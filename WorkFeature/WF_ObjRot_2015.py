@@ -1502,56 +1502,55 @@ class ObjectRotationTab():
                             }
                             
         for m_key, m_val in self.connections_for_button_clicked.items():
-            #print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
+            #func.print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("clicked()"),getattr(self,str(m_val))) 
        
         # Connect to Rotation functions 
         for m_key, m_val in self.connections_for_ObjRot_button_pressed.items():
-            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("pressed()"),getattr(self.rot, str(m_val)))                   
                                            
         for m_key, m_val in self.connections_for_ObjRot_combobox_changed.items():
-            print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )                            
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )                            
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),getattr(self.rot, str(m_val)))     
         
         for m_key, m_val in self.connections_for_ObjRot_slider_changed.items():
-            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("valueChanged(int)"),getattr(self.rot, str(m_val)))        
         
         for m_key, m_val in self.connections_for_ObjRot_return_pressed.items():
-            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("returnPressed()"),getattr(self.rot, str(m_val)))
                                    
         # Connect to Translation functions
         for m_key, m_val in self.connections_for_ObjTrans_button_pressed.items():
-            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("pressed()"),getattr(self.trans, str(m_val)))
                                         
         for m_key, m_val in self.connections_for_ObjTrans_combobox_changed.items():
-            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )                            
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )                            
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),getattr(self.trans, str(m_val)))     
 
         for m_key, m_val in self.connections_for_ObjTrans_checkbox_toggled.items():
-            #print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
-            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL(_fromUtf8("toggled(bool)")),getattr(self.trans, str(m_val)))  
               
 
         for m_key, m_val in self.connections_for_ObjTrans_spin_changed.items():
-            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("valueChanged(int)"),getattr(self.trans, str(m_val))) 
 
         for m_key, m_val in self.connections_for_ObjTrans_return_pressed.items():
-            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
+            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("returnPressed()"),getattr(self.trans, str(m_val)))
                                    

@@ -1847,7 +1847,96 @@ Then click on this button.</string>
                <string>Circle</string>
               </attribute>
               <layout class="QGridLayout" name="gridLayout_22">
-               <item row="3" column="0">
+               <item row="0" column="0" colspan="2">
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <widget class="QPushButton" name="button_linecenter_circle">
+                   <property name="toolTip">
+                    <string>Select an Axis and a Point to create a Circle
+centered on the Point, perpendicular to the Axis 
+with the given radius.</string>
+                   </property>
+                   <property name="text">
+                    <string>Circle=(Axis, center)</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_lineCenterCircle.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_lineCenterCircle.svg</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="radius_circle">
+                   <property name="minimumSize">
+                    <size>
+                     <width>40</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>60</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Radius of the Circle.</string>
+                   </property>
+                   <property name="text">
+                    <string>10.0</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QPushButton" name="button_linepoint_circle">
+                 <property name="toolTip">
+                  <string>Select an Axis and a Point  to create a Circle
+centered on the Axis and tangenting the Point.</string>
+                 </property>
+                 <property name="text">
+                  <string>Circle=(Axis, point)</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_linePointCircle.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_linePointCircle.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QPushButton" name="button_3points_circle">
+                 <property name="toolTip">
+                  <string>Select 3 Points  to create a Circle.</string>
+                 </property>
+                 <property name="text">
+                  <string>Circle=(3 points)</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_3pointsCircle.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_3pointsCircle.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0" colspan="2">
                 <layout class="QHBoxLayout" name="horizontalLayout_24">
                  <item>
                   <widget class="QPushButton" name="button_cut_circle">
@@ -1907,66 +1996,17 @@ in &quot;Ori. Pref.&quot;  TAB</string>
                  </item>
                 </layout>
                </item>
-               <item row="0" column="0">
-                <layout class="QHBoxLayout" name="horizontalLayout_11">
-                 <item>
-                  <widget class="QPushButton" name="button_linecenter_circle">
-                   <property name="toolTip">
-                    <string>Select an Axis and a Point to create a Circle
-centered on the Point, perpendicular to the Axis 
-with the given radius.</string>
-                   </property>
-                   <property name="text">
-                    <string>Circle=(Axis, center)</string>
-                   </property>
-                   <property name="icon">
-                    <iconset>
-                     <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_lineCenterCircle.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_lineCenterCircle.svg</iconset>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>32</width>
-                     <height>32</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="radius_circle">
-                   <property name="minimumSize">
-                    <size>
-                     <width>40</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>60</width>
-                     <height>16777215</height>
-                    </size>
-                   </property>
-                   <property name="toolTip">
-                    <string>Radius of the Circle.</string>
-                   </property>
-                   <property name="text">
-                    <string>10.0</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="button_linepoint_circle">
+               <item row="4" column="0" colspan="2">
+                <widget class="QPushButton" name="button_3points_ellipse">
                  <property name="toolTip">
-                  <string>Select an Axis and a Point  to create a Circle
-centered on the Axis and tangenting the Point.</string>
+                  <string>Select a center and 2 Points to create an Ellipse.</string>
                  </property>
                  <property name="text">
-                  <string>Circle=(Axis, point)</string>
+                  <string>Ellipse=(3 points)</string>
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_linePointCircle.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_linePointCircle.svg</iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_3pointsEllipse.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_3pointsEllipse.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -1989,17 +2029,20 @@ centered on the Axis and tangenting the Point.</string>
                  </property>
                 </spacer>
                </item>
-               <item row="4" column="0">
-                <widget class="QPushButton" name="button_3points_ellipse">
+               <item row="6" column="0" colspan="2">
+                <widget class="QPushButton" name="button_circle_to_sketch">
                  <property name="toolTip">
-                  <string>Select a center and 2 Points to create an Ellipse.</string>
+                  <string>Transform Circle(s) and Arc(s) in Sketch's object(s) by projection onto the Sketch's Plane:
+- First select an existing Skecth;
+- Select as much as Circles and arcs needed;
+Then click on this button.</string>
                  </property>
                  <property name="text">
-                  <string>Ellipse=(3 points)</string>
+                  <string>Circle(s) to Sketch</string>
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_3pointsEllipse.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_3pointsEllipse.svg</iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_2Sketch.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_2Sketch.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -2009,25 +2052,18 @@ centered on the Axis and tangenting the Point.</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
-                <widget class="QPushButton" name="button_3points_circle">
-                 <property name="toolTip">
-                  <string>Select 3 Points  to create a Circle.</string>
+               <item row="7" column="1">
+                <spacer name="verticalSpacer_16">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
                  </property>
-                 <property name="text">
-                  <string>Circle=(3 points)</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_3pointsCircle.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_3pointsCircle.svg</iconset>
-                 </property>
-                 <property name="iconSize">
+                 <property name="sizeHint" stdset="0">
                   <size>
-                   <width>32</width>
-                   <height>32</height>
+                   <width>20</width>
+                   <height>121</height>
                   </size>
                  </property>
-                </widget>
+                </spacer>
                </item>
               </layout>
              </widget>
@@ -2729,12 +2765,13 @@ NB:
                  <item row="0" column="0">
                   <widget class="QPushButton" name="button_cylinder_create">
                    <property name="toolTip">
-                    <string>Create a Cylinder:
-- First select an Axis and a Ref. Point. 
+                    <string>Create a Cylinder aligned on Axes:
+- First select one or several couple of ( Axis and a Ref. Point). 
 - Define Diameter and Length if needed.
 Then Click the button...
 It will create a Cylinder aligned on the selected axis 
-with one of the extremities at the Ref. point.</string>
+with one of the extremities at the Ref. point,
+for all couple selected.</string>
                    </property>
                    <property name="text">
                     <string>Cylinder</string>
@@ -2772,7 +2809,7 @@ with one of the extremities at the Ref. point.</string>
                     </size>
                    </property>
                    <property name="toolTip">
-                    <string>Diameter of the Cylinder.</string>
+                    <string>Radius of the Cylinder.</string>
                    </property>
                    <property name="text">
                     <string>2.0</string>
@@ -2815,12 +2852,13 @@ Negative value will reverse the direction from Ref. Point</string>
                  <item>
                   <widget class="QPushButton" name="button_cube_create">
                    <property name="toolTip">
-                    <string>Create a Cuboid:
-- First select an Axis and a Ref. Point. 
+                    <string>Create a Cuboid aligned on Axes:
+- First select one or several couple of ( Axis and a Ref. Point). 
 - Define Dimensions if needed.
 Then Click the button...
 It will create a Cube aligned on the selected axis 
-with one of the extremities at Ref. point.</string>
+with one of the extremities at Ref. point,
+for all couple selected.</string>
                    </property>
                    <property name="text">
                     <string>Cube</string>
@@ -3048,6 +3086,147 @@ Original code from : Ulrich Brammer</string>
                 </layout>
                </item>
                <item row="7" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_23">
+                 <item>
+                  <widget class="QPushButton" name="button_letter">
+                   <property name="toolTip">
+                    <string>AB:
+Create 3D Text attached to a Point. 
+- First select a  Plane
+- Then push this button
+in this case the center of the text is attached to center of the Plane;
+or
+- First select a  Plane and a Point on the Plane
+- Then push this button
+NB:
+ Change the text and his size if needed</string>
+                   </property>
+                   <property name="text">
+                    <string>AB</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_pointText.svg</normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_pointText.svg</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="letter">
+                   <property name="maximumSize">
+                    <size>
+                     <width>70</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Put the desired text here</string>
+                   </property>
+                   <property name="text">
+                    <string>A</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="size_letter">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>50</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>50</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Size of the font.</string>
+                   </property>
+                   <property name="text">
+                    <string>2.0</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="8" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_34">
+                 <item>
+                  <widget class="QPushButton" name="button_revolve">
+                   <property name="toolTip">
+                    <string>Revolve:
+Make the revolution of Edge(s) or Wire(s) around an Axis:
+- Select one or several wire(s)
+- Then push this button
+or
+- Select FIRST one Point as center of rotation and one Axis as rotation axis !
+- Select one or several wire(s)
+- Then push this button
+
+NB:
+  You can also define the angle of revolution if needed
+   If no Axis is selected the Z axis is considered as Axis of rotation !
+   If no Point is selected the Origin is considered as Center of rotation !</string>
+                   </property>
+                   <property name="text">
+                    <string>Revolve</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../Icons/WF_Revolve.svg</normaloff>../Icons/WF_Revolve.svg</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="angle_revolve">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>40</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>40</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Angle of the revolution in degrees.</string>
+                   </property>
+                   <property name="text">
+                    <string>360</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="9" column="0">
                 <spacer name="verticalSpacer">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -3070,7 +3249,7 @@ Original code from : Ulrich Brammer</string>
                <item row="0" column="0">
                 <widget class="QTabWidget" name="tabWidget_2">
                  <property name="currentIndex">
-                  <number>3</number>
+                  <number>2</number>
                  </property>
                  <widget class="QWidget" name="align_tab">
                   <attribute name="title">
@@ -3432,10 +3611,12 @@ and push this button to accept...</string>
                               </size>
                              </property>
                              <property name="toolTip">
-                              <string>Select the reference Plane to cut the Object from:
+                              <string>Select the Reference Plane to cut the Object from:
 First Click on the plane in the view 
 and push this button to accept...
-(Note that the Angle is calculated from this Plane)</string>
+
+The Reference Plane is the Plane you pose the object on before to use a saw! 
+(Note that the Angle is calculated from the Normal at this Plane)</string>
                              </property>
                              <property name="text">
                               <string>Select Ref. Plane</string>
@@ -3472,6 +3653,12 @@ and push this button to accept...
                                  <height>16777215</height>
                                 </size>
                                </property>
+                               <property name="toolTip">
+                                <string>Angle of cutting  relative to the Normal of the Reference Plane (in degrees).
+
+  0.0 means that the Plane of cutting is along the Cut Line with 
+a 90 deg angle with Reference Plane.</string>
+                               </property>
                                <property name="text">
                                 <string>Angle</string>
                                </property>
@@ -3498,7 +3685,10 @@ and push this button to accept...
                                 </size>
                                </property>
                                <property name="toolTip">
-                                <string>Angle of cutting  relative to the Reference Plane (in degrees).</string>
+                                <string>Angle of cutting  relative to the Normal of the Reference Plane (in degrees).
+
+  0.0 means that the Plane of cutting is along the Cut Line with 
+a 90 deg angle with Reference Plane.</string>
                                </property>
                                <property name="text">
                                 <string>0.0</string>
@@ -3516,6 +3706,11 @@ and push this button to accept...
                                  <width>70</width>
                                  <height>16777215</height>
                                 </size>
+                               </property>
+                               <property name="toolTip">
+                                <string>Thickness of the Cut.
+
+i.e. the thickness of a saw.</string>
                                </property>
                                <property name="text">
                                 <string>Thickness</string>
@@ -3537,7 +3732,9 @@ and push this button to accept...
                                 </size>
                                </property>
                                <property name="toolTip">
-                                <string>Thickness of the Cut.</string>
+                                <string>Thickness of the Cut.
+
+i.e. the thickness of a saw.</string>
                                </property>
                                <property name="text">
                                 <string>0.0</string>
@@ -4765,7 +4962,7 @@ ReClick with same selection, will reverse the direction.</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
+               <item row="2" column="0">
                 <spacer name="verticalSpacer_4">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -4778,6 +4975,23 @@ ReClick with same selection, will reverse the direction.</string>
                  </property>
                 </spacer>
                </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="button_trackcamera">
+                 <property name="text">
+                  <string>Camera Track</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_trackCamera.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_trackCamera.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
              <widget class="QWidget" name="tab_3">
@@ -4789,21 +5003,19 @@ ReClick with same selection, will reverse the direction.</string>
                <string>Check</string>
               </attribute>
               <layout class="QGridLayout" name="gridLayout_35">
-               <item row="5" column="0">
-                <widget class="QPushButton" name="button_isDistance">
+               <item row="8" column="0">
+                <widget class="QPushButton" name="button_isView">
                  <property name="toolTip">
-                  <string>Check for two Points distance:
-Distances measurement and Delta values (on main Axes) between two Points
-- Select the 2 Points and
-Click this button
- </string>
+                  <string>Detect the position of the camera.
+The returned value is the value provided 
+by the function getCameraOrientation().</string>
                  </property>
                  <property name="text">
-                  <string>Distance ?</string>
+                  <string>View ?</string>
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_distanceBetween.svg</normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_distanceBetween.svg</iconset>
+                   <normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_FCCamera_02.svg</normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_FCCamera_02.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -4812,6 +5024,19 @@ Click this button
                   </size>
                  </property>
                 </widget>
+               </item>
+               <item row="9" column="0">
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
                <item row="0" column="0">
                 <widget class="QPushButton" name="button_isParallel">
@@ -4861,66 +5086,6 @@ NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
                  </property>
                 </widget>
                </item>
-               <item row="7" column="0">
-                <spacer name="verticalSpacer_2">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="button_isPerpendicular">
-                 <property name="toolTip">
-                  <string>Check if two faces or two Edges are Perpendicular:
-- Select the 2 faces/planes or 2 Edges/Lines and
-Click this button
-
-NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
-                 </property>
-                 <property name="text">
-                  <string>are Perpendicular ?</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isPerpendicular.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isPerpendicular.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QPushButton" name="button_isClearance">
-                 <property name="toolTip">
-                  <string>Check for two Objects Clearance distance:
-Quick measurements between parallel faces and similarly placed objects
-- Select the 2 Objects and
-Click this button</string>
-                 </property>
-                 <property name="text">
-                  <string>Distance Clearance ?</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isClearance.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isClearance.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
                <item row="4" column="0">
                 <widget class="QPushButton" name="button_isAngle">
                  <property name="toolTip">
@@ -4954,18 +5119,114 @@ NB:
                 </widget>
                </item>
                <item row="6" column="0">
-                <widget class="QPushButton" name="button_isView">
+                <widget class="QPushButton" name="button_isLength">
                  <property name="toolTip">
-                  <string>Detect the position of the camera.
-The returned value is the value provided 
-by the function getCameraOrientation().</string>
+                  <string>Check for Line Length:
+Length measurement and Delta values (on main Axes) for a Line
+- Select the Line and
+Click this button
+ </string>
                  </property>
                  <property name="text">
-                  <string>View ?</string>
+                  <string>Length ?</string>
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_FCCamera_02.svg</normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_FCCamera_02.svg</iconset>
+                   <normaloff>../Icons/WF_isLength.svg</normaloff>../Icons/WF_isLength.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="button_isPerpendicular">
+                 <property name="toolTip">
+                  <string>Check if two faces or two Edges are Perpendicular:
+- Select the 2 faces/planes or 2 Edges/Lines and
+Click this button
+
+NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
+                 </property>
+                 <property name="text">
+                  <string>are Perpendicular ?</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isPerpendicular.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isPerpendicular.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QPushButton" name="button_isDistance">
+                 <property name="toolTip">
+                  <string>Check for two Points distance:
+Distances measurement and Delta values (on main Axes) between two Points
+- Select the 2 Points and
+Click this button
+ </string>
+                 </property>
+                 <property name="text">
+                  <string>Distance ?</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_distanceBetween.svg</normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_distanceBetween.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="button_isClearance">
+                 <property name="toolTip">
+                  <string>Check for two Objects Clearance distance:
+Quick measurements between parallel faces and similarly placed objects
+- Select the 2 Objects and
+Click this button</string>
+                 </property>
+                 <property name="text">
+                  <string>Distance Clearance ?</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isClearance.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isClearance.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QPushButton" name="button_isArea">
+                 <property name="toolTip">
+                  <string>Check for surface Area:
+Area measurement for a Plane or a set of Planes.
+- Select One or several Planes and
+Click this button</string>
+                 </property>
+                 <property name="text">
+                  <string>Area ?</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isArea.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isArea.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>

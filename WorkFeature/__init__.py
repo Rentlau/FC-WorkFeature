@@ -4,7 +4,7 @@
 ***************************************************************************
 *   Thanks to original ideas, codes, and support from :                   *
 *   - Javier Martinez Garcia 2014, 2015 for ideas and first WF codes      * 
-*     for tje code on parallelism of two faces                            *
+*     for tje code on parallelism of two faces, forTour camera code       *
 *   - Jonathan Wiedemann for Gui ideas and for view codes 2014            * 
 *     and support                                                         *
 *   - NormandC for his support                                            *
@@ -58,15 +58,17 @@ if not sys.path.__contains__("/usr/lib/freecad/lib"):
 import WFGui_2015 as WFGui
 from   WF_ObjRot_2015 import *
 global myRelease
-myRelease = "2015_05_31"
+myRelease = "2015_06_22"
 
 import os.path
+import time
 import math
 import itertools
     
 import FreeCAD as App
 import FreeCADGui as Gui
 from pivy.coin import *
+from pivy import coin
 import Part
 import Draft
 from FreeCAD import Base 
@@ -125,6 +127,7 @@ m_distLine = 10.0
 m_angleLine = 45.0
 m_angleAlignFaces = 0.0
 m_angleAlignEdges = 0.0
+m_angleRevolve = 360.0
 m_distPoint = 10.0
 m_diameterCylinder = 2.0
 m_lengthCylinder = 20.0 
@@ -135,6 +138,7 @@ m_widthPlane = 10.0
 m_extensionPlane = 50.0
 m_extensionAxis = 50.0
 m_attach_point = "Mid"
+m_letter = "A"
 
 m_cut_selectObjects = []
 m_angleCutObject = 0.0
@@ -142,6 +146,7 @@ m_thicknessCutObject = 0.0
 m_diameterSphere = 10.0
 m_diameterDome = 10.0
 m_frequencyDome = 2
+m_sizeLetter = 2.0
 
 m_callback = None
 m_clickForPoint = True
@@ -525,6 +530,45 @@ def get_SelectedObjects(info=0, printError=True):
         printError_msg("No active document !")
     return 
 
+    
+def getType(objs):
+    if isinstance(objs,list):
+        for obj in objs:
+            print str(type(obj))
+
+
+def getEdgeType(edge):
+    "returns the type of geom this edge is based on"
+    try:
+        if isinstance(edge.Curve,Part.Line):
+            return "Line"
+        elif isinstance(edge.Curve,Part.Circle):
+            return "Circle"
+        elif isinstance(edge.Curve,Part.BSplineCurve):
+            return "BSplineCurve"
+        elif isinstance(edge.Curve,Part.BezierCurve):
+            return "BezierCurve"
+        elif isinstance(edge.Curve,Part.Ellipse):
+            return "Ellipse"
+        else:
+            return "Unknown"
+    except:
+        return "Unknown"
+        
+def getShapeType(subObject):
+    try:       
+        if isinstance(subObject,Part.Edge):
+            return "Edge"
+        elif isinstance(subObject,Part.Vertex):
+            return "Vertex"
+        elif isinstance(subObject,Part.Face):
+            return "Face"
+        elif isinstance(subObject,Part.Wire):
+            return "Wire"
+        else:
+            return "Unknown"
+    except:
+        return "Unknown"
 
 def definePropOfActiveObj():
     Gui.activeDocument().activeObject().LineColor = (red, green, blue)
@@ -1478,7 +1522,19 @@ def properties_plane(Plane_User_Name):
         print_msg("Not able to set Transparency !")
         
     return
-       
+
+
+def plot_text(letter, size, part, name, grp="WorkObjects"):
+    if not(App.ActiveDocument.getObject( grp )):
+        App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
+    m_s = letter 
+    m_ff = "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+    ss = Draft.makeShapeString(String=m_s,FontFile=m_ff,Size=size,Tracking=0)
+    App.ActiveDocument.getObject( grp ).addObject(ss)   
+    text_User_Name = ss.Label   
+    return text_User_Name, ss   
+
+
 def plot_point(Vector_point, part, name, grp="WorkPoints"):
     if not(App.ActiveDocument.getObject( grp )):
         App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
@@ -1678,6 +1734,19 @@ def plot_sphere(Radius, Point, part="Part::Feature", name="Sphere", grp="WorkObj
     Gui.ActiveDocument.getObject( sphere_User_Name ).Transparency = 75
     return sphere_User_Name, sphere
 
+
+def plot_Shape(shape, part="Part::Feature", name="Shape", grp="WorkObjects"):
+    if not(App.ActiveDocument.getObject( grp )):
+        App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
+    obj = App.ActiveDocument.addObject(part, name)
+    obj.Shape = shape
+    App.ActiveDocument.getObject( grp ).addObject( obj )
+    obj_User_Name = obj.Label
+    Gui.ActiveDocument.getObject( obj_User_Name ).PointColor = (1.00,0.67,0.00)
+    Gui.ActiveDocument.getObject( obj_User_Name ).LineColor = (1.00,0.67,0.00)
+    Gui.ActiveDocument.getObject( obj_User_Name ).ShapeColor = (0.00,0.33,1.00)
+    return obj_User_Name, obj
+    
 
 def plot_Dome(Point, Radius, Frequency, part="Part::Feature", name="Dome", grp="WorkObjects"):
     print_msg("plot_Dome :")    
@@ -2636,7 +2705,7 @@ def plot_distPoint():
                         print_point(Point_C, msg="Point_C : ")
                     Placement1 = Selected_Point.Placement
                     #Placement1 = Parent_Point.Placement
-                    base1 = Placement1.Base
+                    #base1 = Placement1.Base
                     #base1 = Point_C
                     rot1 = Placement1.Rotation
                     center_Vector = Point_C
@@ -3275,10 +3344,10 @@ def plot_planeAxis():
                     if msg != 0:
                         print_msg(" Number_of_Points = Number_of_Planes")
                     for Selected_Plane, Selected_Point in zip(Plane_List, Point_List):
-                     if msg != 0:
-                         print_msg(" Selected_Plane=" + str(Selected_Plane))
-                         print_msg(" Selected_Point=" + str(Selected_Point))
-                     plot_normalAt(Selected_Plane, Selected_Point.Point) 
+                        if msg != 0:
+                            print_msg(" Selected_Plane=" + str(Selected_Plane))
+                            print_msg(" Selected_Point=" + str(Selected_Point))
+                        plot_normalAt(Selected_Plane, Selected_Point.Point) 
                 else :
                     if msg != 0:
                         print_msg(" Number_of_Points > Number_of_Planes")
@@ -3549,7 +3618,6 @@ def plot_planeLinePointAxis():
     Plot an Axis Perpendicular to an Axis, crossing a Point and Parallel to a Plane.
     -Select one Plane, one Axis and one Point ON the previous Axis.
     """
-    global verbose
     msg=verbose
     m_actDoc = get_ActiveDocument(info=msg)
     if m_actDoc == None:
@@ -3723,7 +3791,7 @@ def plot_pointLineAxis():
     Define the length and the attach point if needed.
     A Length of Zero means the length of already selected Axis will be used.
     """
-    msg=0
+    msg=verbose
     createFolders('WorkAxis')
     error_msg = "Unable to create Parallel Axis : \nSelect one Point and one Line only !"
     result_msg = " : Parallel Axis created !"
@@ -4419,6 +4487,239 @@ def plot_baseObjectAxes():
             printError_msg(error_msg)
 
 
+        
+def edgeToSketch(m_obj):
+    msg=verbose
+    if msg != 0:
+        print_msg("Found an Edge !" + str(m_obj))
+        
+def vertexToSketch(m_obj):
+    msg=verbose
+    if msg != 0:
+        print_msg("Found a Vertex !" + str(m_obj))
+        
+        m_rec = Part.makePlane(1,1)
+        
+#                P = BRep_Tool.Pnt(TopoDS.Vertex(refSubShape))
+#                GeomAPI_ProjectPointOnSurf proj(P,gPlane)
+#                P = proj.NearestPoint()
+#                Base.Vector3d p(P.X(),P.Y(),P.Z())
+#                invPlm.multVec(p,p)
+#                point = Part.GeomPoint(p)
+#                point.Construction = True
+#                ExternalGeo.push_back(point)
+        
+def faceToSketch(m_obj):
+    msg=verbose
+    if msg != 0:
+        print_msg("Found a Face !" + str(m_obj))
+    
+    print_gui_msg("Faces are not yet supported for external geometry of sketches !")
+    return
+
+def errorToSketch(m_obj):
+    print_gui_msg("Unknown type of geometry !")
+    return
+
+options = {'Edge' : edgeToSketch, 'Vertex' : vertexToSketch, 'Face' : faceToSketch,
+           'Unknown' : errorToSketch }
+            
+def toSketch():
+
+    msg=verbose
+    msg =1
+    
+    m_actDoc=get_ActiveDocument(info=msg)
+    m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    for m_obj in m_selEx:
+        for m_sub in m_obj.SubObjects:
+            options[getShapeType(m_sub)](m_sub)
+#    #FACE:
+#    #EDGE:
+#    #VERTEX:
+#    pass
+
+def circle_toSketch():
+    """ Transform Circle(s) and Arc(s) in Sketch's Cirlce(s) and Arc(s) by projection onto the Sketch's Plane:
+    - First select an existing Skecth;
+    - Select as much as Circles and Arcs needed;
+    Then click on this button.
+    """
+    msg=verbose
+    msg=1
+    m_tolerance=1e-12
+
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None
+    error_msg = "Transform Circle(s) and Arc(s) in Sketch's Circle(s) and Arc(s) : \nFirst select an existing Skecth\nthen select Circles and Arcs !"
+    result_msg = " : Circle(s) and Arc(s) transformed in Sketch's done!"
+    
+    m_sel   = Gui.Selection.getSelection(m_actDoc.Name)
+    m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    if msg != 0:
+        print_msg("m_sel        : " + str(m_sel))
+        print_msg("m_selEx       : " + str(m_selEx))
+    m_num = len(m_sel)
+    m_num_arc = 0
+    if m_num > 1:
+        # Get the Sketch from the selection
+        m_obj = m_sel[0]
+        if msg != 0:
+            print_msg("m_obj        : " + str(m_obj))
+        if hasattr(m_obj, 'TypeId'):
+            m_type = m_obj.TypeId
+            if msg != 0:
+                print_msg("m_obj.TypeId : " + str(m_type))
+        else:
+            m_type = m_obj.Type
+            if msg != 0:
+                print_msg("m_obj.Type : " + str(m_type))
+        
+        if m_type[:6] == "Sketch":
+            if msg != 0:
+                print_msg("Found a Sketch object!")
+            m_sketch = m_obj
+            # Get the Sketch Plane info
+            m_rec = Part.makePlane(1,1)
+            m_rec.Placement = m_sketch.Placement
+            m_recN = m_rec.normalAt(0,0)
+            # Build a geometry list
+            geoList = []
+            # Get Point(s) from the selection
+            for m_i in range(1,m_num):
+                m_obj = m_selEx[m_i]
+                #SubObject = m_obj.SubObjects[0]
+                for SubObject in m_obj.SubObjects:
+                    if SubObject.ShapeType == "Edge":
+                        if msg != 0:
+                            print_msg("Found a Edge object!")
+                            
+                        m_curve = SubObject.Curve
+                        #if str(m_curve)[:6] == "Circle":
+                        if getEdgeType(SubObject) == "Circle":
+                            if msg != 0:
+                                print_msg("SubObject.Curve=" + str(SubObject.Curve))
+                                print_msg("Object is Circle")
+                            if hasattr(m_curve, 'Center'):
+                                m_center = m_curve.Center
+                                # Projection of the Point selected onto the Sketch Plane
+                                m_center_Proj = m_center.projectToPlane(m_sketch.Placement.Base, m_recN)
+                                # Append the Projection
+                                geoList.append(Part.Point(m_center_Proj))
+                                # Add the geometry list to the Sketch
+                                m_sketch.addGeometry(geoList)
+                            # Get Normal of the Circle
+                            m_cirN = m_curve.Axis
+                            m_radius = m_curve.Radius
+                            if msg != 0:
+                                print_msg("m_radius=" + str(m_radius))
+                            # Check if the Plane of the Sketch is the same than the Plane of the Circle
+                            if colinearVectors(m_recN, Base.Vector(0, 0, 0), m_cirN, info=msg, tolerance=m_tolerance):
+                                # creates a circle
+                                print_msg("Sketch and Circle are on Parallel Planes !")
+                                m_begin = SubObject.FirstParameter
+                                m_end = SubObject.LastParameter
+                                if msg != 0:
+                                    print_msg("m_begin=" + str(m_begin))
+                                    print_msg("m_end=" + str(m_end))                                    
+                
+                                m_circle = Part.Circle(m_center_Proj, m_recN, m_radius)
+                                if msg != 0:
+                                    print_msg("m_circle=" + str(m_circle))
+                                    
+                                if abs((m_begin - m_end)%(2*math.pi)) < m_tolerance:
+                                    geoList.append(m_circle)
+                                else:
+                                    m_curve = Part.ArcOfCircle(m_circle, m_begin, m_end)
+                                    if msg != 0:
+                                        print_msg("m_curve=" + str(m_curve))
+                                    geoList.append(m_curve)
+                                m_sketch.addGeometry(geoList)
+                                m_num_arc = m_num_arc + 1                                                              
+                            else:
+                                # creates an ellipse
+                                print_msg("Sketch and Circle are NOT on Parallel Planes !")
+                                # Projection of a Circle(R)from a Plane towaerd another
+                                # not paralell Plane gives an Ellipse(R,Rcos(teta)) 
+                                # with teta is angle betwwen the 2 Planes and center on 
+                                # projected center Point
+
+                                m_angle, m_angle_rad = angleBetween(m_recN,m_cirN)
+                                if msg != 0:
+                                    print_msg("m_angle=" + str(m_angle))
+                                    print_msg("m_angle_rad=" + str(m_angle_rad))
+
+                                m_minRadius = m_radius*math.cos(m_angle_rad)
+                                if msg != 0:
+                                    print_msg("m_minRadius=" + str(m_minRadius))
+                                                                
+                                if abs(m_minRadius) < m_tolerance:
+                                    S1 = m_center_Proj.add(m_recN.cross(m_cirN).normalize().multiply(m_radius)) 
+                                    S2 = m_center_Proj.sub(m_recN.cross(m_cirN).normalize().multiply(m_radius))
+                                    geoList.append(Part.Line(S1,S2))
+                                else:
+                                    S1 = m_center_Proj.add(m_recN.cross(m_cirN).normalize().multiply(m_radius))                                
+                                    S2 = m_center_Proj.add(m_recN.cross(m_recN.cross(m_cirN).normalize()).multiply(m_minRadius))
+                                    m_curve = Part.Ellipse(S1,S2,m_center_Proj)  
+                                    if msg != 0:
+                                        print_msg("m_curve=" + str(m_curve))
+                                    geoList.append(m_curve)
+                                m_sketch.addGeometry(geoList)
+                                m_num_arc = m_num_arc + 1  
+                        elif getEdgeType(SubObject) == "Ellipse":
+                            if msg != 0:
+                                print_msg("SubObject.Curve=" + str(SubObject.Curve))
+                                print_msg("Object is Ellipse")                            
+                            if hasattr(m_curve, 'Center'):
+                                m_center = m_curve.Center
+                                # Projection of the Point selected onto the Sketch Plane
+                                m_center_Proj = m_center.projectToPlane(m_sketch.Placement.Base, m_recN)
+                                # Append the Projection
+                                geoList.append(Part.Point(m_center_Proj))
+                                # Add the geometry list to the Sketch
+                                m_sketch.addGeometry(geoList)
+                            # Get Normal of the Ellipse
+                            m_cirN = m_curve.Axis
+                            # Check if the Plane of the Sketch is the same than the Plane of the Ellipse
+                            if colinearVectors(m_recN, Base.Vector(0, 0, 0), m_cirN, info=msg, tolerance=m_tolerance):
+                                # creates an Ellipse
+                                print_msg("Sketch and Ellipse are on Parallel Planes !")
+                                m_majorRadius = m_curve.MajorRadius
+                                m_minorRadius = m_curve.MinorRadius
+                                m_focus1 = m_curve.Focus1
+                                m_axis1 = m_center.sub(m_focus1)
+                                if msg != 0:
+                                    print_msg("m_majorRadius=" + str(m_majorRadius))
+                                    print_msg("m_minorRadius=" + str(m_minorRadius))
+                                    print_msg("m_focus1=" + str(m_focus1))
+                                S1 = m_center_Proj.add(m_axis1.normalize().multiply(m_majorRadius))    
+                                S2 = m_center_Proj.add(m_axis1.cross(m_cirN).normalize().multiply(m_minorRadius) )
+                                
+                                m_curve = Part.Ellipse(S1,S2,m_center_Proj)  
+                                if msg != 0:
+                                    print_msg("m_curve=" + str(m_curve))
+                                geoList.append(m_curve)
+                            else:
+                                # creates an ellipse
+                                print_msg("Sketch and Ellipse are NOT on Parallel Planes !")
+                                printError_msg("Sketch and Ellipse are NOT on Parallel Planes ! \nNot yet supported developped !")
+                            m_sketch.addGeometry(geoList)
+                            m_num_arc = m_num_arc + 1  
+                        else:
+                            printError_msg("Not a Circle neither an ellipse \nNot yet supported geometry !")
+                            
+                    else:
+                        continue
+            # Refresh
+            App.getDocument(str(m_actDoc.Name)).recompute()
+            print_msg(str(m_num_arc) + result_msg )
+        else:
+            printError_msg(error_msg)
+    else:
+       printError_msg(error_msg)
+    return
+
 def line_toSketch():
     """ Transform Line(s) in Sketch's Line(s) by projection onto the Sketch's Plane:
     - First select an existing Skecth;
@@ -4427,6 +4728,7 @@ def line_toSketch():
     """
     global verbose
     msg=verbose
+    m_tolerance=1e-12
 
     m_actDoc = get_ActiveDocument(info=msg)
     if m_actDoc == None:
@@ -4484,8 +4786,12 @@ def line_toSketch():
                         # Projection of the Point selected onto the Sketch Plane
                         Projection1 = m_p1.projectToPlane(m_sketch.Placement.Base, m_recN)
                         Projection2 = m_p2.projectToPlane(m_sketch.Placement.Base, m_recN)
-                        # Append the Projection
-                        geoList.append(Part.Line(Projection1,Projection2))
+                        if distanceBetween(Projection1, Projection2) < m_tolerance:
+                            # Append the Projection
+                            geoList.append(Part.Point(Projection1))
+                        else:
+                            # Append the Projection
+                            geoList.append(Part.Line(Projection1,Projection2))
                         # Add the geometry list to the Sketch
                         m_sketch.addGeometry(geoList)
                         m_num_line = m_num_line + 1                   
@@ -5812,10 +6118,12 @@ def plot_axisPointCylinder():
     """ Plot a cylinder with axis aligned on the selected axis and with center at the
     selected point.
     """
-    msg=0
+    msg=verbose
+    msg=1
     createFolders('WorkObjects')
-    error_msg = "Unable to create a Cylinder : \nSelect one Axis and one point only!"  
-    result_msg = " : Cylinder created !"
+    error_msg = "Unable to create a Cylinder : \n"\
+                "Select one or several couple of one Axis and one point!"  
+    result_msg = " : Cylinder(s) created !"
     name = "Cylinder"
     part = "Part::Feature"    
     global m_diameterCylinder
@@ -5826,31 +6134,38 @@ def plot_axisPointCylinder():
         return None
         
     Selection = get_SelectedObjects(info=msg, printError=False)
-    if Selection == None:
-        return None
     try:
         SelectedObjects = Selection
         Number_of_Points = SelectedObjects[0]
         Number_of_Edges  = SelectedObjects[1]
         if msg != 0:
-            print_msg("Number_of_Edges=" + str(Number_of_Edges) +
-                      " Number_of_Points=" + str(Number_of_Points))
-        if (Number_of_Edges == 1) and (Number_of_Points == 1) :
+            print_msg(" Number_of_Edges =" + str(Number_of_Edges))
+            print_msg(" Number_of_Points=" + str(Number_of_Points))
+                
+        if (Number_of_Edges == 0 ):
+            printError_msg(error_msg)
+            return
+            
+        if (Number_of_Edges == Number_of_Points) :
             Point_List = SelectedObjects[3]
             Edge_List  = SelectedObjects[4]
             if msg != 0:
                 print_msg(str(Point_List))
                 print_msg(str(Edge_List))
-            Vector_C = Point_List[0].Point
-            Vector_A = Edge_List[0].valueAt( 0.0 )
-            Vector_B = Edge_List[0].valueAt( Edge_List[0].Length )
-            if msg != 0:
-                print_point(Vector_C, msg="Reference Point : ")
-                print_point(Vector_A, msg="Point A : ")
-                print_point(Vector_B, msg="Point B : ")
-            
-            Cyl_User_Name, cylinder = plot_cylinder(m_diameterCylinder, m_lengthCylinder, Vector_C, Vector_A - Vector_B, part, name)
-            print_msg(str(Cyl_User_Name) + result_msg )
+            for Selected_Line, Selected_Point in zip(Edge_List, Point_List):
+                if msg != 0:
+                    print_msg(" Selected_Line=" + str(Selected_Line))
+                    print_msg(" Selected_Point=" + str(Selected_Point))    
+                Vector_C = Selected_Point.Point
+                Vector_A = Selected_Line.valueAt( 0.0 )
+                Vector_B = Selected_Line.valueAt( Selected_Line.Length )
+                if msg != 0:
+                    print_point(Vector_C, msg="Reference Point : ")
+                    print_point(Vector_A, msg="Point A : ")
+                    print_point(Vector_B, msg="Point B : ")
+                
+                Cyl_User_Name, cylinder = plot_cylinder(m_diameterCylinder, m_lengthCylinder, Vector_C, Vector_A - Vector_B, part, name)
+                print_msg(str(Cyl_User_Name) + result_msg )
         else:
             printError_msg(error_msg)
     except:
@@ -5891,10 +6206,12 @@ def plot_axisPointCube():
     """ Plot a cube with axis aligned on the selected axis and with center at the
     selected point.
     """
-    msg=0
+    msg=verbose
+    msg=1
     createFolders('WorkObjects')
-    error_msg = "Unable to create a Cube : \nSelect one Axis and one point only!"  
-    result_msg = " : Cube created !"
+    error_msg = "Unable to create a Cube : \n"\
+                "Select or several couple of one Axis and one point!"  
+    result_msg = " : Cube(s) created !"
     name = "Cuboid"
     part = "Part::Feature"    
     global m_lengthCube
@@ -5906,31 +6223,38 @@ def plot_axisPointCube():
         return None
         
     Selection = get_SelectedObjects(info=msg, printError=False)
-    if Selection == None:
-        return None
     try:
         SelectedObjects = Selection
         Number_of_Points = SelectedObjects[0]
         Number_of_Edges  = SelectedObjects[1]
         if msg != 0:
-            print_msg("Number_of_Edges=" + str(Number_of_Edges) +
-                      " Number_of_Points=" + str(Number_of_Points))
-        if (Number_of_Edges == 1) and (Number_of_Points == 1) :
+            print_msg("Number_of_Edges=" + str(Number_of_Edges))
+            print_msg(" Number_of_Points=" + str(Number_of_Points))
+
+        if (Number_of_Edges == 0 ):
+            printError_msg(error_msg)
+            return
+            
+        if (Number_of_Edges == Number_of_Points) :
             Point_List = SelectedObjects[3]
             Edge_List  = SelectedObjects[4]
             if msg != 0:
                 print_msg(str(Point_List))
                 print_msg(str(Edge_List))
-            Vector_C = Point_List[0].Point
-            Vector_A = Edge_List[0].valueAt( 0.0 )
-            Vector_B = Edge_List[0].valueAt( Edge_List[0].Length )
-            if msg != 0:
-                print_point(Vector_C, msg="Reference Point : ")
-                print_point(Vector_A, msg="Point A : ")
-                print_point(Vector_B, msg="Point B : ")     
-            
-            Cube_User_Name, cube = plot_cube(m_lengthCube, m_widthCube, m_heightCube, Vector_C, Vector_A - Vector_B, part, name)
-            print_msg(str(Cube_User_Name) + result_msg )    
+            for Selected_Line, Selected_Point in zip(Edge_List, Point_List):
+                if msg != 0:
+                    print_msg(" Selected_Line=" + str(Selected_Line))
+                    print_msg(" Selected_Point=" + str(Selected_Point)) 
+                Vector_C = Selected_Point.Point
+                Vector_A = Selected_Line.valueAt( 0.0 )
+                Vector_B = Selected_Line.valueAt( Selected_Line.Length )
+                if msg != 0:
+                    print_point(Vector_C, msg="Reference Point : ")
+                    print_point(Vector_A, msg="Point A : ")
+                    print_point(Vector_B, msg="Point B : ")     
+                
+                Cube_User_Name, cube = plot_cube(m_lengthCube, m_widthCube, m_heightCube, Vector_C, Vector_A - Vector_B, part, name)
+                print_msg(str(Cube_User_Name) + result_msg )    
         else:
             printError_msg(error_msg)
     except:
@@ -6397,6 +6721,264 @@ def plot_centerDome():
         printError_msg(error_msg)
 
 
+def sizeLetter(value):
+    """ Respond to the change in sizer value from the text box.
+    """        
+    try:
+        # First we check if a valid number have been entered
+        global m_sizeLetter
+        if str(value) == '-':
+            return
+        m_sizeLetter = float(value)
+        print_msg("New diameter is :" + str(m_sizeLetter))
+    except ValueError:
+        printError_msg("Size must be valid number !")
+
+
+def letter(value):
+    """ Respond to the change in letter from the text box.
+    """
+    global verbose
+    msg=verbose        
+    try:
+        # First we check if a valid number have been entered
+        global m_letter
+        m_letter = value
+        if msg != 0:
+            print_msg("New letter is :" + str(m_letter))
+    except ValueError:
+        printError_msg("Letter must be valid text !")
+
+
+def plot_letter():
+    """ Create 3D Text attached to a Point.  
+    - First select a  Plane
+    in this case the center of the text is attached to center of the Plane;
+    or
+    - First select a  Plane and a Point on the Plane
+
+    NB:
+        Change the text and his size if needed
+    """
+    import Draft
+                    
+    def text_at(Plane_Point,Plane_Normal):                            
+        text_User_Name, text = plot_text(m_letter, m_sizeLetter, part, name, grp="WorkObjects")
+        text_Point = text.Shape.BoundBox.Center
+        text_Normal = text.Shape.Faces[0].normalAt(0,0)
+        if msg != 0:
+            print_point(text_Point, msg="text_Point = ")
+            print_point(text_Normal, msg="text_Normal = ")
+        # Rotation
+        if colinearVectors(text_Normal, Origin, Plane_Normal, info=0, tolerance=1e-12):
+            rot_axis = Base.Vector(0, 0, 1).cross(text_Normal)
+            rot_center = text_Point
+            rot_angle = 180.                        
+        else:
+            m_angle, m_angle_rad = angleBetween(text_Normal,Plane_Normal)
+            rot_axis = text_Normal.cross(Plane_Normal)
+            rot_center = text_Point 
+            rot_angle = m_angle
+        Draft.rotate(text,rot_angle,rot_center,rot_axis)
+        # translation
+        New_Point = Plane_Point + Plane_Normal.normalize().multiply(2)                
+        m_move = New_Point.sub(rot_center)
+        if msg != 0:
+            print_msg("m_move = " + str(m_move))
+        m_rot = text.Placement.Rotation
+        m_base = text.Placement.Base
+        m_newplace = App.Placement(m_base.add(m_move), m_rot )
+        text.Placement = m_newplace
+    
+    msg=verbose
+    msg=1
+
+    createFolders('WorkObjects')
+    error_msg = "Unable to create Text : \nSelect one Plane and one Point !"
+    result_msg = " : Text created !"
+    name = "Text"
+    part = "Part::Feature"
+    Selection = get_SelectedObjects(info=msg, printError=False)
+    try:
+        SelectedObjects = Selection
+        Number_of_Planes = SelectedObjects[2]
+        Number_of_Points = SelectedObjects[0]
+        if msg != 0:
+            print_msg(" Number_of_Planes=" + str(Number_of_Planes))
+            print_msg(" Number_of_Points=" + str(Number_of_Points))
+        Point_List = SelectedObjects[3]
+        Plane_List = SelectedObjects[5]
+        if msg != 0:
+            print_msg(" Point_List=" + str(Point_List))
+            print_msg(" Plane_List=" + str(Plane_List))
+        
+        if (Number_of_Planes == 0 ):
+                printError_msg(error_msg)
+                return
+        
+        Origin = Base.Vector(0, 0, 0)                        
+        if (Number_of_Points == 0 ):
+            for Selected_Plane in Plane_List:
+                try:
+                    #print_msg(str(Selected_Plane))
+                    Plane_Point = Selected_Plane.CenterOfMass
+                    Plane_Normal = Selected_Plane.normalAt(0,0)
+                    if msg != 0:
+                        print_point(Plane_Point, msg="Plane_Point = ")
+                        print_point(Plane_Normal, msg="Plane_Normal = ")
+                    text_at(Plane_Point,Plane_Normal)
+
+                except:
+                    printError_msg("Non Planar Surface !")
+        else:
+            if Number_of_Points == Number_of_Planes:
+                if msg != 0:
+                    print_msg(" Number_of_Points = Number_of_Planes")
+                for Selected_Plane, Selected_Point in zip(Plane_List, Point_List):
+                    if msg != 0:
+                        print_msg(" Selected_Plane=" + str(Selected_Plane))
+                        print_msg(" Selected_Point=" + str(Selected_Point))
+                    Plane_Point = Selected_Point.Point
+                    Plane_Normal = Selected_Plane.normalAt(0,0)
+                    if msg != 0:
+                        print_point(Plane_Point, msg="Plane_Point = ")
+                        print_point(Plane_Normal, msg="Plane_Normal = ")
+                    text_at(Plane_Point,Plane_Normal)
+
+            else:
+                printError_msg(error_msg)           
+    except:
+        printError_msg(error_msg)
+
+
+def angleRevolve(value):
+    """ Respond to the change in revolution angle value from the text box.
+    """        
+    try:
+        # First we check if a valid number have been entered
+        global m_angleRevolve
+        m_angleRevolve  = float(value)
+        print_msg("New revolution angle is :" + str(m_angleRevolve))
+    except ValueError:
+        printError_msg("Revolution angle must be valid number angle in degrees)!")
+
+
+def plot_revolution():
+    """
+    Revolve:
+        Make the revolution of an Object around an Axis:
+        - Select on or several axis(es) and one or several wire(s)
+
+    """
+
+    # revolve around Y axis by number of degrees
+    # rev=shape.revolve(App.Vector(0,0,0),App.Vector(0,1,0),Dg)Revolve the shape around an Axis to a given degree.
+#==============================================================================
+# Part.revolve(Vector(0,0,0),Vector(0,0,1),360) - revolves the shape around the Z Axis 360 degree.
+# 
+# Hints: Sometimes you want to create a rotation body out of a closed edge or wire.
+# Example:
+# from FreeCAD import Base
+# import Part
+# V=Base.Vector
+# 
+# e=Part.Ellipse()
+# s=e.toShape()
+# r=s.revolve(V(0,0,0),V(0,1,0), 360)
+# Part.show(r)
+# 
+# However, you may possibly realize some rendering artifacts or that the mesh
+# creation seems to hang. This is because this way the surface is created twice.
+# Since the curve is a full ellipse it is sufficient to do a rotation of 180 degree
+# only, i.e. r=s.revolve(V(0,0,0),V(0,1,0), 180)
+# 
+# Now when rendering this object you may still see some artifacts at the poles. Now the
+# problem seems to be that the meshing algorithm doesn't like to rotate around a point
+# where there is no vertex.
+# 
+# The idea to fix this issue is that you create only half of the ellipse so that its shape
+# representation has vertexes at its start and end point.
+# 
+# from FreeCAD import Base
+# import Part
+# V=Base.Vector
+# 
+# e=Part.Ellipse()
+# s=e.toShape(e.LastParameter/4,3*e.LastParameter/4)
+# r=s.revolve(V(0,0,0),V(0,1,0), 360)
+# Part.show(r) 
+#==============================================================================
+    msg=verbose
+
+    createFolders('WorkObjects')
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "You Must Select one Point as center of rotation\n" +\
+    "and one Axis as rotation axis FIRST !\n" +\
+    "Then Select Edge(s) or Wire(s) to create revolution(s)\n" +\
+    "If no Axis is selected the Z axis is considered as Axis of rotation !\n" +\
+    "If no Point is selected the Origin is considered as Center of rotation !"
+
+    m_actDoc=App.activeDocument()
+    if m_actDoc.Name:     
+        m_sel = Gui.Selection.getSelection(m_actDoc.Name)
+        if msg != 0:
+             print_msg("m_sel=" + str(m_sel))
+        m_num_objs = len(m_sel)
+        if msg != 0:
+             print_msg("m_num_objs=" + str(m_num_objs))
+
+    Selection = get_SelectedObjects(info=msg, printError=False)
+    try:
+        SelectedObjects = m_sel
+        SelectedObjects_rot = Selection
+        Number_of_Edges  = SelectedObjects_rot[1]
+        Number_of_Points = SelectedObjects_rot[0]
+        # No axis of rotation selected
+        if Number_of_Edges == 0:
+            Axis = Base.Vector(0, 0, 1)
+        # No axis of rotation selected just one edge to revolve
+        elif Number_of_Edges > 0 and m_num_objs == 1:
+            Axis = Base.Vector(0, 0, 1)
+        # Axis of rotation selected
+        else :
+            Edge_List  = SelectedObjects_rot[4]
+            edge = Edge_List[0]
+            Axis = edge.Vertexes[-1].Point.sub(edge.Vertexes[0].Point)
+            del SelectedObjects[0]
+        if msg != 0:
+             print_msg("Axis=" + str(Axis))
+             
+        if Number_of_Points == 0:
+            Center = Base.Vector(0, 0, 0)
+        else:
+            Point_List = SelectedObjects_rot[3]
+            Center = Point_List[0].Point
+        if msg != 0:
+             print_msg("Center=" + str(Center))
+             
+        if msg != 0:
+             print_msg("SelectedObjects=" + str(SelectedObjects))
+             
+        m_num = 0
+        for m_obj in SelectedObjects : 
+            if msg != 0:
+                print_msg("m_obj.Shape=" + str(m_obj.Shape))  
+            if not (getShapeType(m_obj.Shape) == "Wire" or getShapeType(m_obj.Shape) == "Edge"):
+                continue
+            m_num = m_num + 1
+            if msg != 0:
+                print_msg("m_num=" + str(m_num))
+            r = m_obj.Shape.revolve(Center, Axis, m_angleRevolve)
+            plot_Shape(r, part="Part::Feature", name="Revolve", grp="WorkObjects")
+            #Part.show(r)
+            
+        if m_num == 0:
+            printError_msg("No Edge was selected !")
+        
+    except:
+        printError_msg(error_msg)
+        
 def view_align():
     """ Set the current view perpendicular to the selected Face, Edge
     or 2 points selected
@@ -6468,8 +7050,102 @@ def view_align():
                     printError_msg(error_msg)                       
         else:
             printError_msg(error_msg)
+
+
+def view_trackCamera():
+    """
+    Originalcode : Tour camera by Javier Martinez Garcia November 2014
+    """
+    msg=verbose
+
+    m_sleep = 0.0004 
+    m_camHeight = 10   # Height of the camera above the track
+    m_lookVectorLength = 80   # Distance from next line start where the camera 
+    # starts to align with new direction        
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "You Must Select Edge(s) or Wire(s) !"
+       
+    m_actDoc=App.activeDocument()
+    if m_actDoc.Name:     
+        m_sel = Gui.Selection.getSelection(m_actDoc.Name)
+        
+    try:
+        SelectedObjects = m_sel
+        if msg != 0:
+             print_msg("SelectedObjects=" + str(SelectedObjects))
+             
+        m_edges_num = 0
+        for m_obj in SelectedObjects :
+            if msg != 0:
+                print_msg("m_obj.Shape=" + str(m_obj.Shape))
+            if not (getShapeType(m_obj.Shape) == "Wire" or getShapeType(m_obj.Shape) == "Edge"):
+                continue
+            if msg != 0:
+                print_msg("m_obj.Shape.Edges=" + str(m_obj.Shape.Edges))
+            if len(m_obj.Shape.Edges) == 0 :
+                continue
+            Edge_List = m_obj.Shape.Edges
             
-            
+            ## Edge rearrangement inside trajectory list
+            trajectory = []
+            trajectory.append( Edge_List[0] )
+            currentEdge = Edge_List[0]
+            for n in range( len( Edge_List ) ):
+                for edge in Edge_List:
+                    if edge.valueAt(0.0) == currentEdge.valueAt( currentEdge.Length ):
+                        trajectory.append( edge )
+                        currentEdge = edge
+                        break
+            Edge_List = trajectory
+            m_edges_num = m_edges_num + len(Edge_List)
+            m_camera = Gui.ActiveDocument.ActiveView.getCameraNode()
+            currEdge = Edge_List[0]
+            currEdgeDir = currEdge.Vertexes[-1].Point.sub(currEdge.Vertexes[0].Point).normalize()    
+            currPos = currEdge.valueAt( 0.0 )
+            for i in range( len( m_obj.Shape.Edges ) - 1):
+                currEdge = Edge_List[i]
+                #if msg != 0:
+                   # print_msg("currEdge=" + str(currEdge))                
+                currEdgeDir = currEdge.Vertexes[-1].Point.sub(currEdge.Vertexes[0].Point).normalize()
+                #if msg != 0:
+                    #print_msg("currEdgeDir=" + str(currEdgeDir))
+                nextEdge = Edge_List[i+1]  
+                #if msg != 0:
+                    #print_msg("nextEdge=" + str(nextEdge))
+                nextEdgeDir = nextEdge.Vertexes[-1].Point.sub(nextEdge.Vertexes[0].Point).normalize()
+                #if msg != 0:
+                    #print_msg("nextEdgeDir=" + str(nextEdgeDir))
+                currPos = currEdge.valueAt( 0.0 )
+                #if msg != 0:
+                    #print_point(currPos, "currPos ")
+                   
+                while currPos.sub(currEdge.valueAt( 0.0 )).Length < currEdge.Length:
+                    currPos = currPos + currEdgeDir                
+                    m_camera.position.setValue( currPos  + Base.Vector( 0, 0, m_camHeight ) )
+                    m_cameraLookVector = currEdgeDir*m_lookVectorLength
+                    if (m_cameraLookVector + currPos - currEdge.valueAt(0.0) ).Length > currEdge.Length:
+                        L = ( m_cameraLookVector + ( currPos - currEdge.valueAt( 0.0 ) ) ).Length - currEdge.Length
+                        m_lookVector = nextEdgeDir*L + nextEdge.valueAt( 0.0 )   
+                    else:
+                        m_lookVector = currEdge.valueAt( currEdge.Length )
+                    m_camera.pointAt( coin.SbVec3f( m_lookVector[0], m_lookVector[1], m_lookVector[2] + m_camHeight ), coin.SbVec3f( 0, 0, 1 ) )
+                    Gui.updateGui()
+                    time.sleep( m_sleep )
+                    
+            while currPos.sub(currEdge.valueAt( 0.0 )).Length < currEdge.Length:
+                currPos = currPos + currEdgeDir
+                m_camera.position.setValue( currPos  + Base.Vector( 0, 0, m_camHeight ) )
+                m_lookVector = currEdge.valueAt( currEdge.Length )
+                m_camera.pointAt( coin.SbVec3f( m_lookVector[0], m_lookVector[1], m_lookVector[2] + m_camHeight ), coin.SbVec3f( 0, 0, 1 ) )
+                Gui.updateGui()
+                time.sleep( m_sleep )
+        if m_edges_num == 0:
+            printError_msg("No Edge was selected !")           
+    except:
+        printError_msg(error_msg)
+
+
 def angleCutObject(value):
     """ Respond to the change in angle value from the text box.
     """        
@@ -7504,6 +8180,101 @@ def points_distance():
         printError_msg(error_msg)        
 
 
+def line_length():
+    """
+    Check for Line Length:
+        Length measurement and Delta values (on main Axes) for a Line
+        - Select the Line
+
+    """
+    msg=verbose
+            
+    error_msg = "INCORRECT Object(s) Selection :\n\nYou Must Select One Line !"
+    
+    Selection = get_SelectedObjects(info=msg, printError=False)
+    try:
+        SelectedObjects = Selection
+        Number_of_Edges  = SelectedObjects[1]
+        if msg!=0:
+            print_msg("Number_of_Edges=" + str(Number_of_Edges))
+
+        if Number_of_Edges != 1:
+            printError_msg(error_msg)
+            return
+        
+        Edge_List  = SelectedObjects[4]
+        edge = Edge_List[0]
+
+        pos_X1 = edge.Vertexes[0].Point.x
+        pos_Y1 = edge.Vertexes[0].Point.y
+        pos_Z1 = edge.Vertexes[0].Point.z
+        if msg!=0:
+            print_point(edge.Vertexes[0].Point, msg="First Point : ")
+
+        pos_X2 = edge.Vertexes[-1].Point.x
+        pos_Y2 = edge.Vertexes[-1].Point.y
+        pos_Z2 = edge.Vertexes[-1].Point.z
+        if msg!=0:
+            print_point(edge.Vertexes[-1].Point, msg="Last Point : ")     
+        
+        m_dist = distanceBetween(edge.Vertexes[0].Point,edge.Vertexes[-1].Point)
+        if msg!=0:
+            print_msg("Distance is : " + str(m_dist))
+            
+        msg=\
+        "Begin : X1 "+str(pos_X1)+" Y1: "+str(pos_Y1)+" Z1: "+str(pos_Z1)+"\n\n" +\
+        "End : X2 "+str(pos_X2)+" Y2: "+str(pos_Y2)+" Z2: "+str(pos_Z2)+"\n\n" +\
+        "Delta X : "+str(abs(pos_X1-pos_X2))+"\n" +\
+        "Delta Y : "+str(abs(pos_Y1-pos_Y2))+"\n" +\
+        "Delta Z : "+str(abs(pos_Z1-pos_Z2))+"\n\n" +\
+        "Distance : " + str(m_dist)        
+
+        print_gui_msg(msg)
+    except:
+        printError_msg(error_msg)
+
+        
+def plane_area():
+    """
+    Check for surface Area:
+        Area measurement for a Plane or a set of Planes.
+        - Select One or several Planes and
+
+    """
+    msg=verbose
+
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "You Must Select Face(s) !"    
+    Selection = get_SelectedObjects(info=msg, printError=False)
+    try:
+        SelectedObjects = Selection
+        Number_of_Planes = SelectedObjects[2] 
+        if msg!=0:
+            print_msg("Number_of_Planes=" + str(Number_of_Planes))
+        
+        if Number_of_Planes >= 1 :
+            Plane_List = SelectedObjects[5]
+            if msg != 0:
+                print_msg(" Plane_List=" + str(Plane_List))
+            m_areas = []
+            for m_plane in Plane_List:
+                m_areas.append(m_plane.Area)
+            result = "Area(s) :\n"
+            a=0
+            for m_a in m_areas:
+                a+=m_a
+                
+                result += str(math.ceil(m_a*1000)/1000) + " mm2\n"
+                
+            result += "Total of areas is " + str(math.ceil(a*1000)/1000) + " mm2"
+            print_gui_msg(result)               
+        else:
+            printError_msg(error_msg)
+    except:
+        printError_msg(error_msg)
+
+        
 def camera_orientation():
     """ Detect the position of the camera.
     The returned value is the value provided 
@@ -7828,7 +8599,8 @@ def object_jointPoints():
                         print_msg("Selected_Point = " + str(Selected_Point))
                         print_msg("Parent_Point = " + str(Parent_Point))
                     m_move = Point_ref.Point.sub(Selected_Point.Point)
-                    print_msg("m_move = " + str(m_move))
+                    if msg != 0:
+                        print_msg("m_move = " + str(m_move))
                     m_rot = Parent_Point.Placement.Rotation
                     m_base = Parent_Point.Placement.Base
                     m_newplace = App.Placement(m_base.add(m_move), m_rot )
@@ -7848,36 +8620,55 @@ except AttributeError:
 
 ####################################################################################  
 class WorkFeatureTab():
-    def __init__(self):
+    def __init__(self, movable=True):
+        self.movable = movable
+        if self.movable:
+            # Look if WF movable tab already exists        
+            m_mvtab=Gui.getMainWindow().findChild(QtGui.QDockWidget, "WorkFeatures")
+            if m_mvtab:
+                m_mvtab.show()
+                m_mvtab.raise_() 
+                return 
+            
         # Get main window
         self.m_main = self.getMainWindow()
         
         # Get Tab panel
-        self.m_tab = self.getComboView(self.m_main)
-        
-        if self.m_tab.count() == 2:
-            # Create a new fake dialog
-            self.m_fake_dialog = QtGui.QDialog()
-            self.m_tab.addTab(self.m_fake_dialog,"")
+        if self.movable:
+            self.m_tab = self.getComboViewMv(self.m_main)
             
-        # Create a new dialog for WorkFeatureTab
-        self.m_dialog = QtGui.QDialog()
-        # Add the dialog in a new tab or focus on it if already exists
-        if self.m_tab.count() >= 2:
-            for i in range(2,self.m_tab.count()):
-                #print_msg (str(isinstance(self.m_tab.tabText(i), unicode)))
-                #print_msg (str(unicode(self.m_tab.tabText(i), 'utf-8')))
-                #if "Work Features" == str(unicode(self.m_tab.tabText(i), 'utf-8')):
-                if "Work Features" == str(_fromUtf8(self.m_tab.tabText(i))):
-                    self.m_tab.removeTab(int(i))
-                    break
+            self.m_dialog = QtGui.QWidget()
+            self.m_tab.addWidget(self.m_dialog)
+            self.ui = WFGui.Ui_Form()
+            self.ui.setupUi(self.m_dialog)       
+            self.m_dialog.setMaximumWidth(400)
+        else :
+            self.m_tab = self.getComboView(self.m_main)
         
-        self.m_tab.addTab(self.m_dialog,"Work Features")
-              
-        self.ui = WFGui.Ui_Form()
-        self.ui.setupUi(self.m_dialog)
-        self.m_tab.setCurrentIndex(3)
+            if self.m_tab.count() == 2:
+                # Create a new fake dialog
+                self.m_fake_dialog = QtGui.QDialog()
+                self.m_tab.addTab(self.m_fake_dialog,"")
+                
+            # Create a new dialog for WorkFeatureTab
+            self.m_dialog = QtGui.QDialog()
+            # Add the dialog in a new tab or focus on it if already exists
+            if self.m_tab.count() >= 2:
+                for i in range(2,self.m_tab.count()):
+                    #print_msg (str(isinstance(self.m_tab.tabText(i), unicode)))
+                    #print_msg (str(unicode(self.m_tab.tabText(i), 'utf-8')))
+                    #if "Work Features" == str(unicode(self.m_tab.tabText(i), 'utf-8')):
+                    if "Work Features" == str(_fromUtf8(self.m_tab.tabText(i))):
+                        self.m_tab.removeTab(int(i))
+                        break
+        
+            self.m_tab.addTab(self.m_dialog,"Work Features")
+                  
+            self.ui = WFGui.Ui_Form()
+            self.ui.setupUi(self.m_dialog)
+            self.m_tab.setCurrentIndex(3)
 
+#----------------------------------------------------------------
         # Create a Rotation object
         self.rot = Rotation(self.ui)
         # Create a Translation object
@@ -7938,7 +8729,8 @@ class WorkFeatureTab():
                              "button_linepoint_circle"     : "plot_linepointCircle",
                              "button_3points_circle"       : "plot_3pointsCircle",
                              "button_cut_circle"           : "plot_cutCircle",
-                             "button_3points_ellipse"      : "plot_3pointsEllipse",                        
+                             "button_3points_ellipse"      : "plot_3pointsEllipse",
+                             "button_circle_to_sketch"     : "circle_toSketch",                          
                                                           
                              "button_threepoints_plane"    : "plot_3PointsPlane",
                              "button_axisandpoint_plane"   : "plot_axisPointPlane",
@@ -7958,14 +8750,17 @@ class WorkFeatureTab():
                              "button_cube_create"          : "plot_axisPointCube",
                              "button_sphere_create"        : "plot_centerSphere",
                              "button_dome_create"          : "plot_centerDome",
+                             "button_letter"               : "plot_letter",
+                             "button_revolve"              : "plot_revolution",
                              
-                             "button_alignview"            : "view_align",                            
+                             "button_alignview"            : "view_align",
+                             "button_trackcamera"          : "view_trackCamera",                            
                              
                              "button_cut_select_object"    : "cut_selectObject",
                              "button_cut_select_line"      : "cut_selectLine",
                              "button_cut_select_plane"     : "cut_selectPlane",                             
                              "button_cut_reset"            : "cut_reset", 
-                             "button_cut_apply"            : "plot_cutObject", 
+                             "button_cut_apply"            : "plot_cutObject",                              
                                                                                       
                              "button_isParallel"           : "object_parallel",
                              "button_isPerpendicular"      : "object_perpendicular",
@@ -7973,6 +8768,8 @@ class WorkFeatureTab():
                              "button_isClearance"          : "object_clearance",
                              "button_isAngle"              : "object_angle",
                              "button_isDistance"           : "points_distance",
+                             "button_isLength"             : "line_length",
+                             "button_isArea"               : "plane_area",
                              "button_isView"               : "camera_orientation",
                              
                              "button_alignface2view"       : "object_align2view",
@@ -8016,6 +8813,9 @@ class WorkFeatureTab():
                              "dist_point"                : "distPoint",
                              "angle_align_faces"         : "angleAlignFaces",
                              "angle_align_edges"         : "angleAlignEdges",
+                             "angle_revolve"             : "angleRevolve",
+                             "size_letter"               : "sizeLetter",
+                             "letter"                    : "letter",
                             }
                             
         self.connections_for_spin_changed = {
@@ -8120,7 +8920,7 @@ class WorkFeatureTab():
 # Connect to Translation functions
 #==============================================================================
         for m_key, m_val in self.connections_for_ObjTrans_button_pressed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
+            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("pressed()"),getattr(self.trans, str(m_val)))
                                         
@@ -8174,7 +8974,7 @@ class WorkFeatureTab():
 # Connect to Rotation functions
 #==============================================================================
         for m_key, m_val in self.connections_for_ObjRot_button_pressed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("pressed()"),getattr(self.rot, str(m_val)))                   
                                            
@@ -8184,31 +8984,47 @@ class WorkFeatureTab():
                                    QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),getattr(self.rot, str(m_val)))     
         
         for m_key, m_val in self.connections_for_ObjRot_slider_changed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("valueChanged(int)"),getattr(self.rot, str(m_val)))        
         
         for m_key, m_val in self.connections_for_ObjRot_return_pressed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("returnPressed()"),getattr(self.rot, str(m_val)))
-
-
-
-
-                                                
+#==============================================================================
+                                               
         self.m_dialog.show()
         m_text=str(myRelease)
         self.ui.label_release.setText(QtGui.QApplication.translate("Form", m_text, None, QtGui.QApplication.UnicodeUTF8))
-       
-    def quit_clicked(self): # quit
-        #self.m_dialog.hide()
-        self.m_dialog.close()
-        if self.m_tab.count() >= 2:
-            for i in range(2,self.m_tab.count()):
-                if "Work Features" == str(_fromUtf8(self.m_tab.tabText(i))):
-                    self.m_tab.removeTab(int(i))
-                    break     
+
+#----------------------------------------------------------------
+        if self.movable:
+            t=Gui.getMainWindow()
+            wf = t.findChild(QtGui.QDockWidget, "WorkFeatures")
+            cv = t.findChild(QtGui.QDockWidget, "Combo View")
+            print_msg( "Combo View" + str(cv))
+            print_msg( "WorkFeatures" + str(wf))        
+            cv.setFeatures( QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable|QtGui.QDockWidget.DockWidgetClosable )
+            wf.setFeatures( QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable|QtGui.QDockWidget.DockWidgetClosable )
+            if wf and cv:
+                t.tabifyDockWidget(cv,wf)                
+                print_msg( "Tabified done !")               
+                wf.activateWindow()
+                wf.raise_()    
+            
+    def quit_clicked(self): # quit       
+        if self.movable:
+            self.dw.close()
+            print_msg( "Close done !")
+            return
+        else:
+            self.m_dialog.close()
+            if self.m_tab.count() >= 2:
+                for i in range(2,self.m_tab.count()):
+                    if "Work Features" == str(_fromUtf8(self.m_tab.tabText(i))):
+                        self.m_tab.removeTab(int(i))
+                        break     
                 
     def getMainWindow(self):
        """ Returns the main window
@@ -8232,7 +9048,27 @@ class WorkFeatureTab():
                 return i.findChild(QtGui.QTabWidget)
         raise Exception("No tab widget found")
  
- 
+    def getComboViewMv(self,window):
+        """ Returns the main Tab.
+        """
+        import FreeCAD
+        mw=FreeCAD.Gui.getMainWindow()
+        layout = QtGui.QVBoxLayout()
+        myw=QtGui.QWidget()
+        myw.setLayout(layout)
+
+        dw1=QtGui.QDockWidget(mw)
+        dw1.setWindowTitle("Work Features")
+        dw1.setObjectName('WorkFeatures')
+        dw1.setWidget(myw)
+
+        mw.addDockWidget(QtCore.Qt.RightDockWidgetArea , dw1)
+        self.myw=myw
+        self.dw=dw1
+        layout.mw=mw
+        return layout
+        
+        
 if __name__ == '__main__':
     myDialog = WorkFeatureTab()
     
