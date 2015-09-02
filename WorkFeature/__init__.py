@@ -58,7 +58,7 @@ if not sys.path.__contains__("/usr/lib/freecad/lib"):
 import WFGui_2015 as WFGui
 from   WF_ObjRot_2015 import *
 global myRelease
-myRelease = "2015_06_22"
+myRelease = "2015_09_02"
 
 import os.path
 import time
@@ -103,6 +103,17 @@ global biColor
 biColor=0
 global objCopy
 objCopy=0
+
+global sweep_solid
+sweep_solid = True
+global sweep_frenet
+sweep_frenet = True
+global sweep_transition
+sweep_transition = 2
+global sweep_all
+sweep_all = True
+global BBox_volum
+BBox_volum = False
 
 m_numberLinePart = 2
 m_numberLineCut = 2
@@ -224,7 +235,7 @@ def print_point(point, msg=""):
     #print_msg(str(point))
     #m_type = point.__class__.__name__
     #print_msg(str(m_type))
-    print_msg(str(msg) +
+    print_msg(str(msg) + " " +
               "x =" + str(point.x) + ", "
               "y =" + str(point.y) + ", "
               "z =" + str(point.z))
@@ -266,7 +277,6 @@ def verbose_toggled(flag):
 def biColor_toggled(flag):
     """ Respond to the change of biColor flag.
     """
-    global verbose
     msg=verbose
     global biColor
     biColor=0
@@ -279,7 +289,6 @@ def biColor_toggled(flag):
 def copy_toggled(flag):
     """ Respond to the change of Object copy flag.
     """
-    global verbose
     msg=verbose
     global objCopy
     objCopy=0
@@ -425,6 +434,24 @@ def get_InfoObjects(info=0, printError=True):
                   ", m_objNames=" + str(m_objNames))
     return m_num, m_selEx, m_objs, m_objNames
 
+def reset_SelectedObjects(Selection, info=0):
+    """ Reset the selection changed by Draft.rotate for example
+    Selection is the original selection you want to reset. Must be saved before any
+    change!
+    """
+    Gui.Selection.clearSelection()
+    for Sel_i_Object in Selection:
+        m_DocumentName = Sel_i_Object.DocumentName
+        m_ObjectName = Sel_i_Object.ObjectName
+        m_Object = Sel_i_Object.Object
+        print_msg(str(m_Object))
+        for m_SubElementName in Sel_i_Object.SubElementNames:
+            if info != 0:
+                m_finalName = str(m_DocumentName)+"."+str(m_ObjectName)+"."+str(m_SubElementName)
+                print_msg(m_finalName)
+            Gui.Selection.addSelection(m_Object,str(m_SubElementName))
+    
+
 def get_SelectedObjectsWithParent(info=0, printError=True):
     """ Return selected objects as
         Selection = (Number_of_Points, Number_of_Edges, Number_of_Planes,
@@ -477,8 +504,71 @@ def get_SelectedObjectsWithParent(info=0, printError=True):
         printError_msg("No active document !")
     return 
 
-    
 def get_SelectedObjects(info=0, printError=True):
+    """ Return selected objects as
+        Selection = (Number_of_Points, Number_of_Edges, Number_of_Planes,
+                    Selected_Points, Selected_Edges, Selected_Planes)
+    """
+    def storeShapeType(Object, Selected_Points, Selected_Edges, Selected_Planes):
+        if Object.ShapeType == "Vertex":
+            Selected_Points.append(Object)
+        if Object.ShapeType == "Edge":
+            Selected_Edges.append(Object) 
+        if Object.ShapeType == "Face":
+            Selected_Planes.append(Object)
+            
+    m_actDoc=get_ActiveDocument(info=0)
+    
+    if m_actDoc.Name:    
+        # Return a list of SelectionObjects for a given document name.
+        # "getSelectionEx" Used for selecting subobjects
+        m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+ 
+        m_num = len(m_selEx)
+        if info != 0:
+            print_msg("m_selEx : " + str(m_selEx))
+            print_msg("m_num   : " + str(m_num))
+            
+        if m_num >= 1: 
+            Selected_Points = []
+            Selected_Edges = []
+            Selected_Planes = []
+            for Sel_i_Object in m_selEx:
+                if info != 0:
+                    print_msg("Processing : " + str(Sel_i_Object.ObjectName))
+                                
+                if Sel_i_Object.HasSubObjects:                
+                    for Object in Sel_i_Object.SubObjects:
+                        if info != 0:
+                            print_msg("SubObject : " + str(Object)) 
+                        if hasattr(Object, 'ShapeType'):
+                            storeShapeType(Object, Selected_Points, Selected_Edges, Selected_Planes)
+                else:
+                    storeShapeType(Sel_i_Object.Object.Shape, Selected_Points, Selected_Edges, Selected_Planes)
+                    
+                    
+                    
+            Number_of_Points = len(Selected_Points)
+            Number_of_Edges = len(Selected_Edges)
+            Number_of_Planes = len(Selected_Planes)
+            Selection = (Number_of_Points, Number_of_Edges, Number_of_Planes,
+                    Selected_Points, Selected_Edges, Selected_Planes)
+            if info != 0:
+                print_msg("Number_of_Points, Number_of_Edges, Number_of_Planes," +
+                           "Selected_Points, Selected_Edges, Selected_Planes = " + str(Selection))
+            return Selection
+        else:
+            if info != 0:
+                print_msg("No Object selected !")
+            if printError:
+                printError_msg("Select at least one object !")
+            return None
+    else:
+        printError_msg("No active document !")
+    return 
+
+    
+def get_SelectedObjects_old(info=0, printError=True):
     """ Return selected objects as
         Selection = (Number_of_Points, Number_of_Edges, Number_of_Planes,
                     Selected_Points, Selected_Edges, Selected_Planes)
@@ -529,6 +619,66 @@ def get_SelectedObjects(info=0, printError=True):
     else:
         printError_msg("No active document !")
     return 
+
+
+def get_wireListFromObjectName(objName, subSelection=True, msg=1):
+    """ Return a list of wires from a selected object.
+    objName is the name of the selected object 
+    subSelection is a flag to say if we want to select from the object:
+        Only the wire selected (True) or
+        All wires belonging to this object (False)
+    """
+    if (None in [objName]) :
+      return None
+    m_wires = []
+    m_name = objName
+    
+    if subSelection :
+        if msg != 0:
+            print "subSelection is True"
+        for o in Gui.Selection.getSelectionEx():
+            if msg != 0:
+                print "ObjectName selected is : " + str(o.ObjectName)
+            if str(o.ObjectName) == str(m_name):
+                if msg != 0:
+                    print "Found : " + str(m_name)
+                for s in o.SubObjects:
+                    if msg != 0:
+                        print "SubObjects : " + str(s)
+                    if hasattr(s, 'Shape') :
+                        if msg != 0:
+                            print "s.Shape : " + str(s.Shape)
+                        if isinstance(s.Shape,Part.Compound):
+                            for wire in s.Shape.Wires:
+                                m_wires.append(Part.Wire([wire]))
+                        if isinstance(s.Shape,Part.Edge) or isinstance(s.Shape,Part.Wire): 
+                            m_wires.append(Part.Wire([s.Shape]))
+                    if hasattr(s, 'ShapeType') :
+                        if msg != 0:
+                            print "s.ShapeType : " + str(s.ShapeType)
+                        if s.ShapeType == 'Edge':
+                            m_wires.append(Part.Wire([s]))
+                        if s.ShapeType == 'Face':
+                            for e in s.Edges:
+                                m_wires.append(Part.Wire([e]))
+    else:
+        if msg != 0:
+            print "subSelection is False"
+        for o in Gui.Selection.getSelectionEx():
+            if msg != 0:
+                print "ObjectName selected is : " + str(o.ObjectName)
+            if str(o.ObjectName) == str(m_name):
+                if msg != 0:
+                    print "Found : " + str(m_name)
+                if isinstance(o.Object.Shape,Part.Compound):
+                    for wire in o.Object.Shape.Wires:
+                        m_wires.append(Part.Wire([wire]))
+                elif isinstance(o.Object.Shape,Part.Edge) or isinstance(o.Object.Shape,Part.Wire): 
+                    m_wires.append(Part.Wire([o.Object.Shape]))
+                else:
+                    m_wires = get_wireListFromObjectName(m_name,True,msg=msg)
+                    #m_wires.append(Part.Wire([o.Object.Shape]))
+    return m_wires
 
     
 def getType(objs):
@@ -863,7 +1013,7 @@ def centerCirclePoint(edge,info=0):
 def distanceBetween(A, B):
     """ Return the distance between 2 points.
     """
-    # if isinstance(A,FreeCAD.Vector) and isinstance(B,FreeCAD.Vector):
+    # if isinstance(A,App.Vector) and isinstance(B,App.Vector):
     line = Part.Line(A,B)
     edge = line.toShape()
     return edge.Length
@@ -983,6 +1133,46 @@ def intersecPoints(shape1, shape2, info=0):
         return None
     return 
 
+def findNormal(wire, forceDiscretize=False, msg=1):
+    """Look for the Normal for wire.
+    """
+    wire_points = []
+    if forceDiscretize:
+        if hasattr(wire,'discretize') != True:
+            printError_msg("No discretize function for the wire!")
+            return None
+        wire_points = wire.discretize(4)
+        if len(wire_points) <= 2:
+            printError_msg("Unable to discretize the wire!")
+            return None
+        m_vect01 = wire_points[1] - wire_points[0]
+        m_vect02 = wire_points[2] - wire_points[0]
+        wire_normal = m_vect01.cross(m_vect02)
+        if msg != 0:
+            print_msg("Normal by discretize() !")
+                       
+    else:                   
+        if len(wire.Edges) != 0:                 
+            wire_normal = wire.Edges[0].tangentAt(0)
+            wire_points.append(wire.Vertexes[0].Point)
+            if msg != 0:
+                print_msg("Normal by Tangent !")
+        else :
+            
+            if hasattr(wire,'discretize') != True:
+                printError_msg("No discretize function for the wire!")
+                return
+            wire_points = wire.discretize(Distance=0.01)
+            if len(wire_points) <= 2:
+                printError_msg("Unable to discretize the wire!")
+                return                
+            wire_normal = wire_points[1] - wire_points[0]
+            if msg != 0:
+                print_msg("Normal by discretize() !")         
+                
+    wire_normal.normalize()
+    return wire_normal, wire_points
+
 def getClickedPoint(info):
     global verbose
     msg=verbose
@@ -1010,11 +1200,14 @@ def getClickedPoint(info):
 
             
 def getClickedNormal(info):
+    import Mesh
     msg=0
     view = Gui.ActiveDocument.ActiveView
     down = (info["State"] == "DOWN")
     pos = info["Position"]
+    
     if msg != 0:
+        #print_msg("info : " + str(info))
         print_msg("info['Position'] : " + str(pos))
     global m_stack
     global m_callback
@@ -1026,28 +1219,66 @@ def getClickedNormal(info):
         if msg != 0:
             print_msg("view.getPoint(pos[0],pos[1] : " + str(point))
             print_msg("view.getObjectInfo(pos) : " + str(obj))
+            
         if obj == None:
             printError_msg("No Object selected !")
             view.removeEventCallback("SoMouseButtonEvent",m_callback)
             return None
         else:
             m_sel = Gui.Selection.getSelection()[0]
-            m_face = m_sel.Shape.Faces[0]
-            m_surf = m_face.Surface
-            m_p = App.Vector(obj["x"],obj["y"],obj["z"])
-            m_uv = m_surf.parameter(m_p)
-            u,v = m_uv[0], m_uv[1]
-            m_p1 = m_face.valueAt(u,v)
-            m_p2 = m_face.normalAt(u,v)
-            if m_extensionFaceNormal == 0.0:
-                m_extensionFaceNormal = 10.0
-            m_p3 = m_p1 + m_p2.normalize().multiply(m_extensionFaceNormal)
-            createFolders('WorkAxis')
-            name = "Normal"
-            plot_axis(m_p1,m_p3, part, name)
-            createFolders('WorkPoints')
-            name = "Point"
-            plot_point(m_p1, part,  name)
+            if hasattr(m_sel, 'Shape'):
+                if len(m_sel.Shape.Faces) > 0:
+                    # find the face selected 
+                    if msg != 0:                        
+                        print_msg( str(obj["Component"])+ " selected !")
+                            
+                    if len(m_sel.Shape.Faces) == 1: 
+                        m_face = m_sel.Shape.Faces[0]
+                    else:
+                        m_face=eval('m_sel.Shape.'+str(obj["Component"]))
+                    m_surf = m_face.Surface
+                    m_p = App.Vector(obj["x"],obj["y"],obj["z"])
+                    m_uv = m_surf.parameter(m_p)
+                    u,v = m_uv[0], m_uv[1]
+                    m_p1 = m_face.valueAt(u,v)
+                    m_p2 = m_face.normalAt(u,v)
+                    if m_extensionFaceNormal == 0.0:
+                        m_extensionFaceNormal = 10.0
+                    m_p3 = m_p1 + m_p2.normalize().multiply(m_extensionFaceNormal)
+                    createFolders('WorkAxis')
+                    name = "Normal"
+                    plot_axis(m_p1,m_p3, part, name)
+                    createFolders('WorkPoints')
+                    name = "Point"
+                    plot_point(m_p1, part,  name)
+                else:
+                    printError_msg("No Face selected !") 
+            else:
+                if isinstance(m_sel,Mesh.Feature):
+                    print_msg("Mesh selected !")
+                    # find the facet selected
+                    r = Gui.ActiveDocument.ActiveView.getCameraOrientation()
+                    start = r.Axis
+                    m_mesh = m_sel.Mesh
+                    m_FacetsSel = m_mesh.nearestFacetOnRay((obj["x"],obj["y"],obj["z"]),(start.x,start.y,start.z))
+                    if len(m_FacetsSel) == 0:
+                        return
+                    m_p1 = App.Vector(obj["x"],obj["y"],obj["z"])
+                    for idx in m_FacetsSel.keys():
+                        m_p2 = App.Vector(m_mesh.Facets[idx].Normal)
+                    
+                    if m_extensionFaceNormal == 0.0:
+                        m_extensionFaceNormal = 10.0
+                    m_p3 = m_p1 + m_p2.normalize().multiply(m_extensionFaceNormal)
+                    createFolders('WorkAxis')
+                    name = "Normal"
+                    plot_axis(m_p1,m_p3, part, name)
+                    createFolders('WorkPoints')
+                    name = "Point"
+                    plot_point(m_p1, part,  name)
+                else:
+                    printError_msg("No Shape available for : " + str(m_sel) + "\nat " + str(App.Vector(obj["x"],obj["y"],obj["z"])))
+
             view.removeEventCallback("SoMouseButtonEvent",m_callback)
 
             
@@ -1535,7 +1766,7 @@ def plot_text(letter, size, part, name, grp="WorkObjects"):
     return text_User_Name, ss   
 
 
-def plot_point(Vector_point, part, name, grp="WorkPoints"):
+def plot_point(Vector_point, part="Part::Feature", name="Point", grp="WorkPoints"):
     if not(App.ActiveDocument.getObject( grp )):
         App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
     point = App.ActiveDocument.addObject( part, name )
@@ -1546,7 +1777,7 @@ def plot_point(Vector_point, part, name, grp="WorkPoints"):
     return point_User_Name
 
 
-def plot_axis(Vector_A, Vector_B, part, name, grp="WorkAxis"):
+def plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis", grp="WorkAxis"):
     if not(App.ActiveDocument.getObject( grp )):
         App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
     axis = App.ActiveDocument.addObject(part, name)
@@ -1771,8 +2002,30 @@ def plot_Dome(Point, Radius, Frequency, part="Part::Feature", name="Dome", grp="
     Gui.ActiveDocument.getObject( dome_User_Name ).Transparency = 75        
     return dome_User_Name, dome   
 
+
+def plot_sweep(traj, section, makeSolid=True, isFrenet=True, transition=2 , part="Part::Feature", name="Sweep", grp="WorkObjects"):
+    if not(App.ActiveDocument.getObject( grp )):
+        App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
+    sweep = App.ActiveDocument.addObject(part, name)
+    # create a 3D shape and assigh it to the current document
+#==============================================================================
+#     makePipeShell(shapeList,[isSolid,isFrenet,transition])
+#     Make a loft defined by a list of profiles along a wire. Transition can be
+#     0 (default), 1 (right corners) or 2 (rounded corners).
+#==============================================================================
+    Sweep = Part.Wire(traj).makePipeShell([section],makeSolid,isFrenet,transition)
     
-def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
+    sweep.Shape = Sweep
+    App.ActiveDocument.getObject( grp ).addObject( sweep )
+    obj_User_Name = sweep.Label
+    Gui.ActiveDocument.getObject( obj_User_Name ).PointColor = (1.00,0.67,0.00)
+    Gui.ActiveDocument.getObject( obj_User_Name ).LineColor = (1.00,0.67,0.00)
+    Gui.ActiveDocument.getObject( obj_User_Name ).ShapeColor = (0.00,0.33,1.00)
+    Gui.ActiveDocument.getObject( obj_User_Name ).Transparency = 75   
+    return obj_User_Name, sweep
+
+    
+def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=False,info=0):
     """ Create a bounding box.
     """
     m_grp = grp
@@ -1784,6 +2037,7 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
     m_o_Z = ori_Z
     global flag_for_face
     flag_for_face = True
+    flag_for_volume = createVol
 
     if info != 0:
         print_msg("Xmin, Ymin, Zmin : \n" +
@@ -1798,7 +2052,9 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
             m_rect = Draft.makeRectangle(length=m_l_X,height=m_l_Y,
                                 placement=m_pl_0,face=flag_for_face,support=None)
             addObjectToGrp(m_rect,m_grp,info=info)
-            definePropOfActiveObj()     
+            definePropOfActiveObj() 
+            if flag_for_volume:
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False    
         except:
             printError_msg("Rectangle 0 not done !")
         try:
@@ -1807,7 +2063,9 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
             m_rect = Draft.makeRectangle(length=m_l_X,height=m_l_Y,
                                 placement=m_pl_1,face=flag_for_face,support=None)                
             addObjectToGrp(m_rect,m_grp,info=info)
-            definePropOfActiveObj()        
+            definePropOfActiveObj()
+            if flag_for_volume:
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False         
         except:
             printError_msg("Rectangle 1 not done !")
             
@@ -1818,7 +2076,9 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
             m_rect = Draft.makeRectangle(length=m_l_X,height=m_l_Z,
                                 placement=m_pl_2,face=flag_for_face,support=None)
             addObjectToGrp(m_rect,m_grp,info=info)
-            definePropOfActiveObj()          
+            definePropOfActiveObj()
+            if flag_for_volume:
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False           
         except:
             printError_msg("Rectangle 2 not done !")
         try:
@@ -1827,7 +2087,9 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
             m_rect = Draft.makeRectangle(length=m_l_X,height=m_l_Z,
                                 placement=m_pl_3,face=flag_for_face,support=None)
             addObjectToGrp(m_rect,m_grp,info=info)
-            definePropOfActiveObj()       
+            definePropOfActiveObj()
+            if flag_for_volume:
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False        
         except:
             printError_msg("Rectangle 3 not done !")
             
@@ -1838,7 +2100,9 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
             m_rect = Draft.makeRectangle(length=m_l_Y,height=m_l_Z,
                                 placement=m_pl_4,face=flag_for_face,support=None)
             addObjectToGrp(m_rect,m_grp,info=info)
-            definePropOfActiveObj()         
+            definePropOfActiveObj()
+            if flag_for_volume:
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False          
         except:
             printError_msg("Rectangle 4 not done !")
         try:
@@ -1847,10 +2111,17 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
             m_rect = Draft.makeRectangle(length=m_l_Y,height=m_l_Z,
                                 placement=m_pl_5,face=flag_for_face,support=None)
             addObjectToGrp(m_rect,m_grp,info=info)
-            definePropOfActiveObj()       
+            definePropOfActiveObj()
+            if flag_for_volume:
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False        
         except:
             printError_msg("Rectangle 5 not done !")
-      
+    
+    if not flag_for_volume:
+        print_msg("Bounding Box Planes created !")
+        return
+        
+    # Else Create Volume  
     #if (m_l_X != 0.0) and (m_l_Y != 0.0) and (m_l_Z != 0.0):
     try: 
         if (m_l_X == 0.0):
@@ -1865,16 +2136,17 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0):
         m_pnt = App.Vector(m_o_X ,m_o_Y,m_o_Z)
         print_point(m_pnt, msg="m_pnt")
         # adds object to the document group
-        box = App.ActiveDocument.addObject("Part::Feature", "BBox")
+        box = App.ActiveDocument.addObject("Part::Feature", "BBoxVolume")
         #By default pnt=Vector(0,0,0) and dir=Vector(0,0,1) 
         Box_face = Part.makeBox(m_l_X,m_l_Y,m_l_Z,m_pnt)
         #print_msg("Box_face :" + str(Box_face) )            
         box.Shape = Box_face
         m_grp.addObject( box )
         Gui.activeDocument().activeObject().Transparency = (50)           
-        print_msg("Bounding Box created !")
+        print_msg("Bounding Box Volume created !")
     except:
-        printError_msg("Bounding Box not created !")
+        printError_msg("Bounding Box Volume not created !")
+        
 #==============================================================================
 
     
@@ -2955,21 +3227,21 @@ def plot_baseObjectPoint():
         printError_msg(error_msg)        
 
 
-
-
 def point_toSketch():
     """ Transform Point(s) in Sketch's Point(s) by projection onto the Sketch's Plane:
     - First select an existing Sketch;
     - Select as much as Points needed;
     Then click on this button.
     """
-    global verbose
     msg=verbose
+    msg=1
 
     m_actDoc = get_ActiveDocument(info=msg)
     if m_actDoc == None:
         return None
-    error_msg = "Transform Point(s) in Sketch's Point(s) : \nFirst select an existing Skecth\nthen select point(s) !"
+    error_msg = "Transform Point(s) in Sketch's Point(s) : \n" +\
+                "First select an existing Sketch\n" +\
+                "then select point(s) !"
     result_msg = " : Point(s) transformed in Sketch's Point(s) done!"
     
     m_sel   = Gui.Selection.getSelection(m_actDoc.Name)
@@ -3000,14 +3272,18 @@ def point_toSketch():
             m_rec = Part.makePlane(1,1)
             m_rec.Placement = m_sketch.Placement
             m_recN = m_rec.normalAt(0,0)
+            
             # Build a geometry list
             geoList = []
             # Get Point(s) from the selection
-            for m_i in range(1,m_num):
-                m_obj = m_selEx[m_i]
+            #for m_i in range(1,m_num):
+            for m_obj in m_selEx[1:]:
+                #m_obj = m_selEx[m_i]
                 if len(m_obj.SubObjects) != 0:
                     SubObject = m_obj.SubObjects[0]
                     if SubObject.ShapeType == "Vertex":
+                        #placement = App.Placement()
+                        #m_sketch.Placement = placement
                         if msg != 0:
                             print_msg("Found a Points object!")
                         Point = m_obj.SubObjects[0]
@@ -3015,11 +3291,14 @@ def point_toSketch():
                         m_p = Point.Point
                         # Projection of the Point selected onto the Sketch Plane
                         Projection = m_p.projectToPlane(m_sketch.Placement.Base, m_recN)
+                        plot_axis(m_p, m_p.add(m_recN), part="Part::Feature", name="Norml", grp="WorkAxis")
+                        plot_point(Projection, part="Part::Feature", name="Proj", grp="WorkPoints")
                         # Append the Projection
                         geoList.append(Part.Point(Projection))
                         # Add the geometry list to the Sketch
                         m_sketch.addGeometry(geoList)
-                        m_num_point = m_num_point + 1                   
+                        m_num_point = m_num_point + 1
+                        #m_sketch.Placement =  m_rec.Placement                  
                     else:
                         continue
                 else:
@@ -3374,9 +3653,113 @@ def extensionFaceNormal(value):
         print_msg("New extension is :" + str(m_extensionFaceNormal))
     except ValueError:
         printError_msg("Extension must be valid number !")
-        
+
 
 def plot_faceNormal():
+    """Create a normal Axis at click location of a Face or at a selected point location.
+    """
+    msg=verbose
+    global m_callback
+        
+    createFolders('WorkAxis')
+    error_msg = "Unable to create Normal Axis : \n" + \
+                "To create a Normal at click location on a Face:\n"  + \
+                "- Click first in the view to select and object,\n" + \
+                "- then push the button,\n" + \
+                "- then click on a location on the selected Face.\n" + \
+                "or\n" + \
+                "To create several Normal of the face:\n" + \
+                "- Click first in the view to select and object,\n" + \
+                "- then select one or several points of the face\n" + \
+                "- then push the button.\n" + \
+                "(These selections can also be done into the Combined View)"
+    result_msg = "Normal Axis created !"
+    
+    def plot_normal(m_sel, m_point):
+        import Mesh
+        global m_extensionFaceNormal
+        part = "Part::Feature"    
+        if hasattr(m_sel, 'Shape'):
+            if len(m_sel.Shape.Faces) > 0:
+                m_face = m_sel.Shape.Faces[0]
+                m_surf = m_face.Surface
+                m_p = m_point
+                m_uv = m_surf.parameter(m_p)
+                u,v = m_uv[0], m_uv[1]
+                m_p1 = m_face.valueAt(u,v)
+                m_p2 = m_face.normalAt(u,v)
+                if m_extensionFaceNormal == 0.0:
+                    m_extensionFaceNormal = 10.0
+                m_p3 = m_p1 + m_p2.normalize().multiply(m_extensionFaceNormal)
+                createFolders('WorkAxis')
+                name = "Normal"
+                plot_axis(m_p1,m_p3, part, name)
+                createFolders('WorkPoints')
+                name = "Point"
+                plot_point(m_p1, part,  name)
+                return True
+            else:
+                printError_msg("No Face selected !")
+                return False
+        else:
+            if isinstance(m_sel,Mesh.Feature):
+                print_msg("Mesh selected !")
+                # find the facet selected
+                r = Gui.ActiveDocument.ActiveView.getCameraOrientation()
+                start = r.Axis
+                m_mesh = m_sel.Mesh 
+                m_FacetsSel = m_mesh.nearestFacetOnRay((m_point.x,m_point.y,m_point.z),(start.x,start.y,start.z))
+                if len(m_FacetsSel) == 0:
+                    return
+                m_p1 = m_point
+                for idx in m_FacetsSel.keys():
+                    m_p2 = App.Vector(m_mesh.Facets[idx].Normal)
+                
+                if m_extensionFaceNormal == 0.0:
+                    m_extensionFaceNormal = 10.0
+                m_p3 = m_p1 + m_p2.normalize().multiply(m_extensionFaceNormal)
+                createFolders('WorkAxis')
+                name = "Normal"
+                plot_axis(m_p1,m_p3, part, name)
+                createFolders('WorkPoints')
+                name = "Point"
+                plot_point(m_p1, part,  name)
+                return True
+            else:
+                printError_msg("No Shape available for : " + str(m_sel) + "\nat " + str(m_point))
+                return False
+                
+    if len(Gui.Selection.getSelectionEx()) >= 2:
+        SelectedObjects = get_SelectedObjects(info=msg, printError=False)
+                
+        Number_of_Points = SelectedObjects[0]
+        Number_of_Planes = SelectedObjects[2]
+        if msg != 0:
+            print_msg(" Number_of_Planes=" + str(Number_of_Planes))
+            print_msg(" Number_of_Points=" + str(Number_of_Points))
+        Point_List = SelectedObjects[3]
+        Plane_List = SelectedObjects[5]
+        if msg != 0:
+            print_msg(" Point_List=" + str(Point_List))
+            print_msg(" Plane_List=" + str(Plane_List))
+            
+        if Number_of_Planes == 1 and Number_of_Points >=1 :
+            m_sel = Plane_List[0]
+            m_sel = Gui.Selection.getSelection()[0]
+            for Selected_Point in Point_List:
+                m_point = Selected_Point.Point
+                if not plot_normal(m_sel, m_point):
+                    break
+                else:
+                    print_msg( result_msg )
+        else:
+            printError_msg(error_msg)
+    else:    
+        view = Gui.ActiveDocument.ActiveView
+        m_callback = view.addEventCallback("SoMouseButtonEvent",getClickedNormal)        
+
+
+def plot_faceNormal_old():
     """Create a normal Axis at click location of a Face.
     """
     global m_callback
@@ -5751,7 +6134,7 @@ def plot_clickForPlane2():
     if msg !=0:
         print_msg("Create plane ("+str(m_radius)+" mm)")
         
-    pl = FreeCAD.Placement()
+    pl = App.Placement()
     pl.Rotation = Gui.ActiveDocument.ActiveView.getCameraOrientation()
 
     
@@ -5767,16 +6150,16 @@ def plot_clickForPlane2():
     yP = float(datExtract(plan)[1])
     zP = float(datExtract(plan)[2])
     qP = float(datExtract(plan)[3])
-    pl = FreeCAD.Placement()
+    pl = App.Placement()
     pl.Rotation.Q = (xP,yP,zP,qP)         # rotation of object
 
-    pl.Base = FreeCAD.Vector(positionX,positionY,positionZ) # here coordinates XYZ of plan
-    points=[FreeCAD.Vector(-(radiusP*1.5),0,0),FreeCAD.Vector((radiusP*1.5),0,0)]
+    pl.Base = App.Vector(positionX,positionY,positionZ) # here coordinates XYZ of plan
+    points=[App.Vector(-(radiusP*1.5),0,0),App.Vector((radiusP*1.5),0,0)]
     mire01 = Draft.makeWire(points,closed=False,placement=pl,face=False,support=None)
     FreeCADGui.ActiveDocument.getObject(App.ActiveDocument.ActiveObject.Name).LineColor = (1.0,0.0,0.0)
     FcPlane.addObject(mire01)  # contener character
    
-    points=[FreeCAD.Vector(0,-(radiusP*1.5),0),FreeCAD.Vector(0,(radiusP*1.5),0)]
+    points=[App.Vector(0,-(radiusP*1.5),0),App.Vector(0,(radiusP*1.5),0)]
     mire02 = Draft.makeWire(points,closed=False,placement=pl,face=False,support=None)
     FreeCADGui.ActiveDocument.getObject(App.ActiveDocument.ActiveObject.Name).LineColor = (1.0,0.0,0.0)
     FcPlane.addObject(mire02)  # contener character
@@ -5785,7 +6168,7 @@ def plot_clickForPlane2():
     Rnameplane = App.ActiveDocument.ActiveObject.Name
 
     App.ActiveDocument.ActiveObject.Label   = "PlaneC"
-    FreeCAD.ActiveDocument.getObject(Rnameplane).MakeFace = True
+    App.ActiveDocument.getObject(Rnameplane).MakeFace = True
     FreeCADGui.ActiveDocument.getObject(Rnameplane).LineColor = (1.0,0.0,0.0)
     FreeCADGui.ActiveDocument.getObject(Rnameplane).ShapeColor = (0.0,0.66666669,1.0)
     FreeCADGui.ActiveDocument.getObject(Rnameplane).Transparency = 80
@@ -5794,7 +6177,7 @@ def plot_clickForPlane2():
     FreeCADGui.ActiveDocument.getObject(Rnameplane).ShowGrid = True
 
     FcPlane.addObject(cercle)  # contener character
-    FreeCAD.ActiveDocument.recompute()
+    App.ActiveDocument.recompute()
 
     positionX = 0.0
     positionY = 0.0
@@ -5986,11 +6369,19 @@ def get_all_from_bounding_box(ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=
     
     return Points, Edges, Faces
 
+def volumBBox_toggled(flag):
+    """ Respond to the change of solid flag.
+    """
+    global BBox_volum
+    BBox_volum = flag
+
   
 def plot_boundingBoxes():
     """Create bounding boxes around each of selected object(s).
     """
-    msg=0
+    msg=verbose    
+    createVol=BBox_volum
+    
     createFolders('WorkBoxes')
     error_msg  = "Select at least one object !"
     result_msg = "Bounding box created !"
@@ -6037,7 +6428,7 @@ def plot_boundingBoxes():
             m_ori_Y = m_boundBox.YMin
             m_ori_Z = m_boundBox.ZMin
 
-            bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,m_length_Z,info=msg)
+            bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,m_length_Z,createVol,info=msg)
 
             m_actDoc.recompute()
             m_i = m_i +1
@@ -6050,7 +6441,9 @@ def plot_boundingBoxes():
 def plot_boundingBox():
     """ Create one bounding box around all of selected object(s).
     """
-    msg=0
+    msg=verbose  
+    createVol=BBox_volum
+    
     createFolders('WorkBoxes')
     error_msg  = "Select at least one object !"
     result_msg = "Bounding box created !"
@@ -6078,7 +6471,7 @@ def plot_boundingBox():
         m_ori_X = m_xmin
         m_ori_Y = m_ymin
         m_ori_Z = m_zmin
-        bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,m_length_Z,info=msg)
+        bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,m_length_Z,createVol,info=msg)
         m_actDoc.recompute()
         print_msg(result_msg)
         
@@ -6126,8 +6519,8 @@ def plot_axisPointCylinder():
     result_msg = " : Cylinder(s) created !"
     name = "Cylinder"
     part = "Part::Feature"    
-    global m_diameterCylinder
-    global m_lengthCylinder
+    #global m_diameterCylinder
+    #global m_lengthCylinder
       
     m_actDoc = get_ActiveDocument(info=msg)
     if m_actDoc.Name == None:
@@ -6214,9 +6607,9 @@ def plot_axisPointCube():
     result_msg = " : Cube(s) created !"
     name = "Cuboid"
     part = "Part::Feature"    
-    global m_lengthCube
-    global m_widthCube
-    global m_heightCube
+    #global m_lengthCube
+    #global m_widthCube
+    #global m_heightCube
     
     m_actDoc = get_ActiveDocument(info=msg)
     if m_actDoc.Name == None:
@@ -6866,8 +7259,16 @@ def angleRevolve(value):
 def plot_revolution():
     """
     Revolve:
-        Make the revolution of an Object around an Axis:
-        - Select on or several axis(es) and one or several wire(s)
+    Make the revolution of Edge(s) or Wire(s) around an Axis:
+    - Select one or several wire(s)
+    or
+    - Select FIRST one Point as center of rotation and one Axis as rotation axis !
+    - Select one or several wire(s)
+    
+    NB:
+      You can also define the angle of revolution if needed
+       If no Axis is selected the Z axis is considered as Axis of rotation !
+       If no Point is selected the Origin is considered as Center of rotation !
 
     """
 
@@ -6978,6 +7379,419 @@ def plot_revolution():
         
     except:
         printError_msg(error_msg)
+
+
+def frenet_toggled(flag):
+    """ Respond to the change of frenet flag.
+    """
+    global sweep_frenet
+    sweep_frenet = flag
+
+    
+def solid_toggled(flag):
+    """ Respond to the change of solid flag.
+    """
+    global sweep_solid
+    sweep_solid = flag
+
+
+def subselect_toggled(flag):
+    """ Respond to the change of allsubselect flag.
+    """
+    global sweep_all
+    sweep_all = flag
+
+
+def transition(*argc):
+    """ Transition between profiles choice by combo box.
+    Options :
+    No Transition (or 0) (default)
+    Right corners (or 1) 
+    Rounded corners (or 2)
+    """
+    global sweep_transition
+    msg=verbose
+    if msg != 0:
+        print_msg("Transition between profiles choice by combo box !")
+    sweep_transition = 2    
+    if str(*argc) == "No Transition":
+        sweep_transition = 0
+    if str(*argc) == "Right corners":
+        sweep_transition = 1
+    if str(*argc) == "Rounded corners":
+        sweep_transition = 2
+
+
+def plot_sectionSweep():
+    """ Section Sweep:
+    #  Make a loft defined by a list of profiles along a wire.
+    Will extrude/sweep a Section along a Trajectory like sweep from Part Workbench but:
+    - the Section center (of Mass) is move at the first point of the Trajectory and;
+    - the "plane" of the Section is rotate to be perpendicular to the Trajectory.
+    
+    - Select first one Section wire (Closed wire will generate volumes by default)
+    (This Section can be a compound from sketch to realize "tube")
+    - Select one or several wire(s) as Trajectory(ies)
+    - Then push this button
+    
+    NB: You can change first:
+    - Solid option (if toggled will generate a solid for Closed wire Section only) 
+    - isFrenet option
+    - All option (means if the trajectory selected is a compound, all sub wires will be used for the sweep)
+    - Transition Option (Select a Transition option in case of trajectory with several wires; Transition can be:
+    #     0 (default), 1 (right corners) or 2 (rounded corners).)   
+    """    
+    msg=verbose
+
+    # Variable makeSolid = 1 to create solid if section is closed, 0 to create surfaces
+    makeSolid=sweep_solid
+    isFrenet=sweep_frenet
+    # Transition between profiles can be 0  (default), 1 (right corners) 
+    # or 2 (rounded corners)
+    transition=sweep_transition
+    # If several sub profiles when this flag is true only the sub profile selected
+    # will be processed
+    allSubProfile=sweep_all
+    
+#    if msg != 0:
+#        print_msg("makeSolid = " + str(makeSolid))
+#        print_msg("isFrenet = " + str(isFrenet))
+#        print_msg("transition = " + str(transition))
+#        print_msg("allSubProfile = " + str(allSubProfile))
+    
+    createFolders('WorkAxis')
+    createFolders('WorkPoints')
+    createFolders('WorkObjects')
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "First select the wire you want as section for Section Sweep (must be closed for solid creation!)\n" +\
+    "Then select the second wire for the trajectory of the Sweep !"
+    result_msg = " : Section Sweep created !"
+    name = "SectionSweep"
+    part = "Part::Feature"
+
+    m_actDoc=App.activeDocument()
+    if m_actDoc.Name:     
+        m_sel = Gui.Selection.getSelection(m_actDoc.Name)
+        m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    else:
+        return
+        
+#    if msg != 0:
+#        print_msg("m_sel = " + str(m_sel))
+#        m_num_objs = len(m_sel)
+#        print_msg("m_num_objs = " + str(m_num_objs))
+              
+    try:
+        SelectedObjects = m_sel
+
+        # First object selected is the section then other are trajectories
+        if not (hasattr(SelectedObjects[0], 'Shape') and hasattr(SelectedObjects[1], 'Shape')) :
+            printError_msg("Object without Shape selected \n"+ str(error_msg))
+            return
+        if msg != 0:
+            print_msg("01-First object selected is the section then other are trajectories")
+            print_msg("Object with Shape selected = " + str(SelectedObjects))
+            
+        # Make a copy of the section
+        m_copy = App.activeDocument().copyObject(SelectedObjects[0])
+        shape0 = m_copy.Shape
+        if msg != 0:
+            print_msg("02-Make a copy of the section")
+            print_msg("shape0 = " + str(shape0))
+        
+        # Get the list of sections in case of first section is a Compound 
+        m_sections = []
+        if isinstance(shape0,Part.Compound): 
+            m_msg = "Compound Section Found !"
+            for wire in shape0.Wires:
+                m_sections.append(Part.Wire([wire]))
+        else:
+            m_msg = "NO Compound Found !"
+            m_sections.append(Part.Wire([shape0]))
+
+        if msg != 0:
+            print_msg("03-Get the list of sections in case of first section is a Compound")
+            print_msg(m_msg)
+            print_msg("m_sections = " + str(m_sections))
+            
+        # Loop on sections
+        for m_id in range(len(m_sections)):
+            m_section = m_sections[m_id]
+            if msg != 0:
+                print_msg("04-Loop on sections")
+                print_msg("Section Selected = " + str(m_section))
+            
+            # Loop on trajectories           
+            for selObj in SelectedObjects[1:]:
+                if not hasattr(selObj, 'Shape') :
+                    continue
+#                if msg != 0:
+#                    print_msg("Processing selObj.Name = " + str(selObj.Name))
+                m_traj_points = []
+                m_section_points = []    
+                rot_center = m_section.CenterOfMass
+                            
+                # Look for the Normal of section wire            
+                m_section_normal, m_section_points = findNormal(m_section, forceDiscretize=True, msg=msg)
+            
+#                if msg != 0:                
+#                    print_point(m_section_normal, msg="NormalOfSection = ")
+#                    axis_User_Name, axis = plot_axis(rot_center, rot_center.add(m_section_normal), part="Part::Feature", name="NormalOfSection", grp="WorkAxis")
+#                    Gui.ActiveDocument.getObject(axis_User_Name).LineColor = (1.0,0.0,0.0)
+            
+                # List of trajectories
+                m_trajs = []                
+                m_trajs = get_wireListFromObjectName(selObj.Name,subSelection=not(allSubProfile),msg=msg)
+                if msg != 0:
+                    print_msg("m_trajs = " + str(m_trajs))
+                for s in m_trajs:
+                    shape2 = s
+                    m_traj = Part.Wire([shape2])
+                    if msg != 0: 
+                        print_msg("m_section = " + str(m_section))
+                        print_msg("m_traj = " + str(m_traj))
+                    
+                    # Look for the Normal for trajectory wire                          
+                    m_traj_normal, m_traj_points = findNormal(m_traj, forceDiscretize=False, msg=msg)
+
+#                    if msg != 0:
+#                        print_point(m_traj_normal, msg="NormalOfTrajectory = ")
+#                        axis_User_Name, axis = plot_axis(rot_center, rot_center.add(m_traj_normal), part, name="NormalOfTrajectory", grp="WorkAxis")
+#                        Gui.ActiveDocument.getObject(axis_User_Name).LineColor = (0.0,1.0,0.0)
+#                        point_User_Name = plot_point(m_traj_points[0], part, name="End", grp="WorkPoints")
+#                        Gui.ActiveDocument.getObject(point_User_Name).PointColor = (1.0,1.0,1.0) 
+                      
+                    m_angle, m_angle_rad = angleBetween(m_traj_normal,m_section_normal)
+                    rot_axis = m_traj_normal.cross(m_section_normal)
+                    rot_angle = -1 * m_angle 
+#                    if msg != 0:
+#                        print_msg("rot_angle = " + str(rot_angle))
+#                        axis_User_Name, axis = plot_axis(rot_center,rot_center.add( rot_axis), part, name="Normal", grp="WorkAxis")
+#                        Gui.ActiveDocument.getObject(axis_User_Name).LineColor = (0.0,0.0,1.0)
+#                        point_User_Name = plot_point(rot_center, part, name="Start", grp="WorkPoints")
+#                        Gui.ActiveDocument.getObject( point_User_Name ).PointColor = (0.0,0.0,1.0)
+
+                    Draft.rotate(m_copy,rot_angle,rot_center,rot_axis,copy=False)
+#                    if msg != 0:
+#                        print_msg("rotation done !")
+                        
+                    # Reset the selection changed by Draft.rotate   
+                    reset_SelectedObjects(m_selEx, info=0)
+                                        
+                    m_move = m_traj_points[0].sub(rot_center)
+                    m_oldplace = m_copy.Placement
+                    m_rot = m_copy.Placement.Rotation
+                    m_base  = m_copy.Placement.Base
+                    if msg != 0:
+                        print_msg("m_copy.Placement = " + str(m_copy.Placement))
+    
+                    m_newplace = App.Placement(m_base.add(m_move), m_rot )
+                    m_copy.Placement = m_newplace
+#                    if msg != 0:
+#                        print_msg("move done !")
+                        
+                    shape3 = m_copy.Shape
+                    m_sections3 = []
+                    if isinstance(shape3,Part.Compound):
+                        for wire in shape3.Wires:
+                            m_sections3.append(Part.Wire([wire]))
+                    else:
+                        m_sections3.append(Part.Wire([shape3]))
+#                    if msg != 0:
+#                        print_msg("m_sections3 = " + str(m_sections3))
+
+                    for m_id3 in range(len(m_sections3)):
+                        m_section3 = m_sections3[m_id3]
+                        if m_id == m_id3 :
+                            Sweep_User_Name, sweep = plot_sweep(m_traj, m_section3, makeSolid, isFrenet, transition, part, name)
+                            print_msg(str(Sweep_User_Name) + result_msg )
+                    
+                    m_copy.Placement = m_oldplace
+                    rot_angle = -1*rot_angle                   
+                    Draft.rotate(m_copy,rot_angle,rot_center,rot_axis,copy=False)
+                    reset_SelectedObjects(m_selEx, info=0)
+                    
+        # Remove duplicated section
+        App.getDocument(str(App.activeDocument().Name)).removeObject(m_copy.Label)
+                      
+
+    except:
+        printError_msg(error_msg)
+    
+def plot_sectionSweep2():
+    """
+    Beam Sweep:
+    Will sweep a Section along a Trajectory like sweep from Part worbench but:
+    - the Section center(of Mass) is move at the first point of the Trajectory and;
+    - the"plane" of the Section is rotate to be perpendicular to the Trajectory.
+    
+    - Select first one Section wire (Closed wire will generate volumes by default)
+    - Select one or several wire as Trajectory(ies)
+    
+    if Solid check box is toggled:
+      The Beam sweep will generate a solid with a closed selected wire as Section.
+    If this check box is toggle off:
+      Or if the Section wire is not closed, only a shell will be created.
+    """
+    msg=verbose
+    msg=1
+
+    # variable makeSolid = 1 to create solid, 0 to create surfaces
+    makeSolid=ssweep_solid
+    isFrenet=sweep_frenet
+    transition=sweep_transition
+    
+    createFolders('WorkAxis')
+    createFolders('WorkPoints')        
+    createFolders('WorkObjects')
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "First select the wire you want as section for Beam Sweep (must be closed)\n" +\
+    "Then select the second wire for the trajectory of the Sweep !"
+    result_msg = " : Beam Sweep created !"
+    name = "BeamSweep"
+    part = "Part::Feature"
+    
+    m_actDoc=App.activeDocument()
+    if m_actDoc.Name:     
+        m_sel = Gui.Selection.getSelection(m_actDoc.Name)
+        m_num_objs = len(m_sel)
+        if msg != 0:
+            print_msg("m_sel=" + str(m_sel))
+            print_msg("m_num_objs=" + str(m_num_objs))
+    
+    Origin = Base.Vector(0, 0, 0)       
+    try:
+        SelectedObjects = m_sel
+        
+        if hasattr(SelectedObjects[0], 'Shape') and hasattr(SelectedObjects[1], 'Shape') :
+            if msg != 0:
+                print_msg("Both Object selected have a Shape")
+
+            m_traj_points = []
+            m_section_points = []
+            shape0 = SelectedObjects[0].Shape
+            
+            # Look for Compound object like Sketch with several wires
+            if isinstance(shape0,Part.Compound):
+                m_face = Part.Face(shape0.Wires)
+                if msg != 0:
+                    print_msg("Face Created!" + str(m_face))
+                    face = App.ActiveDocument.addObject("Part::Feature", 'Face')
+                    face.Shape = m_face
+                rot_center = m_face.CenterOfMass
+                m_section_normal = m_face.normalAt(0,0)                    
+            else:
+                m_section = Part.Wire([shape0])
+                if msg != 0:
+                    print_msg("Section Created!" + str(m_section))
+                rot_center = m_section.CenterOfMass
+                # Look for the Normal a Start of section wire
+                if hasattr(m_section,'discretize') != True:
+                    printError_msg("Unable to discretize the section!")
+                    return
+                m_section_points = m_section.discretize(4)
+                if len(m_section_points) <= 2:
+                    printError_msg("Unable to discretize the section!")
+                    return
+                m_vect01 = m_section_points[1] - m_section_points[0]
+                m_vect02 = m_section_points[2] - m_section_points[0]
+                m_section_normal = m_vect01.cross(m_vect02)
+                if msg != 0:
+                    print_msg("Normal by discretize() !")
+
+            m_section_normal.normalize()
+            if msg != 0:
+                print_point(m_section_normal, msg="NormalOfSection is ")
+                axis_User_Name, axis = plot_axis(Origin, m_section_normal, part, name="NormalOfSection", grp="WorkAxis")
+                Gui.ActiveDocument.getObject(axis_User_Name).LineColor = (1.0,0.0,0.0)
+                
+                
+            for selObj in SelectedObjects[1:]:
+                if not hasattr(selObj, 'Shape') :
+                    continue
+                if isinstance(shape0,Part.Compound):
+                    obj = App.ActiveDocument.addObject("Part::Feature", "Face")
+                    m_obj.Shape = m_face
+                    shape1 = m_obj.Shape
+                else:
+                    m_obj = App.activeDocument().copyObject(SelectedObjects[0],True)
+                    shape1 = m_obj.Shape                
+                print_msg("shape 1 selected !" + str(shape1))
+
+                shape2 = selObj.Shape
+                print_msg("shape 2 selected !" + str(shape2)) 
+                #shape2 = SelectedObjects[1].Shape
+                if isinstance(shape2,Part.Compound): 
+                    m_traj = Part.Wire([shape2.Wires[0]])
+                    if msg != 0: 
+                        print_msg("m_section !" + str(m_section))
+                        print_msg("m_traj !" + str(m_traj)) 
+                else:                    
+                    m_traj = Part.Wire([shape2])
+                    if msg != 0: 
+                        print_msg("m_section !" + str(m_section))
+                        print_msg("m_traj !" + str(m_traj)) 
+
+#==============================================================================
+#               Look for the Normal a Start of trajectory wire
+#==============================================================================
+                if len(shape2.Edges) != 0:                
+                    m_traj_normal = shape2.Edges[0].tangentAt(0)
+                    m_traj_points.append(shape2.Vertexes[0].Point)
+                    if msg != 0:
+                        print_msg("Normal by Tangent !") 
+                else :
+                    if hasattr(m_traj,'discretize') != True:
+                        printError_msg("Unable to discretize the trajectory!")
+                        return
+                    m_traj_points = m_traj.discretize(Distance=0.01)
+                    if len(m_traj_points) <= 2:
+                        printError_msg("Unable to discretize the trajectory!")
+                        return                
+                    m_traj_normal = m_traj_points[1] - m_traj_points[0]
+                    if msg != 0:
+                        print_msg("Normal by discretize() !") 
+                
+                m_traj_normal.normalize()
+                if msg != 0:
+                    print_point(m_traj_normal, msg="NormalOfTrajectory is ")
+                    axis_User_Name, axis = plot_axis(Origin, m_traj_normal, part, name="NormalOfTrajectory", grp="WorkAxis")
+                    Gui.ActiveDocument.getObject(axis_User_Name).LineColor = (0.0,1.0,0.0)
+                    point_User_Name = plot_point(m_traj_points[0], part, name="End", grp="WorkPoints")
+                    Gui.ActiveDocument.getObject( point_User_Name ).PointColor = (1.0,1.0,1.0)   
+                                      
+                m_angle, m_angle_rad = angleBetween(m_traj_normal,m_section_normal)
+                rot_axis = m_traj_normal.cross(m_section_normal)
+                rot_angle = -1 * m_angle
+                #rot_center = m_section.CenterOfMass
+                if msg != 0:
+                    print_msg("rot_angle" + str(rot_angle))
+                    axis_User_Name, axis = plot_axis(Origin, rot_axis, part, name="Normal", grp="WorkAxis")
+                    Gui.ActiveDocument.getObject(axis_User_Name).LineColor = (0.0,0.0,1.0)
+                    point_User_Name = plot_point(rot_center, part, name="Start", grp="WorkPoints")
+                    Gui.ActiveDocument.getObject( point_User_Name ).PointColor = (0.0,0.0,1.0)
+                
+                Draft.rotate(m_obj,rot_angle,rot_center,rot_axis)
+                m_move = m_traj_points[0].sub(rot_center)
+                #m_move = rot_center.add(m_move)
+                m_rot = m_obj.Placement.Rotation
+                m_base  = m_obj.Placement.Base
+                if msg != 0:
+                    print_msg("m_obj.Placement" + str(m_obj.Placement))
+
+                m_newplace = App.Placement(m_base.add(m_move), m_rot )
+                m_obj.Placement = m_newplace
+                shape3 = m_obj.Shape
+                m_section2 = Part.Wire([shape3]) 
+                Sweep_User_Name, sweep = plot_sweep(m_traj, m_section2, makeSolid, isFrenet, transition, part, name)
+                print_msg(str(Sweep_User_Name) + result_msg )
+                if msg == 0:
+                    App.getDocument(str(App.activeDocument().Name)).removeObject(m_obj.Label)  
+    except:
+        printError_msg(error_msg)
+        
         
 def view_align():
     """ Set the current view perpendicular to the selected Face, Edge
@@ -8281,7 +9095,7 @@ def camera_orientation():
     by the function getCameraOrientation().
     """
     msg=verbose
-    pl = FreeCAD.Placement()
+    pl = App.Placement()
     pl.Rotation = Gui.ActiveDocument.ActiveView.getCameraOrientation()
     
     xP = pl.Rotation.Q[0]
@@ -8315,6 +9129,8 @@ def object_align2view():
       if the Face of the object selected is already aligned to the  view Plane,
       a rotation of 180 deg is applied to the object.
       In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)
+      
+      Two clicks will rotate by 180 deg.
     """
     msg=verbose
 
@@ -8324,6 +9140,9 @@ def object_align2view():
     "All Face(s) will be aligned to the actual view Plane!"
         
     Selection = get_SelectedObjectsWithParent(info=msg, printError=False)
+    m_actDoc=get_ActiveDocument(info=1)    
+    Selection2 = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    
     try:
         SelectedObjects = Selection
         Number_of_Planes = SelectedObjects[2]
@@ -8367,6 +9186,8 @@ def object_align2view():
                         rot_center = Plane_Point
                         rot_angle = m_angle
                         Draft.rotate(Parent_Plane,rot_angle,rot_center,rot_axis)
+            # Reset the selection changed by Draft.rotate 
+            reset_SelectedObjects(Selection2, info=0)
         else:
             printError_msg(error_msg)            
     except:
@@ -8399,7 +9220,9 @@ def object_alignFaces():
      
       if the Face of the object selected is already aligned to the last one,
       a rotation of 180 deg is applied to the object.
-      In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)
+      In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)  
+      
+      Two clicks will rotate by 180 deg.
     """
     msg=verbose
         
@@ -8409,6 +9232,8 @@ def object_alignFaces():
     "All Faces will be aligned to the last one !"
     
     Selection = get_SelectedObjectsWithParent(info=msg, printError=False)
+    m_actDoc=get_ActiveDocument(info=1)
+    Selection2 = Gui.Selection.getSelectionEx(m_actDoc.Name)
     
     try:
         SelectedObjects = Selection
@@ -8460,6 +9285,10 @@ def object_alignFaces():
                         rot_center = Plane_Point
                         rot_angle = m_angle + m_angleAlignFaces
                         Draft.rotate(Parent_Plane,rot_angle,rot_center,rot_axis)
+            
+            # Reset the selection changed by Draft.rotate 
+            reset_SelectedObjects(Selection2, info=0)  
+ 
         else:
             printError_msg(error_msg)                          
     except:
@@ -8493,6 +9322,8 @@ def object_alignEdges():
       if the Edge of the object selected is already aligned to the last one,
       a rotation of 180 deg is applied to the object.
       In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)
+      
+      Two clicks will rotate by 180 deg.
     """
     msg=verbose
 
@@ -8502,7 +9333,9 @@ def object_alignEdges():
     "All Edges will be aligned to the last one !"
     
     Selection = get_SelectedObjectsWithParent(info=msg, printError=False)
-
+    m_actDoc=get_ActiveDocument(info=1)
+    Selection2 = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    
     try:
         SelectedObjects = Selection
         Number_of_Edges  = SelectedObjects[1]
@@ -8550,6 +9383,8 @@ def object_alignEdges():
                         rot_center = Edge_Point
                         rot_angle = m_angle + m_angleAlignEdges
                         Draft.rotate(Parent_Edge,rot_angle,rot_center,rot_axis)
+            # Reset the selection changed by Draft.rotate 
+            reset_SelectedObjects(Selection2, info=0)
         else:
             printError_msg(error_msg)                          
     except:
@@ -8558,20 +9393,20 @@ def object_alignEdges():
     
 def object_jointPoints():
     """
+    Joint Point(s) from selected object(s) to the last Point selected.
+    - Click first to select a Point of an object or several Points from several objects. 
+    - Click second to select an Point to joint to.
     """
     msg=verbose
-    msg=1
 
     error_msg =\
     "INCORRECT Object(s) Selection :\n" +\
-    "You Must Select at least two(2) Points (from two objects) !\n" +\
+    "You Must Select at least two(2) Points (from two different objects) !\n" +\
     "All Points will be displaced onto the last one !"
          
     Selection = get_SelectedObjectsWithParent(info=msg, printError=False)
 
     try:
-        SelectedObjects = Selection
-
         SelectedObjects = Selection
         Number_of_Points = SelectedObjects[0]
         if msg!=0:
@@ -8611,6 +9446,118 @@ def object_jointPoints():
         
     except:
         printError_msg(error_msg)
+
+
+def object_jointFaces():
+    """Joint Face(s) from selected object(s) to the last Face selected.
+    - Click first to select a Face of an object or several Faces from several objects. 
+    - Click second to select an Face to joint to.
+    """
+    msg=verbose
+        
+    createFolders('WorkPoints')
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "You Must Select at least two(2) Faces (from two different objects) !\n" +\
+    "All Faces will be displaced onto the last one !"
+    
+    Selection = get_SelectedObjectsWithParent(info=msg, printError=False)
+    m_actDoc=get_ActiveDocument(info=1)
+    Selection2 = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    
+    try:
+        SelectedObjects = Selection
+        Number_of_Planes = SelectedObjects[2]
+        if msg!=0:
+            print_msg("Number_of_Planes=" + str(Number_of_Planes))
+            
+        if Number_of_Planes >= 2 :
+            Plane_List = SelectedObjects[5]
+            if msg != 0:
+                print_msg(" Plane_List=" + str(Plane_List))
+            
+            Origin = Base.Vector(0, 0, 0)           
+            # Get the Reference Plane : last of the selected
+            Ref_Plane_dict = Plane_List[-1]
+            for Selected_Plane, Parent_Plane in Ref_Plane_dict.iteritems():
+                Plane_Point_ref = Selected_Plane.CenterOfMass
+                Plane_Normal_ref = Selected_Plane.normalAt(0,0)
+            if msg != 0:
+                print_point(Plane_Point_ref, msg="Reference Plane_Point = ")
+                print_point(Plane_Normal_ref, msg="Reference Plane_Normal = ")                        
+                point_User_Name = plot_point(Plane_Point_ref, part="Part::Feature", name="End", grp="WorkPoints")
+                Gui.ActiveDocument.getObject(point_User_Name).PointColor = (1.0,1.0,1.0) 
+                
+            del Plane_List[-1]
+            
+            for Selected_Plane_dict in Plane_List:
+                if msg != 0:
+                    print_msg("Selected_Plane_dict = " + str(Selected_Plane_dict))
+                for Selected_Plane, Parent_Plane in Selected_Plane_dict.iteritems():
+                    if msg != 0:
+                        print_msg("Selected_Plane = " + str(Selected_Plane))
+                        print_msg("Parent = " + str(Parent_Plane))
+                    try:                        
+                        Plane_Point = Parent_Plane.Shape.BoundBox.Center
+                    except:
+                        Plane_Point = Selected_Plane.CenterOfMass
+
+                    Plane_Normal = Selected_Plane.normalAt(0,0)
+                    Plane_Center = Selected_Plane.CenterOfMass
+                    point = App.ActiveDocument.addObject( "Part::Feature", "Start" )
+                    point.Shape = Part.Vertex( Plane_Center )
+                    
+                    if msg != 0:
+                        print_point(Plane_Point, msg="Plane_Point = ")
+                        print_point(Plane_Normal, msg="Plane_Normal = ")
+                        point_User_Name = plot_point(Plane_Point, part="Part::Feature", name="Center_Rot", grp="WorkPoints")
+                        Gui.ActiveDocument.getObject( point_User_Name ).PointColor = (0.0,0.0,1.0)
+#==============================================================================
+#             # First align Faces
+#==============================================================================
+                    if colinearVectors(Plane_Normal, Origin, Plane_Normal_ref, info=msg, tolerance=1e-12):
+                        if Plane_Normal == Plane_Normal_ref.multiply(-1):
+                            Plane_Center = Selected_Plane.CenterOfMass
+                        #else:
+                        rot_axis = Base.Vector(0, 0, 1).cross(Plane_Normal)
+                        rot_center = Plane_Point
+                        rot_angle = 180.                   
+                        Draft.rotate(Parent_Plane,rot_angle,rot_center,rot_axis)
+                        Draft.rotate(point,rot_angle,rot_center,rot_axis)
+                        Plane_Center = point.Shape.Point
+                    else:
+                        m_angle, m_angle_rad = angleBetween(Plane_Normal,Plane_Normal_ref)
+                        rot_axis = Plane_Normal.cross(Plane_Normal_ref)
+                        rot_center = Plane_Point
+                        rot_angle = m_angle
+                        Draft.rotate(Parent_Plane,rot_angle,rot_center,rot_axis)
+                        Draft.rotate(point,rot_angle,rot_center,rot_axis)
+                        Plane_Center = point.Shape.Point
+                    if msg != 0:
+                        print_msg("rotation done !")
+                    # Reset the selection changed by Draft.rotate 
+                    reset_SelectedObjects(Selection2, info=0)    
+                    
+                    if msg != 0:
+                        point_User_Name = plot_point(Plane_Center, part="Part::Feature", name="Start", grp="WorkPoints")
+                        Gui.ActiveDocument.getObject( point_User_Name ).PointColor = (0.0,0.0,1.0)
+        
+#==============================================================================
+#             # Then Joint Faces
+#==============================================================================
+                    m_move = Plane_Point_ref.sub(Plane_Center)
+                    m_oldplace = Parent_Plane.Placement
+                    m_rot = m_oldplace.Rotation
+                    m_base  = m_oldplace.Base
+                    m_newplace = App.Placement(m_base.add(m_move), m_rot )
+                    Parent_Plane.Placement = m_newplace
+                    App.getDocument(str(App.activeDocument().Name)).removeObject(point.Label) 
+                    if msg != 0:
+                        print_msg("move done !")
+
+    except:
+        printError_msg(error_msg)
+        
         
 ####################################################################################   
 try:
@@ -8676,7 +9623,10 @@ class WorkFeatureTab():
                 
         ### Connect to functions
         self.connections_for_checkbox_toggled = {
-                             "checkBox_object_center"       : "bBox_toggled", 
+                             "checkBox_object_center"       : "bBox_toggled",
+                             "checkBox_solid"               : "solid_toggled",
+                             "checkBox_allsubselect"        : "subselect_toggled",
+                             "checkBox_volumBB"             : "volumBBox_toggled", 
                             }
         self.connections_for_button_clicked = {
                              "button_WF_quit"               : "quit_clicked", 
@@ -8752,6 +9702,7 @@ class WorkFeatureTab():
                              "button_dome_create"          : "plot_centerDome",
                              "button_letter"               : "plot_letter",
                              "button_revolve"              : "plot_revolution",
+                             "button_sweep"                : "plot_sectionSweep",
                              
                              "button_alignview"            : "view_align",
                              "button_trackcamera"          : "view_trackCamera",                            
@@ -8775,7 +9726,8 @@ class WorkFeatureTab():
                              "button_alignface2view"       : "object_align2view",
                              "button_align_faces"          : "object_alignFaces",
                              "button_align_edges"          : "object_alignEdges",
-                             "button_joint_points"         : "object_jointPoints",                             
+                             "button_joint_points"         : "object_jointPoints", 
+                             "button_joint_faces"          : "object_jointFaces",                             
                             } 
                             
         self.connections_for_text_changed = {
@@ -8835,10 +9787,12 @@ class WorkFeatureTab():
                              "radioButton_verbose"       : "verbose_toggled",
                              "radioButton_biColor"       : "biColor_toggled",
                              "radioButton_copy"          : "copy_toggled",
+                             "radioButton_Frenet"        : "frenet_toggled",
                             }
                             
         self.connections_for_combobox_changed = {
                              "point_loc_comboBox"        : "attachPoint",
+                             "transition_comboBox"       : "transition",
                             }
                             
                 

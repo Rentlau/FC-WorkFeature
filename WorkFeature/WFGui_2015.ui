@@ -144,6 +144,23 @@
                        </property>
                       </widget>
                      </item>
+                     <item row="2" column="0">
+                      <widget class="QRadioButton" name="radioButton_copy">
+                       <property name="toolTip">
+                        <string>Force the duplication of the Parent Object for the following functions:
+  - in &quot;Axis 2/2&quot; TAB:
+	Axes=(Axis,Pt,dist)
+	If an Edge of a Cube is selected the Cube is duplicate 
+	with the corresponding
+	Edge at the defined distance from the original.
+  - in &quot;Plane&quot; TAB:
+	Plane=(Plane,dist)  </string>
+                       </property>
+                       <property name="text">
+                        <string>Object copy</string>
+                       </property>
+                      </widget>
+                     </item>
                      <item row="3" column="0">
                       <layout class="QHBoxLayout" name="horizontalLayout_25">
                        <item>
@@ -181,23 +198,6 @@
                         </widget>
                        </item>
                       </layout>
-                     </item>
-                     <item row="2" column="0">
-                      <widget class="QRadioButton" name="radioButton_copy">
-                       <property name="toolTip">
-                        <string>Force the duplication of the Parent Object for the following functions:
-  - in &quot;Axis 2/2&quot; TAB:
-	Axes=(Axis,Pt,dist)
-	If an Edge of a Cube is selected the Cube is duplicate 
-	with the corresponding
-	Edge at the defined distance from the original.
-  - in &quot;Plane&quot; TAB:
-	Plane=(Plane,dist)  </string>
-                       </property>
-                       <property name="text">
-                        <string>Object copy</string>
-                       </property>
-                      </widget>
                      </item>
                     </layout>
                    </widget>
@@ -469,7 +469,8 @@ The Vector TC is perpendicular to the plane.</string>
     if BBox is not toggled
         This point is the MEAN location of all center of Mass (if exist) of all objects.
         All  center of Mass will be created too.
-    if BBox is toggled
+    
+if BBox check box is toggled
         This point is the center of the Global X,Y,Z bounding box of all objects.
         This bounding box alway exists (especially for draft objects).
         Be aware this point is not necessary the center of Mass of all Objects!</string>
@@ -491,6 +492,12 @@ The Vector TC is perpendicular to the plane.</string>
                  </item>
                  <item>
                   <widget class="QCheckBox" name="checkBox_object_center">
+                   <property name="toolTip">
+                    <string>if BBox check box is toggled
+        This point is the center of the Global X,Y,Z bounding box of all objects.
+        This bounding box alway exists (especially for draft objects).
+        Be aware this point is not necessary the center of Mass of all Objects!</string>
+                   </property>
                    <property name="text">
                     <string>BBox</string>
                    </property>
@@ -1021,10 +1028,17 @@ The extension is 10 units by defaut but must be changed if needed.</string>
                       </size>
                      </property>
                      <property name="toolTip">
-                      <string>Create a normal Axis at click location of a Face.
-Click first in the view to select and object,
-then push the button, 
-then click on a location on the selected object.</string>
+                      <string>Create a normal Axis of a Face.
+To create a Normal at click location on a Face:
+- Click first in the view to select and object,
+- then push the button, 
+- then click on a location on the selected Face.
+or
+To create several Normal of the face:
+- Click first in the view to select and object,
+- then select one or several points of the face
+- then push the button.
+(These selections can also be done into the Combined View)</string>
                      </property>
                      <property name="text">
                       <string>Face Normal</string>
@@ -2691,60 +2705,87 @@ NB:
               <attribute name="title">
                <string>Object</string>
               </attribute>
-              <layout class="QGridLayout" name="gridLayout_12">
+              <layout class="QGridLayout" name="gridLayout_54">
                <item row="0" column="0">
-                <widget class="QPushButton" name="button_boundingboxes">
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Create bounding boxes around each of selected object(s).</string>
-                 </property>
-                 <property name="text">
-                  <string>Bounding Box(es)</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_boundingBoxes.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_boundingBoxes.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
+                <layout class="QHBoxLayout" name="horizontalLayout_35">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_2">
+                   <item>
+                    <widget class="QPushButton" name="button_boundingboxes">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Create bounding boxes around each of selected object(s).
+6 rectangles at the limits of each bounding boxes will be created.</string>
+                     </property>
+                     <property name="text">
+                      <string>Bounding Box(es)</string>
+                     </property>
+                     <property name="icon">
+                      <iconset>
+                       <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_boundingBoxes.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_boundingBoxes.svg</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>32</width>
+                       <height>32</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="button_boundingbox">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Create one bounding box around all of selected object(s).
+6 rectangles at the limits of the bounding box will be created.</string>
+                     </property>
+                     <property name="text">
+                      <string>Bounding Box</string>
+                     </property>
+                     <property name="icon">
+                      <iconset>
+                       <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_boundingBox.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_boundingBox.svg</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>32</width>
+                       <height>32</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_volumBB">
+                   <property name="maximumSize">
+                    <size>
+                     <width>60</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>if &quot;Vol.&quot; is toggled:
+  In Addition of rectangles, the Bounding box will be also created as a Volume.</string>
+                   </property>
+                   <property name="text">
+                    <string>Vol.</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
                <item row="1" column="0">
-                <widget class="QPushButton" name="button_boundingbox">
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Create one bounding box around all of selected object(s).</string>
-                 </property>
-                 <property name="text">
-                  <string>Bounding Box</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_boundingBox.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_boundingBox.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
                 <widget class="Line" name="line">
                  <property name="frameShadow">
                   <enum>QFrame::Plain</enum>
@@ -2760,7 +2801,7 @@ NB:
                  </property>
                 </widget>
                </item>
-               <item row="3" column="0">
+               <item row="2" column="0">
                 <layout class="QGridLayout" name="gridLayout_6">
                  <item row="0" column="0">
                   <widget class="QPushButton" name="button_cylinder_create">
@@ -2847,7 +2888,7 @@ Negative value will reverse the direction from Ref. Point</string>
                  </item>
                 </layout>
                </item>
-               <item row="4" column="0">
+               <item row="3" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_4">
                  <item>
                   <widget class="QPushButton" name="button_cube_create">
@@ -2934,7 +2975,7 @@ Negative value will reverse the direction from Ref. Point</string>
                  </item>
                 </layout>
                </item>
-               <item row="5" column="0">
+               <item row="4" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_19">
                  <item>
                   <widget class="QPushButton" name="button_sphere_create">
@@ -2991,7 +3032,7 @@ at the selected point(s).</string>
                  </item>
                 </layout>
                </item>
-               <item row="6" column="0">
+               <item row="5" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_20">
                  <item>
                   <widget class="QPushButton" name="button_dome_create">
@@ -3085,7 +3126,7 @@ Original code from : Ulrich Brammer</string>
                  </item>
                 </layout>
                </item>
-               <item row="7" column="0">
+               <item row="6" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_23">
                  <item>
                   <widget class="QPushButton" name="button_letter">
@@ -3162,7 +3203,7 @@ NB:
                  </item>
                 </layout>
                </item>
-               <item row="8" column="0">
+               <item row="7" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_34">
                  <item>
                   <widget class="QPushButton" name="button_revolve">
@@ -3226,6 +3267,153 @@ NB:
                  </item>
                 </layout>
                </item>
+               <item row="8" column="0">
+                <widget class="QFrame" name="frame_5">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>3</number>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_53">
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="gridLayout_12">
+                    <item row="2" column="0">
+                     <widget class="QCheckBox" name="checkBox_allsubselect">
+                      <property name="toolTip">
+                       <string>if &quot;All&quot; is toggled:
+  All the wires of the Trajectory  selected will be considered.
+
+Untoggled if you select a Skecth with several curves and you want to process
+only the one subselected.</string>
+                      </property>
+                      <property name="text">
+                       <string>All</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QComboBox" name="transition_comboBox">
+                      <property name="toolTip">
+                       <string>For the function :
+makePipeShell(shapeList,[isSolid,isFrenet,transition])
+Select a Transition option in case of trajectory with several wires; Transition can be:
+#     0 (default), 1 (right corners) or 2 (rounded corners).</string>
+                      </property>
+                      <property name="currentIndex">
+                       <number>2</number>
+                      </property>
+                      <item>
+                       <property name="text">
+                        <string>No Transition</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Right corners</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Rounded corners</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QCheckBox" name="checkBox_solid">
+                      <property name="minimumSize">
+                       <size>
+                        <width>9</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>if &quot;Solid&quot; is toggled:
+  The Beam sweep will generate a solid with a closed selected wire as Section.
+If this check box is toggle off:
+  Or if the Section wire is not closed, only a shell will be created.</string>
+                      </property>
+                      <property name="text">
+                       <string>Solid</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QRadioButton" name="radioButton_Frenet">
+                      <property name="toolTip">
+                       <string>Force the &quot;isFrenet&quot; parameter to True for the function :
+makePipeShell(shapeList,[isSolid,isFrenet,transition])
+</string>
+                      </property>
+                      <property name="text">
+                       <string>isFrenet</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                      <property name="autoExclusive">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QPushButton" name="button_sweep">
+                    <property name="toolTip">
+                     <string>Section Sweep:
+#  Make a loft defined by a list of profiles along a wire.
+Will extrude/sweep a Section along a Trajectory like sweep from Part Workbench but:
+- the Section center (of Mass) is move at the first point of the Trajectory and;
+- the &quot;plane&quot; of the Section is rotate to be perpendicular to the Trajectory.
+
+- Select first one Section wire (Closed wire will generate volumes by default)
+(This Section can be a compound from sketch to realize &quot;tube&quot;)
+- Select one or several wire(s) as Trajectory(ies)
+- Then push this button
+
+NB: You can change first:
+- Solid option (if toggled will generate a solid for Closed wire Section only) 
+- isFrenet option
+- All option (means if the trajectory selected is a compound, all sub wires will be used for the sweep)
+- Transition Option (Select a Transition option in case of trajectory with several wires; Transition can be:
+#     0 (default), 1 (right corners) or 2 (rounded corners).)
+</string>
+                    </property>
+                    <property name="text">
+                     <string>Section Sweep</string>
+                    </property>
+                    <property name="icon">
+                     <iconset>
+                      <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_Beam.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_Beam.svg</iconset>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>32</width>
+                      <height>32</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
                <item row="9" column="0">
                 <spacer name="verticalSpacer">
                  <property name="orientation">
@@ -3233,8 +3421,8 @@ NB:
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
-                   <width>20</width>
-                   <height>40</height>
+                   <width>17</width>
+                   <height>8</height>
                   </size>
                  </property>
                 </spacer>
@@ -3249,7 +3437,7 @@ NB:
                <item row="0" column="0">
                 <widget class="QTabWidget" name="tabWidget_2">
                  <property name="currentIndex">
-                  <number>2</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="align_tab">
                   <attribute name="title">
@@ -3273,6 +3461,7 @@ NB:
                      <property name="toolTip">
                       <string>Align the face of selected object(s)  to the actual view Plane.
  - Click first to select a Face of one or several objects.
+These objects will be moved not the point of view.
 Then Click the button.
 
 NB:
@@ -3282,6 +3471,9 @@ NB:
   if the Face of the object selected is already aligned to the  view Plane,
   a rotation of 180 deg is applied to the object.
   In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)
+
+  Two clicks will rotate by 180 deg the moving objects.
+
 </string>
                      </property>
                      <property name="text">
@@ -3312,7 +3504,8 @@ NB:
                        <property name="toolTip">
                         <string>Align the Face(s) from selected object(s) to the last Face selected.
  - Click first to select a Face of an object or several Faces from several objects. 
- - Click second to select a Face to align to.
+These objects will be moved.
+ - Click second to select a Face to align to (the last object is fixed and will never move).
 Then Click the button.
 
 NB:
@@ -3321,7 +3514,10 @@ NB:
  
   if the Face of the object selected is already aligned to the last one,
   a rotation of 180 deg is applied to the object.
-  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)</string>
+  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)
+
+  Two clicks will rotate by 180 deg the moving objects.
+</string>
                        </property>
                        <property name="text">
                         <string>Align Faces</string>
@@ -3381,7 +3577,8 @@ NB:
                        <property name="toolTip">
                         <string>Align the Edge(s) from selected object(s) to the last Edge selected.
  - Click first to select an Edge of an object or several Edges from several objects. 
- - Click second to select an Edge to align to.
+These objects will be moved.
+ - Click second to select an Edge to align to  (the last object is fixed and will never move).
 Then Click the button.
 
 NB:
@@ -3390,7 +3587,10 @@ NB:
  
   if the Edge of the object selected is already aligned to the last one,
   a rotation of 180 deg is applied to the object.
-  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)</string>
+  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)
+
+  Two clicks will rotate by 180 deg the moving objects.
+</string>
                        </property>
                        <property name="text">
                         <string>Align Edges</string>
@@ -3437,13 +3637,28 @@ NB:
                      </item>
                     </layout>
                    </item>
+                   <item row="5" column="0">
+                    <spacer name="verticalSpacer_15">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
                    <item row="3" column="0">
                     <widget class="QPushButton" name="button_joint_points">
                      <property name="toolTip">
                       <string>Joint Point(s) from selected object(s) to the last Point selected.
- - Click first to select a Point of an object or several Points from several objects. 
- - Click second to select an Point to joint to.
+ - Click first to select a Point of an object or several Points from several objects.
+These objects will be moved. 
+ - Click second to select an Point to joint to (the last object is fixed and will never move).
 Then Click the button.
+
 </string>
                      </property>
                      <property name="text">
@@ -3462,17 +3677,31 @@ Then Click the button.
                     </widget>
                    </item>
                    <item row="4" column="0">
-                    <spacer name="verticalSpacer_15">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
+                    <widget class="QPushButton" name="button_joint_faces">
+                     <property name="toolTip">
+                      <string>Joint Face(s) from selected object(s) to the last Face selected.
+ - Click first to select a Face of an object or several Faces from several objects. 
+These objects will be moved.
+ - Click second to select a Face to joint to (the last object is fixed and will never move).
+Then Click the button.
+
+  Two clicks will rotate by 180 deg the moving objects.
+</string>
                      </property>
-                     <property name="sizeHint" stdset="0">
+                     <property name="text">
+                      <string>Joint Faces</string>
+                     </property>
+                     <property name="icon">
+                      <iconset>
+                       <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_objectJointFaces.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_objectJointFaces.svg</iconset>
+                     </property>
+                     <property name="iconSize">
                       <size>
-                       <width>20</width>
-                       <height>40</height>
+                       <width>32</width>
+                       <height>32</height>
                       </size>
                      </property>
-                    </spacer>
+                    </widget>
                    </item>
                   </layout>
                  </widget>
@@ -4365,7 +4594,7 @@ N copies requested :
                            <number>1</number>
                           </property>
                           <property name="maximum">
-                           <number>10</number>
+                           <number>20</number>
                           </property>
                           <property name="singleStep">
                            <number>1</number>
@@ -5038,30 +5267,6 @@ by the function getCameraOrientation().</string>
                  </property>
                 </spacer>
                </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="button_isParallel">
-                 <property name="toolTip">
-                  <string>Check if two faces or two Edges are Parallel:
-- Select the 2 faces/planes or 2 Edges/Lines and
-Click this button
-
-NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
-                 </property>
-                 <property name="text">
-                  <string>are Parallel ?</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isParallel.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isParallel.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
                <item row="2" column="0">
                 <widget class="QPushButton" name="button_isCoplanar">
                  <property name="toolTip">
@@ -5077,6 +5282,30 @@ NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
                  <property name="icon">
                   <iconset>
                    <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isCoplanar.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isCoplanar.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="button_isParallel">
+                 <property name="toolTip">
+                  <string>Check if two faces or two Edges are Parallel:
+- Select the 2 faces/planes or 2 Edges/Lines and
+Click this button
+
+NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
+                 </property>
+                 <property name="text">
+                  <string>are Parallel ?</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isParallel.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isParallel.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -5142,30 +5371,6 @@ Click this button
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="button_isPerpendicular">
-                 <property name="toolTip">
-                  <string>Check if two faces or two Edges are Perpendicular:
-- Select the 2 faces/planes or 2 Edges/Lines and
-Click this button
-
-NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
-                 </property>
-                 <property name="text">
-                  <string>are Perpendicular ?</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isPerpendicular.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isPerpendicular.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
                <item row="5" column="0">
                 <widget class="QPushButton" name="button_isDistance">
                  <property name="toolTip">
@@ -5181,6 +5386,30 @@ Click this button
                  <property name="icon">
                   <iconset>
                    <normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_distanceBetween.svg</normaloff>../../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_distanceBetween.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="button_isPerpendicular">
+                 <property name="toolTip">
+                  <string>Check if two faces or two Edges are Perpendicular:
+- Select the 2 faces/planes or 2 Edges/Lines and
+Click this button
+
+NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
+                 </property>
+                 <property name="text">
+                  <string>are Perpendicular ?</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isPerpendicular.svg</normaloff>../../../../../../../../home/laurent/Documents/03_Plans/Python/Icons/WF_isPerpendicular.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>

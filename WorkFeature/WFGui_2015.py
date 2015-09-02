@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'WFGui_2015_06_22.ui'
+# Form implementation generated from reading ui file 'WFGui_2015_08_31.ui'
 #
-# Created: Mon Jun 22 13:51:21 2015
+# Created: Mon Aug 31 22:01:38 2015
 #      by: PySide UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -71,6 +71,9 @@ class Ui_Form(object):
         self.radioButton_biColor.setAutoExclusive(False)
         self.radioButton_biColor.setObjectName(_fromUtf8("radioButton_biColor"))
         self.gridLayout_3.addWidget(self.radioButton_biColor, 1, 0, 1, 1)
+        self.radioButton_copy = QtGui.QRadioButton(self.groupBox_5)
+        self.radioButton_copy.setObjectName(_fromUtf8("radioButton_copy"))
+        self.gridLayout_3.addWidget(self.radioButton_copy, 2, 0, 1, 1)
         self.horizontalLayout_25 = QtGui.QHBoxLayout()
         self.horizontalLayout_25.setObjectName(_fromUtf8("horizontalLayout_25"))
         self.label_5 = QtGui.QLabel(self.groupBox_5)
@@ -81,9 +84,6 @@ class Ui_Form(object):
         self.tolerance_edit.setObjectName(_fromUtf8("tolerance_edit"))
         self.horizontalLayout_25.addWidget(self.tolerance_edit)
         self.gridLayout_3.addLayout(self.horizontalLayout_25, 3, 0, 1, 1)
-        self.radioButton_copy = QtGui.QRadioButton(self.groupBox_5)
-        self.radioButton_copy.setObjectName(_fromUtf8("radioButton_copy"))
-        self.gridLayout_3.addWidget(self.radioButton_copy, 2, 0, 1, 1)
         self.gridLayout_14.addWidget(self.groupBox_5, 0, 0, 1, 1)
         self.gridLayout_5.addWidget(self.frame_3, 1, 0, 1, 1)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
@@ -883,8 +883,12 @@ class Ui_Form(object):
         self.Objects_Tab2.setEnabled(True)
         self.Objects_Tab2.setMinimumSize(QtCore.QSize(0, 0))
         self.Objects_Tab2.setObjectName(_fromUtf8("Objects_Tab2"))
-        self.gridLayout_12 = QtGui.QGridLayout(self.Objects_Tab2)
-        self.gridLayout_12.setObjectName(_fromUtf8("gridLayout_12"))
+        self.gridLayout_54 = QtGui.QGridLayout(self.Objects_Tab2)
+        self.gridLayout_54.setObjectName(_fromUtf8("gridLayout_54"))
+        self.horizontalLayout_35 = QtGui.QHBoxLayout()
+        self.horizontalLayout_35.setObjectName(_fromUtf8("horizontalLayout_35"))
+        self.verticalLayout_2 = QtGui.QVBoxLayout()
+        self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
         self.button_boundingboxes = QtGui.QPushButton(self.Objects_Tab2)
         self.button_boundingboxes.setMaximumSize(QtCore.QSize(16777215, 16777215))
         icon54 = QtGui.QIcon()
@@ -892,7 +896,7 @@ class Ui_Form(object):
         self.button_boundingboxes.setIcon(icon54)
         self.button_boundingboxes.setIconSize(QtCore.QSize(32, 32))
         self.button_boundingboxes.setObjectName(_fromUtf8("button_boundingboxes"))
-        self.gridLayout_12.addWidget(self.button_boundingboxes, 0, 0, 1, 1)
+        self.verticalLayout_2.addWidget(self.button_boundingboxes)
         self.button_boundingbox = QtGui.QPushButton(self.Objects_Tab2)
         self.button_boundingbox.setMaximumSize(QtCore.QSize(16777215, 16777215))
         icon55 = QtGui.QIcon()
@@ -900,7 +904,13 @@ class Ui_Form(object):
         self.button_boundingbox.setIcon(icon55)
         self.button_boundingbox.setIconSize(QtCore.QSize(32, 32))
         self.button_boundingbox.setObjectName(_fromUtf8("button_boundingbox"))
-        self.gridLayout_12.addWidget(self.button_boundingbox, 1, 0, 1, 1)
+        self.verticalLayout_2.addWidget(self.button_boundingbox)
+        self.horizontalLayout_35.addLayout(self.verticalLayout_2)
+        self.checkBox_volumBB = QtGui.QCheckBox(self.Objects_Tab2)
+        self.checkBox_volumBB.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.checkBox_volumBB.setObjectName(_fromUtf8("checkBox_volumBB"))
+        self.horizontalLayout_35.addWidget(self.checkBox_volumBB)
+        self.gridLayout_54.addLayout(self.horizontalLayout_35, 0, 0, 1, 1)
         self.line = QtGui.QFrame(self.Objects_Tab2)
         self.line.setFrameShadow(QtGui.QFrame.Plain)
         self.line.setLineWidth(4)
@@ -908,7 +918,7 @@ class Ui_Form(object):
         self.line.setFrameShape(QtGui.QFrame.HLine)
         self.line.setFrameShadow(QtGui.QFrame.Sunken)
         self.line.setObjectName(_fromUtf8("line"))
-        self.gridLayout_12.addWidget(self.line, 2, 0, 1, 1)
+        self.gridLayout_54.addWidget(self.line, 1, 0, 1, 1)
         self.gridLayout_6 = QtGui.QGridLayout()
         self.gridLayout_6.setObjectName(_fromUtf8("gridLayout_6"))
         self.button_cylinder_create = QtGui.QPushButton(self.Objects_Tab2)
@@ -938,7 +948,7 @@ class Ui_Form(object):
         self.length_cylinder.setMaximumSize(QtCore.QSize(60, 16777215))
         self.length_cylinder.setObjectName(_fromUtf8("length_cylinder"))
         self.gridLayout_6.addWidget(self.length_cylinder, 0, 2, 1, 1)
-        self.gridLayout_12.addLayout(self.gridLayout_6, 3, 0, 1, 1)
+        self.gridLayout_54.addLayout(self.gridLayout_6, 2, 0, 1, 1)
         self.horizontalLayout_4 = QtGui.QHBoxLayout()
         self.horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
         self.button_cube_create = QtGui.QPushButton(self.Objects_Tab2)
@@ -968,7 +978,7 @@ class Ui_Form(object):
         self.height_cube.setMaximumSize(QtCore.QSize(60, 16777215))
         self.height_cube.setObjectName(_fromUtf8("height_cube"))
         self.horizontalLayout_4.addWidget(self.height_cube)
-        self.gridLayout_12.addLayout(self.horizontalLayout_4, 4, 0, 1, 1)
+        self.gridLayout_54.addLayout(self.horizontalLayout_4, 3, 0, 1, 1)
         self.horizontalLayout_19 = QtGui.QHBoxLayout()
         self.horizontalLayout_19.setObjectName(_fromUtf8("horizontalLayout_19"))
         self.button_sphere_create = QtGui.QPushButton(self.Objects_Tab2)
@@ -988,7 +998,7 @@ class Ui_Form(object):
         self.diameter_sphere.setMaximumSize(QtCore.QSize(60, 16777215))
         self.diameter_sphere.setObjectName(_fromUtf8("diameter_sphere"))
         self.horizontalLayout_19.addWidget(self.diameter_sphere)
-        self.gridLayout_12.addLayout(self.horizontalLayout_19, 5, 0, 1, 1)
+        self.gridLayout_54.addLayout(self.horizontalLayout_19, 4, 0, 1, 1)
         self.horizontalLayout_20 = QtGui.QHBoxLayout()
         self.horizontalLayout_20.setObjectName(_fromUtf8("horizontalLayout_20"))
         self.button_dome_create = QtGui.QPushButton(self.Objects_Tab2)
@@ -1017,7 +1027,7 @@ class Ui_Form(object):
         self.diameter_dome.setMaximumSize(QtCore.QSize(60, 16777215))
         self.diameter_dome.setObjectName(_fromUtf8("diameter_dome"))
         self.horizontalLayout_20.addWidget(self.diameter_dome)
-        self.gridLayout_12.addLayout(self.horizontalLayout_20, 6, 0, 1, 1)
+        self.gridLayout_54.addLayout(self.horizontalLayout_20, 5, 0, 1, 1)
         self.horizontalLayout_23 = QtGui.QHBoxLayout()
         self.horizontalLayout_23.setObjectName(_fromUtf8("horizontalLayout_23"))
         self.button_letter = QtGui.QPushButton(self.Objects_Tab2)
@@ -1041,7 +1051,7 @@ class Ui_Form(object):
         self.size_letter.setMaximumSize(QtCore.QSize(50, 16777215))
         self.size_letter.setObjectName(_fromUtf8("size_letter"))
         self.horizontalLayout_23.addWidget(self.size_letter)
-        self.gridLayout_12.addLayout(self.horizontalLayout_23, 7, 0, 1, 1)
+        self.gridLayout_54.addLayout(self.horizontalLayout_23, 6, 0, 1, 1)
         self.horizontalLayout_34 = QtGui.QHBoxLayout()
         self.horizontalLayout_34.setObjectName(_fromUtf8("horizontalLayout_34"))
         self.button_revolve = QtGui.QPushButton(self.Objects_Tab2)
@@ -1061,12 +1071,51 @@ class Ui_Form(object):
         self.angle_revolve.setMaximumSize(QtCore.QSize(40, 16777215))
         self.angle_revolve.setObjectName(_fromUtf8("angle_revolve"))
         self.horizontalLayout_34.addWidget(self.angle_revolve)
-        self.gridLayout_12.addLayout(self.horizontalLayout_34, 8, 0, 1, 1)
-        spacerItem9 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_12.addItem(spacerItem9, 9, 0, 1, 1)
+        self.gridLayout_54.addLayout(self.horizontalLayout_34, 7, 0, 1, 1)
+        self.frame_5 = QtGui.QFrame(self.Objects_Tab2)
+        self.frame_5.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_5.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_5.setLineWidth(3)
+        self.frame_5.setObjectName(_fromUtf8("frame_5"))
+        self.gridLayout_53 = QtGui.QGridLayout(self.frame_5)
+        self.gridLayout_53.setObjectName(_fromUtf8("gridLayout_53"))
+        self.gridLayout_12 = QtGui.QGridLayout()
+        self.gridLayout_12.setObjectName(_fromUtf8("gridLayout_12"))
+        self.checkBox_allsubselect = QtGui.QCheckBox(self.frame_5)
+        self.checkBox_allsubselect.setChecked(True)
+        self.checkBox_allsubselect.setObjectName(_fromUtf8("checkBox_allsubselect"))
+        self.gridLayout_12.addWidget(self.checkBox_allsubselect, 2, 0, 1, 1)
+        self.transition_comboBox = QtGui.QComboBox(self.frame_5)
+        self.transition_comboBox.setObjectName(_fromUtf8("transition_comboBox"))
+        self.transition_comboBox.addItem(_fromUtf8(""))
+        self.transition_comboBox.addItem(_fromUtf8(""))
+        self.transition_comboBox.addItem(_fromUtf8(""))
+        self.gridLayout_12.addWidget(self.transition_comboBox, 2, 1, 1, 1)
+        self.checkBox_solid = QtGui.QCheckBox(self.frame_5)
+        self.checkBox_solid.setMinimumSize(QtCore.QSize(9, 0))
+        self.checkBox_solid.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.checkBox_solid.setChecked(True)
+        self.checkBox_solid.setObjectName(_fromUtf8("checkBox_solid"))
+        self.gridLayout_12.addWidget(self.checkBox_solid, 1, 0, 1, 1)
+        self.radioButton_Frenet = QtGui.QRadioButton(self.frame_5)
+        self.radioButton_Frenet.setChecked(True)
+        self.radioButton_Frenet.setAutoExclusive(False)
+        self.radioButton_Frenet.setObjectName(_fromUtf8("radioButton_Frenet"))
+        self.gridLayout_12.addWidget(self.radioButton_Frenet, 1, 1, 1, 1)
+        self.gridLayout_53.addLayout(self.gridLayout_12, 0, 0, 1, 1)
+        self.button_sweep = QtGui.QPushButton(self.frame_5)
         icon62 = QtGui.QIcon()
-        icon62.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_box.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget.addTab(self.Objects_Tab2, icon62, _fromUtf8(""))
+        icon62.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_Beam.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_sweep.setIcon(icon62)
+        self.button_sweep.setIconSize(QtCore.QSize(32, 32))
+        self.button_sweep.setObjectName(_fromUtf8("button_sweep"))
+        self.gridLayout_53.addWidget(self.button_sweep, 1, 0, 1, 1)
+        self.gridLayout_54.addWidget(self.frame_5, 8, 0, 1, 1)
+        spacerItem9 = QtGui.QSpacerItem(17, 8, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.gridLayout_54.addItem(spacerItem9, 9, 0, 1, 1)
+        icon63 = QtGui.QIcon()
+        icon63.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_box.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget.addTab(self.Objects_Tab2, icon63, _fromUtf8(""))
         self.Modif_Tab = QtGui.QWidget()
         self.Modif_Tab.setObjectName(_fromUtf8("Modif_Tab"))
         self.gridLayout_11 = QtGui.QGridLayout(self.Modif_Tab)
@@ -1084,9 +1133,9 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.button_alignface2view.sizePolicy().hasHeightForWidth())
         self.button_alignface2view.setSizePolicy(sizePolicy)
         self.button_alignface2view.setMaximumSize(QtCore.QSize(220, 16777215))
-        icon63 = QtGui.QIcon()
-        icon63.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_viewAlignFace.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_alignface2view.setIcon(icon63)
+        icon64 = QtGui.QIcon()
+        icon64.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_viewAlignFace.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_alignface2view.setIcon(icon64)
         self.button_alignface2view.setIconSize(QtCore.QSize(32, 32))
         self.button_alignface2view.setObjectName(_fromUtf8("button_alignface2view"))
         self.gridLayout_51.addWidget(self.button_alignface2view, 0, 0, 1, 1)
@@ -1094,9 +1143,9 @@ class Ui_Form(object):
         self.horizontalLayout_32.setObjectName(_fromUtf8("horizontalLayout_32"))
         self.button_align_faces = QtGui.QPushButton(self.align_tab)
         self.button_align_faces.setMaximumSize(QtCore.QSize(220, 16777215))
-        icon64 = QtGui.QIcon()
-        icon64.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_objectAlignFaces.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_align_faces.setIcon(icon64)
+        icon65 = QtGui.QIcon()
+        icon65.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_objectAlignFaces.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_align_faces.setIcon(icon65)
         self.button_align_faces.setIconSize(QtCore.QSize(32, 32))
         self.button_align_faces.setObjectName(_fromUtf8("button_align_faces"))
         self.horizontalLayout_32.addWidget(self.button_align_faces)
@@ -1115,9 +1164,9 @@ class Ui_Form(object):
         self.horizontalLayout_33.setObjectName(_fromUtf8("horizontalLayout_33"))
         self.button_align_edges = QtGui.QPushButton(self.align_tab)
         self.button_align_edges.setMaximumSize(QtCore.QSize(220, 16777215))
-        icon65 = QtGui.QIcon()
-        icon65.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_objectAlignAxes.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_align_edges.setIcon(icon65)
+        icon66 = QtGui.QIcon()
+        icon66.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_objectAlignAxes.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_align_edges.setIcon(icon66)
         self.button_align_edges.setIconSize(QtCore.QSize(32, 32))
         self.button_align_edges.setObjectName(_fromUtf8("button_align_edges"))
         self.horizontalLayout_33.addWidget(self.button_align_edges)
@@ -1132,15 +1181,22 @@ class Ui_Form(object):
         self.angle_align_edges.setObjectName(_fromUtf8("angle_align_edges"))
         self.horizontalLayout_33.addWidget(self.angle_align_edges)
         self.gridLayout_51.addLayout(self.horizontalLayout_33, 2, 0, 1, 1)
+        spacerItem10 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.gridLayout_51.addItem(spacerItem10, 5, 0, 1, 1)
         self.button_joint_points = QtGui.QPushButton(self.align_tab)
-        icon66 = QtGui.QIcon()
-        icon66.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_objectJointPoints.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_joint_points.setIcon(icon66)
+        icon67 = QtGui.QIcon()
+        icon67.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_objectJointPoints.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_joint_points.setIcon(icon67)
         self.button_joint_points.setIconSize(QtCore.QSize(32, 32))
         self.button_joint_points.setObjectName(_fromUtf8("button_joint_points"))
         self.gridLayout_51.addWidget(self.button_joint_points, 3, 0, 1, 1)
-        spacerItem10 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_51.addItem(spacerItem10, 4, 0, 1, 1)
+        self.button_joint_faces = QtGui.QPushButton(self.align_tab)
+        icon68 = QtGui.QIcon()
+        icon68.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_objectJointFaces.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_joint_faces.setIcon(icon68)
+        self.button_joint_faces.setIconSize(QtCore.QSize(32, 32))
+        self.button_joint_faces.setObjectName(_fromUtf8("button_joint_faces"))
+        self.gridLayout_51.addWidget(self.button_joint_faces, 4, 0, 1, 1)
         self.tabWidget_2.addTab(self.align_tab, _fromUtf8(""))
         self.cut_tab = QtGui.QWidget()
         self.cut_tab.setObjectName(_fromUtf8("cut_tab"))
@@ -1307,9 +1363,9 @@ class Ui_Form(object):
         self.ObjRot_button_select_axis.setMaximumSize(QtCore.QSize(80, 16777215))
         self.ObjRot_button_select_axis.setObjectName(_fromUtf8("ObjRot_button_select_axis"))
         self.gridLayout_21.addWidget(self.ObjRot_button_select_axis, 1, 0, 1, 1)
-        icon67 = QtGui.QIcon()
-        icon67.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_rotationAxis.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget_3.addTab(self.tab_8, icon67, _fromUtf8(""))
+        icon69 = QtGui.QIcon()
+        icon69.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_rotationAxis.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget_3.addTab(self.tab_8, icon69, _fromUtf8(""))
         self.tab_9 = QtGui.QWidget()
         self.tab_9.setObjectName(_fromUtf8("tab_9"))
         self.gridLayout_23 = QtGui.QGridLayout(self.tab_9)
@@ -1336,9 +1392,9 @@ class Ui_Form(object):
         self.ObjRot_button_select_center.setMaximumSize(QtCore.QSize(80, 16777215))
         self.ObjRot_button_select_center.setObjectName(_fromUtf8("ObjRot_button_select_center"))
         self.gridLayout_23.addWidget(self.ObjRot_button_select_center, 1, 0, 1, 1)
-        icon68 = QtGui.QIcon()
-        icon68.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_rotationPoint.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget_3.addTab(self.tab_9, icon68, _fromUtf8(""))
+        icon70 = QtGui.QIcon()
+        icon70.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_rotationPoint.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget_3.addTab(self.tab_9, icon70, _fromUtf8(""))
         self.gridLayout_50.addWidget(self.tabWidget_3, 1, 0, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(self.frame)
         self.groupBox_2.setMinimumSize(QtCore.QSize(150, 67))
@@ -1374,9 +1430,9 @@ class Ui_Form(object):
         self.ObjRot_button_select_angle.setMaximumSize(QtCore.QSize(80, 16777215))
         self.ObjRot_button_select_angle.setObjectName(_fromUtf8("ObjRot_button_select_angle"))
         self.gridLayout_24.addWidget(self.ObjRot_button_select_angle, 0, 0, 1, 1)
-        icon69 = QtGui.QIcon()
-        icon69.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_click.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget_5.addTab(self.tab_10, icon69, _fromUtf8(""))
+        icon71 = QtGui.QIcon()
+        icon71.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_click.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget_5.addTab(self.tab_10, icon71, _fromUtf8(""))
         self.gridLayout_29.addWidget(self.tabWidget_5, 0, 0, 1, 1)
         self.horizontalLayout_13 = QtGui.QHBoxLayout()
         self.horizontalLayout_13.setObjectName(_fromUtf8("horizontalLayout_13"))
@@ -1441,7 +1497,7 @@ class Ui_Form(object):
         self.ObjTrans_spin.setButtonSymbols(QtGui.QAbstractSpinBox.NoButtons)
         self.ObjTrans_spin.setKeyboardTracking(False)
         self.ObjTrans_spin.setMinimum(1)
-        self.ObjTrans_spin.setMaximum(10)
+        self.ObjTrans_spin.setMaximum(20)
         self.ObjTrans_spin.setSingleStep(1)
         self.ObjTrans_spin.setProperty("value", 1)
         self.ObjTrans_spin.setObjectName(_fromUtf8("ObjTrans_spin"))
@@ -1525,9 +1581,9 @@ class Ui_Form(object):
         self.gridLayout_27.addLayout(self.gridLayout_41, 2, 0, 1, 1)
         self.gridLayout_26.addLayout(self.gridLayout_27, 2, 0, 1, 1)
         self.gridLayout_15.addWidget(self.groupBox_3, 0, 0, 1, 1)
-        icon70 = QtGui.QIcon()
-        icon70.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_startPoint.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget_4.addTab(self.tab_5, icon70, _fromUtf8(""))
+        icon72 = QtGui.QIcon()
+        icon72.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_startPoint.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget_4.addTab(self.tab_5, icon72, _fromUtf8(""))
         self.tab_6 = QtGui.QWidget()
         self.tab_6.setObjectName(_fromUtf8("tab_6"))
         self.gridLayout_42 = QtGui.QGridLayout(self.tab_6)
@@ -1602,9 +1658,9 @@ class Ui_Form(object):
         self.gridLayout_44.addLayout(self.gridLayout_47, 0, 0, 1, 1)
         self.gridLayout_43.addLayout(self.gridLayout_44, 2, 0, 1, 1)
         self.gridLayout_42.addWidget(self.groupBox_4, 0, 0, 1, 1)
-        icon71 = QtGui.QIcon()
-        icon71.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_endPoint.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget_4.addTab(self.tab_6, icon71, _fromUtf8(""))
+        icon73 = QtGui.QIcon()
+        icon73.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_endPoint.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget_4.addTab(self.tab_6, icon73, _fromUtf8(""))
         self.gridLayout_48.addWidget(self.tabWidget_4, 2, 0, 1, 1)
         self.horizontalLayout_16 = QtGui.QHBoxLayout()
         self.horizontalLayout_16.setObjectName(_fromUtf8("horizontalLayout_16"))
@@ -1638,96 +1694,96 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.button_alignview.sizePolicy().hasHeightForWidth())
         self.button_alignview.setSizePolicy(sizePolicy)
         self.button_alignview.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        icon72 = QtGui.QIcon()
-        icon72.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_viewAlign.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_alignview.setIcon(icon72)
+        icon74 = QtGui.QIcon()
+        icon74.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_viewAlign.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_alignview.setIcon(icon74)
         self.button_alignview.setIconSize(QtCore.QSize(32, 32))
         self.button_alignview.setObjectName(_fromUtf8("button_alignview"))
         self.gridLayout_13.addWidget(self.button_alignview, 0, 0, 1, 1)
         spacerItem17 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.gridLayout_13.addItem(spacerItem17, 2, 0, 1, 1)
         self.button_trackcamera = QtGui.QPushButton(self.View_Tab)
-        icon73 = QtGui.QIcon()
-        icon73.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_trackCamera.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_trackcamera.setIcon(icon73)
+        icon75 = QtGui.QIcon()
+        icon75.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_trackCamera.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_trackcamera.setIcon(icon75)
         self.button_trackcamera.setIconSize(QtCore.QSize(32, 32))
         self.button_trackcamera.setObjectName(_fromUtf8("button_trackcamera"))
         self.gridLayout_13.addWidget(self.button_trackcamera, 1, 0, 1, 1)
-        icon74 = QtGui.QIcon()
-        icon74.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_view.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget.addTab(self.View_Tab, icon74, _fromUtf8(""))
+        icon76 = QtGui.QIcon()
+        icon76.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_view.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget.addTab(self.View_Tab, icon76, _fromUtf8(""))
         self.tab_3 = QtGui.QWidget()
         self.tab_3.setObjectName(_fromUtf8("tab_3"))
         self.gridLayout_35 = QtGui.QGridLayout(self.tab_3)
         self.gridLayout_35.setObjectName(_fromUtf8("gridLayout_35"))
         self.button_isView = QtGui.QPushButton(self.tab_3)
-        icon75 = QtGui.QIcon()
-        icon75.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_FCCamera_02.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isView.setIcon(icon75)
+        icon77 = QtGui.QIcon()
+        icon77.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_FCCamera_02.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isView.setIcon(icon77)
         self.button_isView.setIconSize(QtCore.QSize(32, 32))
         self.button_isView.setObjectName(_fromUtf8("button_isView"))
         self.gridLayout_35.addWidget(self.button_isView, 8, 0, 1, 1)
         spacerItem18 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.gridLayout_35.addItem(spacerItem18, 9, 0, 1, 1)
-        self.button_isParallel = QtGui.QPushButton(self.tab_3)
-        icon76 = QtGui.QIcon()
-        icon76.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isParallel.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isParallel.setIcon(icon76)
-        self.button_isParallel.setIconSize(QtCore.QSize(32, 32))
-        self.button_isParallel.setObjectName(_fromUtf8("button_isParallel"))
-        self.gridLayout_35.addWidget(self.button_isParallel, 0, 0, 1, 1)
         self.button_isCoplanar = QtGui.QPushButton(self.tab_3)
-        icon77 = QtGui.QIcon()
-        icon77.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isCoplanar.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isCoplanar.setIcon(icon77)
+        icon78 = QtGui.QIcon()
+        icon78.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isCoplanar.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isCoplanar.setIcon(icon78)
         self.button_isCoplanar.setIconSize(QtCore.QSize(32, 32))
         self.button_isCoplanar.setObjectName(_fromUtf8("button_isCoplanar"))
         self.gridLayout_35.addWidget(self.button_isCoplanar, 2, 0, 1, 1)
+        self.button_isParallel = QtGui.QPushButton(self.tab_3)
+        icon79 = QtGui.QIcon()
+        icon79.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isParallel.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isParallel.setIcon(icon79)
+        self.button_isParallel.setIconSize(QtCore.QSize(32, 32))
+        self.button_isParallel.setObjectName(_fromUtf8("button_isParallel"))
+        self.gridLayout_35.addWidget(self.button_isParallel, 0, 0, 1, 1)
         self.button_isAngle = QtGui.QPushButton(self.tab_3)
-        icon78 = QtGui.QIcon()
-        icon78.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_angleBetween.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isAngle.setIcon(icon78)
+        icon80 = QtGui.QIcon()
+        icon80.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_angleBetween.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isAngle.setIcon(icon80)
         self.button_isAngle.setIconSize(QtCore.QSize(32, 32))
         self.button_isAngle.setObjectName(_fromUtf8("button_isAngle"))
         self.gridLayout_35.addWidget(self.button_isAngle, 4, 0, 1, 1)
         self.button_isLength = QtGui.QPushButton(self.tab_3)
-        icon79 = QtGui.QIcon()
-        icon79.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isLength.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isLength.setIcon(icon79)
+        icon81 = QtGui.QIcon()
+        icon81.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isLength.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isLength.setIcon(icon81)
         self.button_isLength.setIconSize(QtCore.QSize(32, 32))
         self.button_isLength.setObjectName(_fromUtf8("button_isLength"))
         self.gridLayout_35.addWidget(self.button_isLength, 6, 0, 1, 1)
-        self.button_isPerpendicular = QtGui.QPushButton(self.tab_3)
-        icon80 = QtGui.QIcon()
-        icon80.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isPerpendicular.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isPerpendicular.setIcon(icon80)
-        self.button_isPerpendicular.setIconSize(QtCore.QSize(32, 32))
-        self.button_isPerpendicular.setObjectName(_fromUtf8("button_isPerpendicular"))
-        self.gridLayout_35.addWidget(self.button_isPerpendicular, 1, 0, 1, 1)
         self.button_isDistance = QtGui.QPushButton(self.tab_3)
-        icon81 = QtGui.QIcon()
-        icon81.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_distanceBetween.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isDistance.setIcon(icon81)
+        icon82 = QtGui.QIcon()
+        icon82.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_distanceBetween.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isDistance.setIcon(icon82)
         self.button_isDistance.setIconSize(QtCore.QSize(32, 32))
         self.button_isDistance.setObjectName(_fromUtf8("button_isDistance"))
         self.gridLayout_35.addWidget(self.button_isDistance, 5, 0, 1, 1)
+        self.button_isPerpendicular = QtGui.QPushButton(self.tab_3)
+        icon83 = QtGui.QIcon()
+        icon83.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isPerpendicular.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isPerpendicular.setIcon(icon83)
+        self.button_isPerpendicular.setIconSize(QtCore.QSize(32, 32))
+        self.button_isPerpendicular.setObjectName(_fromUtf8("button_isPerpendicular"))
+        self.gridLayout_35.addWidget(self.button_isPerpendicular, 1, 0, 1, 1)
         self.button_isClearance = QtGui.QPushButton(self.tab_3)
-        icon82 = QtGui.QIcon()
-        icon82.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isClearance.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isClearance.setIcon(icon82)
+        icon84 = QtGui.QIcon()
+        icon84.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isClearance.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isClearance.setIcon(icon84)
         self.button_isClearance.setIconSize(QtCore.QSize(32, 32))
         self.button_isClearance.setObjectName(_fromUtf8("button_isClearance"))
         self.gridLayout_35.addWidget(self.button_isClearance, 3, 0, 1, 1)
         self.button_isArea = QtGui.QPushButton(self.tab_3)
-        icon83 = QtGui.QIcon()
-        icon83.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isArea.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_isArea.setIcon(icon83)
+        icon85 = QtGui.QIcon()
+        icon85.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_isArea.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_isArea.setIcon(icon85)
         self.button_isArea.setIconSize(QtCore.QSize(32, 32))
         self.button_isArea.setObjectName(_fromUtf8("button_isArea"))
         self.gridLayout_35.addWidget(self.button_isArea, 7, 0, 1, 1)
-        icon84 = QtGui.QIcon()
-        icon84.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_check.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget.addTab(self.tab_3, icon84, _fromUtf8(""))
+        icon86 = QtGui.QIcon()
+        icon86.addPixmap(QtGui.QPixmap(_fromUtf8("icons:WF_check.svg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget.addTab(self.tab_3, icon86, _fromUtf8(""))
         self.gridLayout_30.addWidget(self.tabWidget, 0, 0, 1, 1)
         self.tabWidget_0.addTab(self.tab_2, _fromUtf8(""))
         self.gridLayout_9.addWidget(self.tabWidget_0, 0, 0, 1, 1)
@@ -1749,7 +1805,8 @@ class Ui_Form(object):
         self.tabWidget_0.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         self.point_loc_comboBox.setCurrentIndex(1)
-        self.tabWidget_2.setCurrentIndex(2)
+        self.transition_comboBox.setCurrentIndex(2)
+        self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget_3.setCurrentIndex(0)
         self.ObjRot_comboBox_axis.setCurrentIndex(0)
         self.ObjRot_comboBox_center.setCurrentIndex(2)
@@ -1773,6 +1830,15 @@ class Ui_Form(object):
 "    Arcs=Cut(Circle)  \n"
 "", None, QtGui.QApplication.UnicodeUTF8))
         self.radioButton_biColor.setText(QtGui.QApplication.translate("Form", "Bi Color", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioButton_copy.setToolTip(QtGui.QApplication.translate("Form", "Force the duplication of the Parent Object for the following functions:\n"
+"  - in \"Axis 2/2\" TAB:\n"
+"    Axes=(Axis,Pt,dist)\n"
+"    If an Edge of a Cube is selected the Cube is duplicate \n"
+"    with the corresponding\n"
+"    Edge at the defined distance from the original.\n"
+"  - in \"Plane\" TAB:\n"
+"    Plane=(Plane,dist)  ", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioButton_copy.setText(QtGui.QApplication.translate("Form", "Object copy", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setToolTip(QtGui.QApplication.translate("Form", "Change the tolerance for the following functions:\n"
 "  - in \"Check\" TAB:\n"
 "    are Parallel?\n"
@@ -1785,15 +1851,6 @@ class Ui_Form(object):
 "    are Perpendicular?\n"
 "    are Coplanar?", None, QtGui.QApplication.UnicodeUTF8))
         self.tolerance_edit.setText(QtGui.QApplication.translate("Form", "1e-10", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioButton_copy.setToolTip(QtGui.QApplication.translate("Form", "Force the duplication of the Parent Object for the following functions:\n"
-"  - in \"Axis 2/2\" TAB:\n"
-"    Axes=(Axis,Pt,dist)\n"
-"    If an Edge of a Cube is selected the Cube is duplicate \n"
-"    with the corresponding\n"
-"    Edge at the defined distance from the original.\n"
-"  - in \"Plane\" TAB:\n"
-"    Plane=(Plane,dist)  ", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioButton_copy.setText(QtGui.QApplication.translate("Form", "Object copy", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Origin_Tab), QtGui.QApplication.translate("Form", "Ori. Pref.", None, QtGui.QApplication.UnicodeUTF8))
         self.button_point_line_point.setToolTip(QtGui.QApplication.translate("Form", "Point(s)=(Point(s),Line(s)):\n"
 "Create projection(s) of Point(s) onto Line(s).\n"
@@ -1833,11 +1890,16 @@ class Ui_Form(object):
 "    if BBox is not toggled\n"
 "        This point is the MEAN location of all center of Mass (if exist) of all objects.\n"
 "        All  center of Mass will be created too.\n"
-"    if BBox is toggled\n"
+"    \n"
+"if BBox check box is toggled\n"
 "        This point is the center of the Global X,Y,Z bounding box of all objects.\n"
 "        This bounding box alway exists (especially for draft objects).\n"
 "        Be aware this point is not necessary the center of Mass of all Objects!", None, QtGui.QApplication.UnicodeUTF8))
         self.button_object_center.setText(QtGui.QApplication.translate("Form", "Object(s) Center", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox_object_center.setToolTip(QtGui.QApplication.translate("Form", "if BBox check box is toggled\n"
+"        This point is the center of the Global X,Y,Z bounding box of all objects.\n"
+"        This bounding box alway exists (especially for draft objects).\n"
+"        Be aware this point is not necessary the center of Mass of all Objects!", None, QtGui.QApplication.UnicodeUTF8))
         self.checkBox_object_center.setText(QtGui.QApplication.translate("Form", "BBox", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Point_Tab1), QtGui.QApplication.translate("Form", "Point 1/2", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.Point_Tab1), QtGui.QApplication.translate("Form", "Point", None, QtGui.QApplication.UnicodeUTF8))
@@ -1912,10 +1974,17 @@ class Ui_Form(object):
 "NB: Axes are created on both sides of the Plane\n"
 "The extension is 10 units by defaut but must be changed if needed.", None, QtGui.QApplication.UnicodeUTF8))
         self.button_plane_axis.setText(QtGui.QApplication.translate("Form", "Plane(s) Axes", None, QtGui.QApplication.UnicodeUTF8))
-        self.button_face_normal.setToolTip(QtGui.QApplication.translate("Form", "Create a normal Axis at click location of a Face.\n"
-"Click first in the view to select and object,\n"
-"then push the button, \n"
-"then click on a location on the selected object.", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_face_normal.setToolTip(QtGui.QApplication.translate("Form", "Create a normal Axis of a Face.\n"
+"To create a Normal at click location on a Face:\n"
+"- Click first in the view to select and object,\n"
+"- then push the button, \n"
+"- then click on a location on the selected Face.\n"
+"or\n"
+"To create several Normal of the face:\n"
+"- Click first in the view to select and object,\n"
+"- then select one or several points of the face\n"
+"- then push the button.\n"
+"(These selections can also be done into the Combined View)", None, QtGui.QApplication.UnicodeUTF8))
         self.button_face_normal.setText(QtGui.QApplication.translate("Form", "Face Normal", None, QtGui.QApplication.UnicodeUTF8))
         self.extension_face_normal.setToolTip(QtGui.QApplication.translate("Form", "Length of external part of the (Normal) Axis.\n"
 "  If zero In case of cylinder axis the extension will be a percentage of the object length.\n"
@@ -2173,10 +2242,15 @@ class Ui_Form(object):
         self.extension_plane.setToolTip(QtGui.QApplication.translate("Form", "Extension of the Plane in each dimension in percentage.", None, QtGui.QApplication.UnicodeUTF8))
         self.extension_plane.setText(QtGui.QApplication.translate("Form", "50.0", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Plane_Tab11), QtGui.QApplication.translate("Form", "Plane 2/2", None, QtGui.QApplication.UnicodeUTF8))
-        self.button_boundingboxes.setToolTip(QtGui.QApplication.translate("Form", "Create bounding boxes around each of selected object(s).", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_boundingboxes.setToolTip(QtGui.QApplication.translate("Form", "Create bounding boxes around each of selected object(s).\n"
+"6 rectangles at the limits of each bounding boxes will be created.", None, QtGui.QApplication.UnicodeUTF8))
         self.button_boundingboxes.setText(QtGui.QApplication.translate("Form", "Bounding Box(es)", None, QtGui.QApplication.UnicodeUTF8))
-        self.button_boundingbox.setToolTip(QtGui.QApplication.translate("Form", "Create one bounding box around all of selected object(s).", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_boundingbox.setToolTip(QtGui.QApplication.translate("Form", "Create one bounding box around all of selected object(s).\n"
+"6 rectangles at the limits of the bounding box will be created.", None, QtGui.QApplication.UnicodeUTF8))
         self.button_boundingbox.setText(QtGui.QApplication.translate("Form", "Bounding Box", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox_volumBB.setToolTip(QtGui.QApplication.translate("Form", "if \"Vol.\" is toggled:\n"
+"  In Addition of rectangles, the Bounding box will be also created as a Volume.", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox_volumBB.setText(QtGui.QApplication.translate("Form", "Vol.", None, QtGui.QApplication.UnicodeUTF8))
         self.button_cylinder_create.setToolTip(QtGui.QApplication.translate("Form", "Create a Cylinder aligned on Axes:\n"
 "- First select one or several couple of ( Axis and a Ref. Point). \n"
 "- Define Diameter and Length if needed.\n"
@@ -2259,9 +2333,51 @@ class Ui_Form(object):
         self.button_revolve.setText(QtGui.QApplication.translate("Form", "Revolve", None, QtGui.QApplication.UnicodeUTF8))
         self.angle_revolve.setToolTip(QtGui.QApplication.translate("Form", "Angle of the revolution in degrees.", None, QtGui.QApplication.UnicodeUTF8))
         self.angle_revolve.setText(QtGui.QApplication.translate("Form", "360", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox_allsubselect.setToolTip(QtGui.QApplication.translate("Form", "if \"All\" is toggled:\n"
+"  All the wires of the Trajectory  selected will be considered.\n"
+"\n"
+"Untoggled if you select a Skecth with several curves and you want to process\n"
+"only the one subselected.", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox_allsubselect.setText(QtGui.QApplication.translate("Form", "All", None, QtGui.QApplication.UnicodeUTF8))
+        self.transition_comboBox.setToolTip(QtGui.QApplication.translate("Form", "For the function :\n"
+"makePipeShell(shapeList,[isSolid,isFrenet,transition])\n"
+"Select a Transition option in case of trajectory with several wires; Transition can be:\n"
+"#     0 (default), 1 (right corners) or 2 (rounded corners).", None, QtGui.QApplication.UnicodeUTF8))
+        self.transition_comboBox.setItemText(0, QtGui.QApplication.translate("Form", "No Transition", None, QtGui.QApplication.UnicodeUTF8))
+        self.transition_comboBox.setItemText(1, QtGui.QApplication.translate("Form", "Right corners", None, QtGui.QApplication.UnicodeUTF8))
+        self.transition_comboBox.setItemText(2, QtGui.QApplication.translate("Form", "Rounded corners", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox_solid.setToolTip(QtGui.QApplication.translate("Form", "if \"Solid\" is toggled:\n"
+"  The Beam sweep will generate a solid with a closed selected wire as Section.\n"
+"If this check box is toggle off:\n"
+"  Or if the Section wire is not closed, only a shell will be created.", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox_solid.setText(QtGui.QApplication.translate("Form", "Solid", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioButton_Frenet.setToolTip(QtGui.QApplication.translate("Form", "Force the \"isFrenet\" parameter to True for the function :\n"
+"makePipeShell(shapeList,[isSolid,isFrenet,transition])\n"
+"", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioButton_Frenet.setText(QtGui.QApplication.translate("Form", "isFrenet", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_sweep.setToolTip(QtGui.QApplication.translate("Form", "Section Sweep:\n"
+"#  Make a loft defined by a list of profiles along a wire.\n"
+"Will extrude/sweep a Section along a Trajectory like sweep from Part Workbench but:\n"
+"- the Section center (of Mass) is move at the first point of the Trajectory and;\n"
+"- the \"plane\" of the Section is rotate to be perpendicular to the Trajectory.\n"
+"\n"
+"- Select first one Section wire (Closed wire will generate volumes by default)\n"
+"(This Section can be a compound from sketch to realize \"tube\")\n"
+"- Select one or several wire(s) as Trajectory(ies)\n"
+"- Then push this button\n"
+"\n"
+"NB: You can change first:\n"
+"- Solid option (if toggled will generate a solid for Closed wire Section only) \n"
+"- isFrenet option\n"
+"- All option (means if the trajectory selected is a compound, all sub wires will be used for the sweep)\n"
+"- Transition Option (Select a Transition option in case of trajectory with several wires; Transition can be:\n"
+"#     0 (default), 1 (right corners) or 2 (rounded corners).)\n"
+"", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_sweep.setText(QtGui.QApplication.translate("Form", "Section Sweep", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Objects_Tab2), QtGui.QApplication.translate("Form", "Object", None, QtGui.QApplication.UnicodeUTF8))
         self.button_alignface2view.setToolTip(QtGui.QApplication.translate("Form", "Align the face of selected object(s)  to the actual view Plane.\n"
 " - Click first to select a Face of one or several objects.\n"
+"These objects will be moved not the point of view.\n"
 "Then Click the button.\n"
 "\n"
 "NB:\n"
@@ -2271,11 +2387,15 @@ class Ui_Form(object):
 "  if the Face of the object selected is already aligned to the  view Plane,\n"
 "  a rotation of 180 deg is applied to the object.\n"
 "  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)\n"
+"\n"
+"  Two clicks will rotate by 180 deg the moving objects.\n"
+"\n"
 "", None, QtGui.QApplication.UnicodeUTF8))
         self.button_alignface2view.setText(QtGui.QApplication.translate("Form", "Align Face to View", None, QtGui.QApplication.UnicodeUTF8))
         self.button_align_faces.setToolTip(QtGui.QApplication.translate("Form", "Align the Face(s) from selected object(s) to the last Face selected.\n"
 " - Click first to select a Face of an object or several Faces from several objects. \n"
-" - Click second to select a Face to align to.\n"
+"These objects will be moved.\n"
+" - Click second to select a Face to align to (the last object is fixed and will never move).\n"
 "Then Click the button.\n"
 "\n"
 "NB:\n"
@@ -2284,13 +2404,17 @@ class Ui_Form(object):
 " \n"
 "  if the Face of the object selected is already aligned to the last one,\n"
 "  a rotation of 180 deg is applied to the object.\n"
-"  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)", None, QtGui.QApplication.UnicodeUTF8))
+"  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)\n"
+"\n"
+"  Two clicks will rotate by 180 deg the moving objects.\n"
+"", None, QtGui.QApplication.UnicodeUTF8))
         self.button_align_faces.setText(QtGui.QApplication.translate("Form", "Align Faces", None, QtGui.QApplication.UnicodeUTF8))
         self.angle_align_faces.setToolTip(QtGui.QApplication.translate("Form", "This Angle  (in degrees) will be added to the angle needed to align Faces.", None, QtGui.QApplication.UnicodeUTF8))
         self.angle_align_faces.setText(QtGui.QApplication.translate("Form", "0.0", None, QtGui.QApplication.UnicodeUTF8))
         self.button_align_edges.setToolTip(QtGui.QApplication.translate("Form", "Align the Edge(s) from selected object(s) to the last Edge selected.\n"
 " - Click first to select an Edge of an object or several Edges from several objects. \n"
-" - Click second to select an Edge to align to.\n"
+"These objects will be moved.\n"
+" - Click second to select an Edge to align to  (the last object is fixed and will never move).\n"
 "Then Click the button.\n"
 "\n"
 "NB:\n"
@@ -2299,16 +2423,30 @@ class Ui_Form(object):
 " \n"
 "  if the Edge of the object selected is already aligned to the last one,\n"
 "  a rotation of 180 deg is applied to the object.\n"
-"  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)", None, QtGui.QApplication.UnicodeUTF8))
+"  In this case the Axis of rotation is Z vector : Base.Vector(0, 0, 1)\n"
+"\n"
+"  Two clicks will rotate by 180 deg the moving objects.\n"
+"", None, QtGui.QApplication.UnicodeUTF8))
         self.button_align_edges.setText(QtGui.QApplication.translate("Form", "Align Edges", None, QtGui.QApplication.UnicodeUTF8))
         self.angle_align_edges.setToolTip(QtGui.QApplication.translate("Form", "This Angle  (in degrees) will be added to the angle needed to align Edges.", None, QtGui.QApplication.UnicodeUTF8))
         self.angle_align_edges.setText(QtGui.QApplication.translate("Form", "0.0", None, QtGui.QApplication.UnicodeUTF8))
         self.button_joint_points.setToolTip(QtGui.QApplication.translate("Form", "Joint Point(s) from selected object(s) to the last Point selected.\n"
-" - Click first to select a Point of an object or several Points from several objects. \n"
-" - Click second to select an Point to joint to.\n"
+" - Click first to select a Point of an object or several Points from several objects.\n"
+"These objects will be moved. \n"
+" - Click second to select an Point to joint to (the last object is fixed and will never move).\n"
 "Then Click the button.\n"
+"\n"
 "", None, QtGui.QApplication.UnicodeUTF8))
         self.button_joint_points.setText(QtGui.QApplication.translate("Form", "Joint Points", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_joint_faces.setToolTip(QtGui.QApplication.translate("Form", "Joint Face(s) from selected object(s) to the last Face selected.\n"
+" - Click first to select a Face of an object or several Faces from several objects. \n"
+"These objects will be moved.\n"
+" - Click second to select a Face to joint to (the last object is fixed and will never move).\n"
+"Then Click the button.\n"
+"\n"
+"  Two clicks will rotate by 180 deg the moving objects.\n"
+"", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_joint_faces.setText(QtGui.QApplication.translate("Form", "Joint Faces", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.align_tab), QtGui.QApplication.translate("Form", "Align", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_6.setTitle(QtGui.QApplication.translate("Form", "Object", None, QtGui.QApplication.UnicodeUTF8))
         self.button_cut_select_object.setToolTip(QtGui.QApplication.translate("Form", "Select the Object to cut:\n"
@@ -2486,18 +2624,18 @@ class Ui_Form(object):
 "The returned value is the value provided \n"
 "by the function getCameraOrientation().", None, QtGui.QApplication.UnicodeUTF8))
         self.button_isView.setText(QtGui.QApplication.translate("Form", "View ?", None, QtGui.QApplication.UnicodeUTF8))
-        self.button_isParallel.setToolTip(QtGui.QApplication.translate("Form", "Check if two faces or two Edges are Parallel:\n"
-"- Select the 2 faces/planes or 2 Edges/Lines and\n"
-"Click this button\n"
-"\n"
-"NB: You can change the tolerance in \"Ori. Pref.\"  TAB", None, QtGui.QApplication.UnicodeUTF8))
-        self.button_isParallel.setText(QtGui.QApplication.translate("Form", "are Parallel ?", None, QtGui.QApplication.UnicodeUTF8))
         self.button_isCoplanar.setToolTip(QtGui.QApplication.translate("Form", "Check if two faces or two Edges are Coplanar:\n"
 "- Select the 2 faces/planes or 2 Edges/Lines and\n"
 "Click this button\n"
 "\n"
 "NB: You can change the tolerance in \"Ori. Pref.\"  TAB", None, QtGui.QApplication.UnicodeUTF8))
         self.button_isCoplanar.setText(QtGui.QApplication.translate("Form", "are Coplanar ?", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_isParallel.setToolTip(QtGui.QApplication.translate("Form", "Check if two faces or two Edges are Parallel:\n"
+"- Select the 2 faces/planes or 2 Edges/Lines and\n"
+"Click this button\n"
+"\n"
+"NB: You can change the tolerance in \"Ori. Pref.\"  TAB", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_isParallel.setText(QtGui.QApplication.translate("Form", "are Parallel ?", None, QtGui.QApplication.UnicodeUTF8))
         self.button_isAngle.setToolTip(QtGui.QApplication.translate("Form", "Check for two Edges/Planes angle:\n"
 "Angle measurement between two Edges or two Planes\n"
 "- Select the 2 Edges and\n"
@@ -2518,18 +2656,18 @@ class Ui_Form(object):
 "Click this button\n"
 " ", None, QtGui.QApplication.UnicodeUTF8))
         self.button_isLength.setText(QtGui.QApplication.translate("Form", "Length ?", None, QtGui.QApplication.UnicodeUTF8))
-        self.button_isPerpendicular.setToolTip(QtGui.QApplication.translate("Form", "Check if two faces or two Edges are Perpendicular:\n"
-"- Select the 2 faces/planes or 2 Edges/Lines and\n"
-"Click this button\n"
-"\n"
-"NB: You can change the tolerance in \"Ori. Pref.\"  TAB", None, QtGui.QApplication.UnicodeUTF8))
-        self.button_isPerpendicular.setText(QtGui.QApplication.translate("Form", "are Perpendicular ?", None, QtGui.QApplication.UnicodeUTF8))
         self.button_isDistance.setToolTip(QtGui.QApplication.translate("Form", "Check for two Points distance:\n"
 "Distances measurement and Delta values (on main Axes) between two Points\n"
 "- Select the 2 Points and\n"
 "Click this button\n"
 " ", None, QtGui.QApplication.UnicodeUTF8))
         self.button_isDistance.setText(QtGui.QApplication.translate("Form", "Distance ?", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_isPerpendicular.setToolTip(QtGui.QApplication.translate("Form", "Check if two faces or two Edges are Perpendicular:\n"
+"- Select the 2 faces/planes or 2 Edges/Lines and\n"
+"Click this button\n"
+"\n"
+"NB: You can change the tolerance in \"Ori. Pref.\"  TAB", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_isPerpendicular.setText(QtGui.QApplication.translate("Form", "are Perpendicular ?", None, QtGui.QApplication.UnicodeUTF8))
         self.button_isClearance.setToolTip(QtGui.QApplication.translate("Form", "Check for two Objects Clearance distance:\n"
 "Quick measurements between parallel faces and similarly placed objects\n"
 "- Select the 2 Objects and\n"
