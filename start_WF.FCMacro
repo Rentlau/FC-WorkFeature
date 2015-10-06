@@ -4,7 +4,7 @@ import os.path
 
 try:
     # try import
-    import WorkFeature
+    import WorkFeature.WF_2015 as WF
 except:
     # get the path of the current python script    
     m_current_path = os.path.realpath(__file__)
@@ -13,6 +13,6 @@ except:
     if not sys.path.__contains__(str(m_current_path)):
         sys.path.append(str(m_current_path))
     # retry import now
-    import WorkFeature
+    import WorkFeature.WF_2015 as WF
   
-WorkFeature.myDialog = WorkFeature.WorkFeatureTab()
+WF.myDialog = WF.WorkFeatureTab()
