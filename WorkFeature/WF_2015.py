@@ -4,7 +4,7 @@
 ***************************************************************************
 *   Thanks to original ideas, codes, and support from :                   *
 *   - Javier Martinez Garcia 2014, 2015 for ideas and first WF codes      * 
-*     for tje code on parallelism of two faces, forTour camera code       *
+*     for tje code on parallelism of two faces, forTour camera code...    *
 *   - Jonathan Wiedemann for Gui ideas and for view codes 2014            * 
 *     and support                                                         *
 *   - NormandC for his support                                            *
@@ -13,6 +13,7 @@
 *   - Eriossoltero for macro Ellipse-Center+2Points                       *
 *   - Ulrich Brammer for Geodesic dome code                               *
 *   - Wmayer Many Thanks for active help on testing and debbuging         *
+*   - Gaël Ecorchard for HighlightDifference Macro                        *
 *   Special thanks to Mario52 for diverse MACRO codes as FCCamera,        *
 *   cutCircle, cutWire, Delta xyz, bounding box ...                       *
 *   and other diverse pieces of codes                                     * 
@@ -29,6 +30,7 @@
 *   Copyright (c) 2013 galou_breizh                                       *
 *   Copyright (c) 2015 Ulrich Brammer <ulrich1a[at]users.sourceforge.net> *
 *   Copyright (c) Eriossoltero                                            *
+*   Copyright (c) 2015 Gaël Ecorchard                                     *
 *                                                                         *
 *   This file is a supplement to the FreeCAD CAx development system.      *
 *                                                                         *
@@ -51,15 +53,18 @@
 """
 # First two lines to be able to launch with python
 import sys
+from WorkFeature import WF_ObjParCurve_2015
 # change this by your own FreeCAD lib path import FreeCAD
 if not sys.path.__contains__("/usr/lib/freecad/lib"): 
     sys.path.append("/usr/lib/freecad/lib")     
  
 import WFGui_2015 as WFGui
 from   WF_ObjRot_2015 import *
+from   WF_Utils_2015 import *
+from   WF_ObjParCurve_2015 import *
 
 global myRelease
-myRelease = "2015_10_05"
+myRelease = "2015_10_20"
 
 import os.path
 import time
@@ -84,9 +89,13 @@ ICONS_PATH = os.path.dirname(__file__) + "/Icons"
 QtCore.QDir.addSearchPath("icons", ICONS_PATH) 
 
 # LineColor
-red   = 1.0  # 1 = 255
-green = 0.0  #
-blue  = 0.0  #
+#red   = 1.0  # 1 = 255
+#green = 0.0  #
+#blue  = 0.0  #
+red=(1.00,0.00,0.00)
+green=(0.00,0.67,0.00)
+blue=(0.33,0.00,1.00)
+orange=(1.00,0.67,0.00)
 flag_for_face=True
 
 # Some Global variables
@@ -1708,7 +1717,7 @@ def properties_point(Point_User_Name):
     return 
 
 
-def properties_line(Line_User_Name):
+def properties_line(Line_User_Name, color=(1.00,0.67,0.00)):
     """ Define the properties of a Work feature Line.
     PointColor
     LineColor
@@ -1717,11 +1726,11 @@ def properties_line(Line_User_Name):
     Transparency  
     """
     try:
-        Gui.ActiveDocument.getObject(Line_User_Name).PointColor = (1.00,0.67,0.00)
+        Gui.ActiveDocument.getObject(Line_User_Name).PointColor = color
     except:
         print_msg("Not able to set PointColor !")
     try:
-        Gui.ActiveDocument.getObject(Line_User_Name).LineColor = (1.00,0.67,0.00)
+        Gui.ActiveDocument.getObject(Line_User_Name).LineColor = color
     except:
         print_msg("Not able to set LineColor !")
     try:
@@ -1788,14 +1797,14 @@ def plot_point(Vector_point, part="Part::Feature", name="Point", grp="WorkPoints
     return point_User_Name
 
 
-def plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis", grp="WorkAxis"):
+def plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis", grp="WorkAxis", color=(1.00,0.67,0.00)):
     if not(App.ActiveDocument.getObject( grp )):
         App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
     axis = App.ActiveDocument.addObject(part, name)
     axis.Shape = Part.makeLine(Vector_A, Vector_B)
     App.ActiveDocument.getObject( grp ).addObject(axis)
     axis_User_Name = axis.Label
-    properties_line(axis_User_Name)    
+    properties_line(axis_User_Name, color)    
     return axis_User_Name, axis 
 
 
@@ -3303,10 +3312,11 @@ def point_toSketch():
             num_point, return_points = vertexToSketch(m_pointList,m_sketch)
             if m_num_point != num_point:
                 printError_msg(error_msg)
-                return 
-            createFolders('WorkPoints')
-            for point in return_points:
-                plot_point(point, part="Part::Feature", name="Sketch_Proj", grp="WorkPoints")
+                return
+            if msg != 0: 
+                createFolders('WorkPoints')
+                for point in return_points:
+                    plot_point(point, part="Part::Feature", name="Sketch_Proj", grp="WorkPoints")
             # Refresh        
             App.getDocument(str(m_actDoc.Name)).recompute()
             print_msg(str(num_point) + result_msg )
@@ -3449,9 +3459,94 @@ def plot_2PointsAxis():
     except:
         printError_msg(error_msg)
 
+def plot_NPoints_axis():
+    """ Create an Axis based on a linear regression from a set of Points.
+    """
+    global verbose
+    msg=verbose
+    import numpy as np
+        
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None
+        
+    createFolders('WorkAxis')
+    error_msg = "Unable to create Axis : \nSelect at least two points!"
+    result_msg = " : Axis created !"
+    name = "Line from N Points"
+    part = "Part::Feature"
+    grp = "WorkAxis"
+    
+    Selection = get_SelectedObjects(info=msg, printError=False)
+        
+    try:
+        SelectedObjects = Selection        
+        Number_of_Points = SelectedObjects[0]
+        if msg != 0:
+            print_msg("Number_of_Points=" + str(Number_of_Points))
+        if Number_of_Points > 1:
+            m_x = []
+            m_y = []
+            m_z = []
+            Point_List = SelectedObjects[3]
+            if msg != 0:
+                print_msg("Point_List=" + str(Point_List))
+            for Selected_Point in Point_List:
+                m_point = Selected_Point.Point
+                m_x.append(m_point.x)
+                m_y.append(m_point.y)
+                m_z.append(m_point.z)
+            
+            m_np_x = np.asfarray(m_x)
+            m_np_y = np.asfarray(m_y)
+            m_np_z = np.asfarray(m_z)
+            if msg != 0:
+                print_msg(" m_np_x=" + str(m_np_x))
+                print_msg(" m_np_y=" + str(m_np_y))
+                print_msg(" m_np_z=" + str(m_np_z))
+            m_data = np.concatenate((m_np_x[:, np.newaxis], 
+                        m_np_y[:, np.newaxis], 
+                        m_np_z[:, np.newaxis]), 
+                        axis=1)
+            if msg != 0:
+                print_msg(" m_data=" + str(m_data))
+            # Calculate the mean of the points, i.e. the 'center' of the cloud
+            m_datamean = m_data.mean(axis=0)
+            if msg != 0:
+                print_msg(" m_datamean=" + str(m_datamean))
+            Axis_E0 = Base.Vector(m_datamean[0], m_datamean[1], m_datamean[2])
+            
+            # Do an SVD on the mean-centered data.
+            m_uu, m_dd, m_vv = np.linalg.svd(m_data - m_datamean)
+            if msg != 0:
+                print_msg(" m_uu=" + str(m_uu))
+                print_msg(" m_dd=" + str(m_dd))
+                print_msg(" m_vv=" + str(m_vv))
+            # Now vv[0] contains the first principal component, i.e. the direction
+            # vector of the 'best fit' line in the least squares sense.
+            Axis_dir = Base.Vector(m_vv[0][0],m_vv[0][1],m_vv[0][2])
+            Axis_E1 = Axis_E0 - Axis_dir.normalize().multiply(m_dd[0]/2.)
+            Axis_E2 = Axis_E0 + Axis_dir.normalize().multiply(m_dd[0]/2.)
+            Axis_User_Name, axis = plot_axis(Axis_E1, Axis_E2, part, name, grp, orange)
+            print_msg(str(Axis_User_Name) + result_msg )
+            Axis_dir = Base.Vector(m_vv[1][0],m_vv[1][1],m_vv[1][2])
+            #Axis_E2 = Axis_E0 + Axis_dir.normalize().multiply(m_dd[1]/2.)
+            Axis_E2 = Axis_E0 + Axis_dir
+            Axis_User_Name, axis = plot_axis(Axis_E0, Axis_E2, part, name, grp, red)
+            print_msg(str(Axis_User_Name) + result_msg )
+            Axis_dir = Base.Vector(m_vv[2][0],m_vv[2][1],m_vv[2][2])
+            #Axis_E2 = Axis_E0 + Axis_dir.normalize().multiply(m_dd[2]/2.)
+            Axis_E2 = Axis_E0 + Axis_dir
+            Axis_User_Name, axis = plot_axis(Axis_E0, Axis_E2, part, name, grp, green)            
+            print_msg(str(Axis_User_Name) + result_msg )
+        else:
+            printError_msg(error_msg)
+    except:
+        printError_msg(error_msg)
         
 def plot_cylinderAxis():
-    msg=1
+    global verbose
+    msg=verbose
     createFolders('WorkAxis')
     error_msg = "Unable to create Cylinder Axis : \nSelect one cylindrical face only !"
     result_msg = " : Cylinder Axis created !"
@@ -3471,55 +3566,56 @@ def plot_cylinderAxis():
         if msg != 0:
             print_msg("Number_of_Faces=" + str(Number_of_Faces))
             print_msg("Number_of_Edges=" + str(Number_of_Edges))
-        if Number_of_Faces == 1:
+        if Number_of_Faces >= 1:
             Face_list = SelectedObjects[5]
-            Face = Face_list[0]
-            Face_Wire = Face.OuterWire
-            Face_Edges = Face_Wire.Edges
-            try:
-                Circle_Center_1 = None
-                Circle_Center_2 = None
-                for i in range(len(Face_Edges)):
-                    Current_Edge = Face_Edges[i]
-                    Edge_Info = Current_Edge.Curve
-                    Edge_Type_Name = str(Edge_Info)
-                    #print_msg("Edge_Type_Name = " + str(Edge_Type_Name))
-                    Edge_Circle = Edge_Type_Name[0:6]
-                    Edge_Line = Edge_Type_Name[1:5]
-                    if Edge_Circle == "Circle":
-                        Circle_Axis = Current_Edge.Curve.Axis
-                        Circle_Axis = Circle_Axis.normalize()
-                        if Circle_Center_1 == None:
-                            Circle_Center_1 = Current_Edge.Curve.Center
-                            #Circle_Radius_1 = Current_Edge.Curve.Radius
-                        else:
-                            Circle_Center_2 = Current_Edge.Curve.Center
-                            #Circle_Radius_2 = Current_Edge.Curve.Radius
-                    if Edge_Line == "Line":
-                        Line_Start = Current_Edge.Curve.StartPoint
-                        Line_End = Current_Edge.Curve.EndPoint
-                        Edge_Length = ( Line_End - Line_Start ).Length
-            except:
-                printError_msg("Not valid cylinder !")
-            #print_msg("Circle_Center_1 = " + str(Circle_Center_1))
-            #print_msg("Circle_Center_2 = " + str(Circle_Center_2))                       
-            Axis_A = Circle_Center_1
-            Axis_B = Circle_Center_2
-            Axis_dir = Axis_B - Axis_A
-            if m_extensionFaceNormal != 0.0:
-                Axis_dir_norm = Axis_B - Axis_A
-                Axis_dir_norm = Axis_dir_norm.normalize()
-                Axis_dir_norm = Axis_dir_norm.multiply(m_extensionFaceNormal)
-                Axis_E1 = Axis_B + Axis_dir_norm
-                Axis_E2 = Axis_A - Axis_dir_norm
-            else:
-                Axis_E1 = Axis_B + Axis_dir.multiply(0.1)           
-                Axis_E2 = Axis_A - Axis_dir.multiply(0.9)
-            
-            
-            Axis_User_Name, axis = plot_axis(Axis_E1, Axis_E2, part, name)
-                      
-            print_msg(str(Axis_User_Name) + result_msg )
+            for Face in Face_list:
+            #Face = Face_list[0]
+                Face_Wire = Face.OuterWire
+                Face_Edges = Face_Wire.Edges
+                try:
+                    Circle_Center_1 = None
+                    Circle_Center_2 = None
+                    for i in range(len(Face_Edges)):
+                        Current_Edge = Face_Edges[i]
+                        Edge_Info = Current_Edge.Curve
+                        Edge_Type_Name = str(Edge_Info)
+                        #print_msg("Edge_Type_Name = " + str(Edge_Type_Name))
+                        Edge_Circle = Edge_Type_Name[0:6]
+                        Edge_Line = Edge_Type_Name[1:5]
+                        if Edge_Circle == "Circle":
+                            Circle_Axis = Current_Edge.Curve.Axis
+                            Circle_Axis = Circle_Axis.normalize()
+                            if Circle_Center_1 == None:
+                                Circle_Center_1 = Current_Edge.Curve.Center
+                                #Circle_Radius_1 = Current_Edge.Curve.Radius
+                            else:
+                                Circle_Center_2 = Current_Edge.Curve.Center
+                                #Circle_Radius_2 = Current_Edge.Curve.Radius
+                        if Edge_Line == "Line":
+                            Line_Start = Current_Edge.Curve.StartPoint
+                            Line_End = Current_Edge.Curve.EndPoint
+                            Edge_Length = ( Line_End - Line_Start ).Length
+                except:
+                    printError_msg("Not valid cylinder !")
+                #print_msg("Circle_Center_1 = " + str(Circle_Center_1))
+                #print_msg("Circle_Center_2 = " + str(Circle_Center_2))                       
+                Axis_A = Circle_Center_1
+                Axis_B = Circle_Center_2
+                Axis_dir = Axis_B - Axis_A
+                if m_extensionFaceNormal != 0.0:
+                    Axis_dir_norm = Axis_B - Axis_A
+                    Axis_dir_norm = Axis_dir_norm.normalize()
+                    Axis_dir_norm = Axis_dir_norm.multiply(m_extensionFaceNormal)
+                    Axis_E1 = Axis_B + Axis_dir_norm
+                    Axis_E2 = Axis_A - Axis_dir_norm
+                else:
+                    Axis_E1 = Axis_B + Axis_dir.multiply(0.1)           
+                    Axis_E2 = Axis_A - Axis_dir.multiply(0.9)
+                
+                
+                Axis_User_Name, axis = plot_axis(Axis_E1, Axis_E2, part, name)
+                          
+                print_msg(str(Axis_User_Name) + result_msg )
         elif Number_of_Edges >= 1:
             m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
             m_objs = [selobj.Object for selobj in m_selEx]
@@ -4907,10 +5003,10 @@ def vertexToSketch(points,sketch):
         Projection2 = m_p2.projectToPlane(m_sketch.Placement.Base, m_rec2N)
         # Append the Projection
         geoList.append(Part.Point(Projection1))
-        return_points.append(Part.Point(Projection2))
-        m_sketch.addGeometry(geoList)
+        return_points.append(Part.Point(Projection2))        
         num_point = num_point + 1
         
+    m_sketch.addGeometry(geoList)    
     return num_point, return_points
         
 
@@ -5320,12 +5416,13 @@ def line_toSketch():
             if m_num_line != (num_edge + num_point):
                 printError_msg(error_msg)
                 return
-            createFolders('WorkPoints')
-            createFolders('WorkAxis')
-            for point in return_points:
-                plot_point(point, part="Part::Feature", name="Sketch_Proj", grp="WorkPoints")
-            for edge in return_edges:
-                plot_axis(edge.StartPoint,edge.EndPoint, part="Part::Feature", name="Sketch_Proj", grp="WorkAxis")
+            if msg != 0: 
+                createFolders('WorkPoints')
+                createFolders('WorkAxis')
+                for point in return_points:
+                    plot_point(point, part="Part::Feature", name="Sketch_Proj", grp="WorkPoints")
+                for edge in return_edges:
+                    plot_axis(edge.StartPoint,edge.EndPoint, part="Part::Feature", name="Sketch_Proj", grp="WorkAxis")
  
             # Refresh
             App.getDocument(str(m_actDoc.Name)).recompute()
@@ -7587,7 +7684,8 @@ def plot_sectionSweep():
     - All option (means if the trajectory selected is a compound, all sub wires will be used for the sweep)
     - Transition Option (Select a Transition option in case of trajectory with several wires; Transition can be:
     #     0 (default), 1 (right corners) or 2 (rounded corners).)   
-    """    
+    """
+    global verbose    
     msg=verbose
 
     # Variable makeSolid = 1 to create solid if section is closed, 0 to create surfaces
@@ -7600,11 +7698,11 @@ def plot_sectionSweep():
     # will be processed
     allSubProfile=sweep_all
     
-#    if msg != 0:
-#        print_msg("makeSolid = " + str(makeSolid))
-#        print_msg("isFrenet = " + str(isFrenet))
-#        print_msg("transition = " + str(transition))
-#        print_msg("allSubProfile = " + str(allSubProfile))
+    if msg != 0:
+        print_msg("makeSolid = " + str(makeSolid))
+        print_msg("isFrenet = " + str(isFrenet))
+        print_msg("transition = " + str(transition))
+        print_msg("allSubProfile = " + str(allSubProfile))
     
     createFolders('WorkAxis')
     createFolders('WorkPoints')
@@ -7649,13 +7747,30 @@ def plot_sectionSweep():
         
         # Get the list of sections in case of first section is a Compound 
         m_sections = []
-        if isinstance(shape0,Part.Compound): 
-            m_msg = "Compound Section Found !"
+        if isinstance(shape0,Part.Compound):
+            if msg != 0: 
+                print_msg("Compound Section Found !")
             for wire in shape0.Wires:
                 m_sections.append(Part.Wire([wire]))
         else:
-            m_msg = "NO Compound Found !"
-            m_sections.append(Part.Wire([shape0]))
+            if msg != 0:
+                print_msg("NO Compound Section Found !")
+                print_msg(str(getShapeType(shape0)))
+            try:
+                if len(shape0.Wires):
+                    for wire in shape0.Wires:                
+                        m_sections.append(Part.Wire([wire]))
+                elif len(shape0.Edges):
+                    for edge in shape0.Edges:
+                        m_sections.append(Part.Wire([edge]))
+                elif len(shape0.Vertexes):
+                    for vertex in shape0.Vertexes:
+                        m_sections.append(Part.Wire([vertex]))
+                else:
+                    print_msg("Not able to transform " + str(shape0) + "in wire !")
+                    return                                    
+            except:
+                pass
 
         if msg != 0:
             print_msg("03-Get the list of sections in case of first section is a Compound")
@@ -7744,7 +7859,21 @@ def plot_sectionSweep():
                         for wire in shape3.Wires:
                             m_sections3.append(Part.Wire([wire]))
                     else:
-                        m_sections3.append(Part.Wire([shape3]))
+                        try:
+                            if len(shape3.Wires):
+                                for wire in shape3.Wires:                
+                                    m_sections3.append(Part.Wire([wire]))
+                            elif len(shape0.Edges):
+                                for edge in shape3.Edges:
+                                    m_sections3.append(Part.Wire([edge]))
+                            elif len(shape0.Vertexes):
+                                for vertex in shape3.Vertexes:
+                                    m_sections3.append(Part.Wire([vertex]))
+                            else:
+                                print_msg("Not able to transform " + str(shape3) + "in wire !")
+                                return                                    
+                        except:
+                            pass
 #                    if msg != 0:
 #                        print_msg("m_sections3 = " + str(m_sections3))
 
@@ -8978,6 +9107,16 @@ def object_perpendicular():
      
 def object_coplanar():
     two_objects_are("coplanar")
+ 
+   
+def object_highlightCommon():
+    """
+    Compute the common parts between selected shapes:
+    Quick measurements between parallel faces and similarly placed objects
+
+    Original code from : 'JMG, galou and other contributors' 10/2015
+    Adapted to WF by   : Rentlau_64 10/2015
+    """
 
 def object_clearance():
     """
@@ -9026,6 +9165,7 @@ def object_angle():
     NB:
     Normals of Planes will be used.
     """
+    global verbose
     msg=verbose
             
     error_msg =\
@@ -9262,8 +9402,244 @@ def camera_orientation():
     "Degrees Angle  : " + str(math.degrees(pl.Rotation.Angle))
     
     print_gui_msg(msg)
-    
+
+
+def object_common():
+    """Compute the common parts between selected shapes.
+    - Select at least two objects.
         
+    Original code from HighlightCommon.FCMacro
+    https://github.com/FreeCAD/FreeCAD-macros/blob/master/Utility/HighlightCommon.FCMacro
+    Authors = 2015 Javier Martinez Garcia
+    """
+    global verbose
+    msg=verbose
+    
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None
+    
+    createFolders('WorkObjects')    
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "You Must Select at least Two(2) Objects !"
+    result_msg = " : Common object created into WorkFeatures/WorkObjects/"
+    name = "Part"
+    part = "Part::Feature"
+    grp = "WorkObjects"
+      
+    try:
+        selectionObjects = Gui.Selection.getSelection()
+        if len(selectionObjects) < 2:
+            printError_msg(error_msg)
+            return
+        object_list = []
+        for obj in selectionObjects:
+            object_list.append(obj)
+        for i, object_a in enumerate(object_list):
+            shape_a = object_a.Shape
+            label_a = object_a.Label
+            for object_b in object_list[(i + 1):]:
+                shape_b = object_b.Shape
+                label_b = object_b.Label
+                common = shape_a.common(shape_b)
+                if common.Volume > 1e-6:
+                    if not(App.ActiveDocument.getObject( grp )):
+                        App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
+                    intersection_object = FreeCAD.ActiveDocument.addObject(part)
+                    intersection_object.Label = "Common (" +\
+                         str(label_a.encode('utf-8')) +\
+                         "-" +\
+                         str(label_b.encode('utf-8')) +\
+                         ")"
+                    intersection_object.Shape = common
+                    App.ActiveDocument.getObject( grp ).addObject(intersection_object)
+                    intersection_object.ViewObject.ShapeColor = (1.0, 0.0, 0.0, 1.0)
+                    object_a.ViewObject.Transparency = 80
+                    object_b.ViewObject.Transparency = 80
+                    
+                    print_msg( str(intersection_object.Label.encode('utf-8')) + result_msg )
+                    print_msg("Volume of the intersection between " +\
+                        str(label_a.encode('utf-8')) +\
+                        " and " +\
+                        str(label_b.encode('utf-8')) +\
+                        " : " +\
+                        str(common.Volume) + "\n")
+                else:
+                    print_gui_msg("No intersection between " +\
+                        str(label_a.encode('utf-8')) +\
+                        " and " +\
+                        str(label_b.encode('utf-8')))
+    except:
+        printError_msg(error_msg)
+        
+                
+def object_difference():
+    """Compute the difference parts between selected shapes.
+    - Select two objects.
+
+    Original code from HighlightDifference.FCMacro
+    https://github.com/FreeCAD/FreeCAD-macros/blob/master/Utility/HighlightDifference.FCMacro
+    Authors = 2015 Gaël Ecorchard (Galou)
+    """
+    global verbose
+    msg=verbose
+    msg=1
+    
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None
+    
+    createFolders('WorkObjects')    
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "You Must Select Two(2) Objects !"
+    result_msg = " : Difference object created into WorkFeatures/WorkObjects/"
+    name = "Part"
+    part = "Part::Feature"
+    grp = "WorkObjects"
+      
+    try:
+        selectionObjects = Gui.Selection.getSelection()
+                                       
+        if len(selectionObjects) < 2:
+            printError_msg(error_msg)
+            return
+        object_list = []
+        for obj in selectionObjects:
+            object_list.append(obj) 
+        for i, object_a in enumerate(object_list): 
+            shape_a = object_a.Shape
+            label_a = object_a.Label
+            for object_b in object_list[(i + 1):]:
+                shape_b = object_b.Shape
+                label_b = object_b.Label
+                shape_addition = shape_a.cut(shape_b)
+                if shape_addition.Volume < 1e-6:
+                    print_gui_msg("No Cut of " +\
+                        str(label_a.encode('utf-8')) +\
+                        " by " +\
+                        str(label_b.encode('utf-8')))
+                else:
+                    print_msg("Volume of the red " +\
+                        str(label_a.encode('utf-8')) +\
+                        " Cut by " +\
+                        str(label_b.encode('utf-8')) +\
+                        " : " +\
+                        str(shape_addition.Volume) + "\n")
+                    if not(App.ActiveDocument.getObject( grp )):
+                        App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
+                        
+                    added = FreeCAD.ActiveDocument.addObject(part)
+                    added.Label = "Cut red (" +\
+                         str(label_a.encode('utf-8')) +\
+                         "-" +\
+                         str(label_b.encode('utf-8')) +\
+                         ")"
+                    added.Shape = shape_addition
+                    App.ActiveDocument.getObject( grp ).addObject(added)
+                    added.ViewObject.ShapeColor = (1.0, 0.0, 0.0, 1.0)              
+   
+                shape_removal = shape_b.cut(shape_a)
+                if shape_removal.Volume < 1e-6:
+                    print_gui_msg("No Cut of " +\
+                        str(label_b.encode('utf-8')) +\
+                        " by " +\
+                        str(label_a.encode('utf-8')))
+                else:                    
+                    print_msg("Volume of the green " +\
+                        str(label_b.encode('utf-8')) +\
+                        " Cut by " +\
+                        str(label_a.encode('utf-8')) +\
+                        " : " +\
+                        str(shape_removal.Volume) + "\n")
+                                        
+                    if not(App.ActiveDocument.getObject( grp )):
+                        App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
+                    
+                    removed = FreeCAD.ActiveDocument.addObject(part)
+                    removed.Label = "Cut green (" +\
+                         str(label_b.encode('utf-8')) +\
+                         "-" +\
+                         str(label_a.encode('utf-8')) +\
+                         ")"
+                    removed.Shape = shape_removal
+                    App.ActiveDocument.getObject( grp ).addObject(removed)
+                    removed.ViewObject.ShapeColor = (0.0, 0.5, 0.0, 1.0)
+                 
+                object_a.ViewObject.Transparency = 80
+                object_b.ViewObject.Transparency = 80 
+    except:
+        printError_msg(error_msg)        
+
+ 
+# object_a = FreeCAD.Gui.Selection.getSelectionEx()[0].Object
+# object_b = FreeCAD.Gui.Selection.getSelectionEx()[1].Object
+# shape_a = object_a.Shape
+# shape_b = object_b.Shape
+# label_a = object_a.Label
+# label_b = object_b.Label
+# shape_addition = shape_a.cut(shape_b)
+# if shape_addition.Volume < 1e-6:
+#     FreeCAD.Console.PrintMessage('No addition from {} to {}\n'.format(
+#         label_a, label_b))
+# else:
+#     FreeCAD.Console.PrintMessage(
+#         'Volume of the addition from {} to {}: {}\n'.format(
+#             label_a, label_b, shape_addition.Volume))
+# 
+# shape_removal = shape_b.cut(shape_a)
+# if shape_removal.Volume < 1e-6:
+#     FreeCAD.Console.PrintMessage('No removal from {} to {}\n'.format(
+#         label_a, label_b))
+# else:
+#     FreeCAD.Console.PrintMessage(
+#         'Volume of the removal from {} to {}: {}\n'.format(
+#             label_a, label_b, shape_removal.Volume))
+# 
+# if (shape_addition.Volume < 1e-6) and (shape_removal.Volume < 1e-6):
+#     FreeCAD.Console.PrintMessage('{} and {} have the same shape\n'.format(
+#         label_a, label_b))
+# 
+# added = FreeCAD.ActiveDocument.addObject('Part::Feature')
+# added.Label = 'Addition ({} − {})'.format(label_a, label_b)
+# added.Shape = shape_addition
+# added.ViewObject.ShapeColor = (1.0, 0.0, 0.0, 1.0)
+# removed = FreeCAD.ActiveDocument.addObject('Part::Feature')
+# removed.Label = 'Removal ({} − {})'.format(label_b, label_a)
+# removed.Shape = shape_removal
+# removed.ViewObject.ShapeColor = (0.0, 0.5, 0.0, 1.0)
+# 
+# object_a.ViewObject.Transparency = 80
+# object_b.ViewObject.Transparency = 80        
+                 
+def object_align2view_old():
+    """ Align the object(s) selected to the actual view.
+    - Click first to select a Face of an object.
+
+    The changed values are : Rotation Axis((X, Y, Z), Angle) 
+    Same Euler angles : Yaw, Pitch, Roll
+    The Translation is not modifylace your object selected to the position ActiveView (camera)
+    
+    Original Code from Mario52
+    """
+    # revoir le point de rotation
+    msg=verbose
+    error_msg = "INCORRECT Object(s) Selection :\n\nYou Must at least one object !"
+    
+    try:
+        m_sel_list = Gui.Selection.getSelection()
+        pl = App.Placement()
+        pl.Rotation = FreeCADGui.ActiveDocument.ActiveView.getCameraOrientation()
+        for m_sel in m_sel_list:
+            m_Nameelement = m_sel.Name
+            if msg!=0:
+                print_msg("Object selected =" + str(m_Nameelement))            
+            pl.Base = m_sel.Placement.Base
+            App.ActiveDocument.getObject(m_Nameelement).Placement=pl           
+    except:
+        printError_msg(error_msg)
+
 def object_align2view():
     """
     Align the face of selected object(s)  to the actual view Plane.
@@ -9763,10 +10139,14 @@ class WorkFeatureTab():
             self.m_tab.setCurrentIndex(3)
 
 #----------------------------------------------------------------
-        # Create a Rotation object
-        self.rot = Rotation(self.ui)
-        # Create a Translation object
-        self.trans = Translation(self.ui)
+        # Create a Rotation object and connect
+        self.eventsRot = RotationEvents(self.ui)
+        # Create a Translation object and connect
+        self.eventsTrans = TranslationEvents(self.ui)
+        # Create a Parametric 2D Curve object and connect
+        self.events2D = ParametricCurve2DEvents(self.ui)
+        # Create a Parametric 3D Curve object and connect
+        self.events3D = ParametricCurve3DEvents(self.ui)
                 
         ### Connect to functions
         self.connections_for_checkbox_toggled = {
@@ -9803,6 +10183,7 @@ class WorkFeatureTab():
                              
                              "button_object_axis"          : "plot_centerObjectAxes",
                              "button_twopoints_axis"       : "plot_2PointsAxis",
+                             "button_Npoints_axis"         : "plot_NPoints_axis",
                              "button_cylinder_axis"        : "plot_cylinderAxis",
                              "button_plane_axis"           : "plot_planeAxis",
                              "button_face_normal"          : "plot_faceNormal",                            
@@ -9849,6 +10230,8 @@ class WorkFeatureTab():
                              "button_dome_create"          : "plot_centerDome",
                              "button_letter"               : "plot_letter",
                              "button_revolve"              : "plot_revolution",
+                             "button_common"               : "object_common",
+                             "button_difference"           : "object_difference",
                              "button_sweep"                : "plot_sectionSweep",
                              
                              "button_alignview"            : "view_align",
@@ -9874,7 +10257,7 @@ class WorkFeatureTab():
                              "button_align_faces"          : "object_alignFaces",
                              "button_align_edges"          : "object_alignEdges",
                              "button_joint_points"         : "object_jointPoints", 
-                             "button_joint_faces"          : "object_jointFaces",                             
+                             "button_joint_faces"          : "object_jointFaces",                            
                             } 
                             
         self.connections_for_text_changed = {
@@ -9983,117 +10366,6 @@ class WorkFeatureTab():
             #print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )                            
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),globals()[str(m_val)])                      
-
-#==============================================================================
-# Define Connections to Translation Object
-#==============================================================================
-        self.connections_for_ObjTrans_button_pressed = {                        
-                             "ObjTrans_button_select"         : "initialize",
-                             "ObjTrans_button_select_start"   : "select_start",
-                             "ObjTrans_button_select_end"     : "select_end",
-                             "ObjTrans_button_reset"          : "reset",
-                             "ObjTrans_button_apply"          : "application",
-                             }
-                             
-        self.connections_for_ObjTrans_combobox_changed = {
-                             "ObjTrans_comboBox_start"        : "select_start_type",
-                             "ObjTrans_comboBox_end"          : "select_end_type",
-                            }
- 
-        self.connections_for_ObjTrans_checkbox_toggled = { 
-                            "ObjTrans_duplicate"              : "copyFlag",
-                            "ObjTrans_deepCopy"               : "deepCopyFlag",
-                            }
-                
-        self.connections_for_ObjTrans_spin_changed = {
-                             "ObjTrans_spin"                  : "numberCopies",
-                            }
-                        
-        self.connections_for_ObjTrans_return_pressed = { 
-                             "ObjTrans_start_x"           : "start_x_entered",
-                             "ObjTrans_start_y"           : "start_y_entered",
-                             "ObjTrans_start_z"           : "start_z_entered",
-                             "ObjTrans_end_x"             : "end_x_entered",
-                             "ObjTrans_end_y"             : "end_y_entered",
-                             "ObjTrans_end_z"             : "end_z_entered",
-                             }
-#==============================================================================
-# Connect to Translation functions
-#==============================================================================
-        for m_key, m_val in self.connections_for_ObjTrans_button_pressed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("pressed()"),getattr(self.trans, str(m_val)))
-                                        
-        for m_key, m_val in self.connections_for_ObjTrans_combobox_changed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )                            
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),getattr(self.trans, str(m_val)))     
-
-        for m_key, m_val in self.connections_for_ObjTrans_checkbox_toggled.items():
-            #print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL(_fromUtf8("toggled(bool)")),getattr(self.trans, str(m_val)))  
-              
-
-        for m_key, m_val in self.connections_for_ObjTrans_spin_changed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("valueChanged(int)"),getattr(self.trans, str(m_val))) 
-        
-        for m_key, m_val in self.connections_for_ObjTrans_return_pressed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("returnPressed()"),getattr(self.trans, str(m_val)))
-#==============================================================================
-# Define Connections to Rotation Object
-#==============================================================================
-        self.connections_for_ObjRot_slider_changed = {                    
-                             "ObjRot_horizontalSlider"      : "angle_value_changed",
-                             }
-                             
-        self.connections_for_ObjRot_button_pressed = { 
-                             "ObjRot_button_select"         : "initialize",
-                             "ObjRot_button_select_center"  : "select_center",
-                             "ObjRot_button_select_axis"    : "select_axis",
-                             "ObjRot_button_select_angle"   : "select_angle",
-                             "ObjRot_button_reset"          : "reset",
-                             "ObjRot_button_apply"          : "application",
-                             }
-                             
-        self.connections_for_ObjRot_combobox_changed = {
-                             "ObjRot_comboBox_center"       : "center_value",
-                             "ObjRot_comboBox_axis"         : "axis_value",
-                            }
-                              
-        self.connections_for_ObjRot_return_pressed = { 
-                             "ObjRot_lineEdit_angle"        : "angle_value_entered",
-                             }
-
-#==============================================================================
-# Connect to Rotation functions
-#==============================================================================
-        for m_key, m_val in self.connections_for_ObjRot_button_pressed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("pressed()"),getattr(self.rot, str(m_val)))                   
-                                           
-        for m_key, m_val in self.connections_for_ObjRot_combobox_changed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )                            
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),getattr(self.rot, str(m_val)))     
-        
-        for m_key, m_val in self.connections_for_ObjRot_slider_changed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("valueChanged(int)"),getattr(self.rot, str(m_val)))        
-        
-        for m_key, m_val in self.connections_for_ObjRot_return_pressed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("returnPressed()"),getattr(self.rot, str(m_val)))
-#==============================================================================
                                                
         self.m_dialog.show()
         m_text=str(myRelease)
