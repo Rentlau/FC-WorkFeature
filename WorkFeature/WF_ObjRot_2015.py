@@ -5,9 +5,11 @@ import sys
 if not sys.path.__contains__("/usr/lib/freecad/lib"): 
     sys.path.append("/usr/lib/freecad/lib") 
     
-import __init__  as func
+import WF_2015 as func
+from WF_Utils_2015 import *
+
 global myRelease
-myRelease = "2105_02"
+myRelease = "2015_10"
 
 import os.path
 import math
@@ -21,33 +23,7 @@ from FreeCAD import Base
 
 from PySide import QtCore, QtGui
 
-####################################################################################
-# Functions
-def print_attributes(obj, doc=False):
-    """ Print all the attributes of this object and their value """
-    __m_type = obj.__class__.__name__
-    print '* Attributes print for '+ str(__m_type) + '*'
-    for names in dir(obj):
-        attr = getattr(obj,names)
-        if not callable(attr):
-            if doc:
-                print names,':',attr
-            else:
-                print names
-                
 
-def print_methods(obj, doc=False):
-    """ Print all the methods of this object and their doc string"""
-    __m_type = obj.__class__.__name__
-    print '\n* Methods print for '+ str(__m_type) + '*'
-    for names in dir(obj):
-        attr = getattr(obj,names)
-        if callable(attr):
-            if doc:
-                print names,':',attr.__doc__
-            else:
-                print names
-                
 
 def plot_point(Vector_point, part="Part::Feature", name="CenterObjects", grp="Rot_Trans"):
     if not(App.ActiveDocument.getObject( grp )):
@@ -1406,7 +1382,70 @@ try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
+    
+class RotationEvents(DefineAndConnectEvents):
+    def __init__(self,ui):
+        self.ui = ui
+        # Create a Rotation object
+        self.rot = Rotation(self.ui)
+        DefineAndConnectEvents.__init__(self, self.ui, self.rot)
 
+    def defineEvents(self): 
+        self.connections_for_slider_changed = {                    
+                             "ObjRot_horizontalSlider"    : "angle_value_changed",
+                             }
+        self.connections_for_button_pressed = { 
+                             "ObjRot_button_select"           : "initialize",
+                             "ObjRot_button_select_center"    : "select_center",
+                             "ObjRot_button_select_axis"      : "select_axis",
+                             "ObjRot_button_reset"            : "reset",
+                             "ObjRot_button_apply"            : "application",
+                             }                      
+        self.connections_for_combobox_changed = {
+                             "ObjRot_comboBox_center"        : "center_value",
+                             "ObjRot_comboBox_axis"          : "axis_value",
+                            }
+        self.connections_for_checkbox_toggled = {}
+        self.connections_for_spin_changed = {}
+        self.connections_for_return_pressed = { 
+                             "ObjRot_lineEdit_angle"           : "angle_value_entered",
+                             }
+                             
+class TranslationEvents(DefineAndConnectEvents):
+    def __init__(self,ui):
+        self.ui = ui
+        # Create a Translation object
+        self.trans = Translation(self.ui)
+        DefineAndConnectEvents.__init__(self, self.ui, self.trans)
+
+    def defineEvents(self): 
+        self.connections_for_slider_changed = {}
+        self.connections_for_button_pressed = { 
+                             "ObjTrans_button_select"         : "initialize",
+                             "ObjTrans_button_select_start"   : "select_start",
+                             "ObjTrans_button_select_end"     : "select_end",
+                             "ObjTrans_button_reset"          : "reset",
+                             "ObjTrans_button_apply"          : "application",
+                             }                      
+        self.connections_for_combobox_changed = {
+                             "ObjTrans_comboBox_start"        : "select_start_type",
+                             "ObjTrans_comboBox_end"          : "select_end_type",
+                            }
+        self.connections_for_checkbox_toggled = {
+                            "ObjTrans_duplicate"              : "copyFlag",
+                            "ObjTrans_deepCopy"               : "deepCopyFlag",        
+                            }
+        self.connections_for_spin_changed = {
+                            "ObjTrans_spin"                  : "numberCopies",
+                            }
+        self.connections_for_return_pressed = { 
+                             "ObjTrans_start_x"           : "start_x_entered",
+                             "ObjTrans_start_y"           : "start_y_entered",
+                             "ObjTrans_start_z"           : "start_z_entered",
+                             "ObjTrans_end_x"             : "end_x_entered",
+                             "ObjTrans_end_y"             : "end_y_entered",
+                             "ObjTrans_end_z"             : "end_z_entered",
+                             }
 ####################################################################################
 class ObjectRotationTab():
     def __init__(self):
@@ -1438,12 +1477,11 @@ class ObjectRotationTab():
         self.ui.setupUi(self.m_dialog)
         self.m_tab.setCurrentIndex(i+1)
         
-        # Create a Rotation object
-        self.rot = Rotation(self.ui)
         # Create a Translation object
         self.trans = Translation(self.ui)
         
-        # Connect to functions
+        # Create a Rotation object and connect
+        self.eventsRot = RotationEvents(self.ui)
  
                             
         self.connections_for_ObjTrans_button_pressed = {                        
@@ -1476,57 +1514,16 @@ class ObjectRotationTab():
                              "ObjTrans_end_z"             : "end_z_entered",
                              }
                                            
-        self.connections_for_ObjRot_slider_changed = {                    
-                             "ObjRot_horizontalSlider"    : "angle_value_changed",
-                             }
-                             
-        self.connections_for_ObjRot_button_pressed = { 
-                             "ObjRot_button_select"           : "initialize",
-                             "ObjRot_button_select_center"    : "select_center",
-                             "ObjRot_button_select_axis"      : "select_axis",
-                             "ObjRot_button_reset"            : "reset",
-                             "ObjRot_button_apply"            : "application",
-                             }
-                             
-        self.connections_for_ObjRot_combobox_changed = {
-                             "ObjRot_comboBox_center"        : "center_value",
-                             "ObjRot_comboBox_axis"          : "axis_value",
-                            }
-                              
-        self.connections_for_ObjRot_return_pressed = { 
-                             "ObjRot_lineEdit_angle"           : "angle_value_entered",
-                             }
-                             
+                            
         self.connections_for_button_clicked = {
                              "button_quit"               : "quit_clicked", 
                             }
                             
         for m_key, m_val in self.connections_for_button_clicked.items():
-            #func.print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
+            #print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("clicked()"),getattr(self,str(m_val))) 
-       
-        # Connect to Rotation functions 
-        for m_key, m_val in self.connections_for_ObjRot_button_pressed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("pressed()"),getattr(self.rot, str(m_val)))                   
-                                           
-        for m_key, m_val in self.connections_for_ObjRot_combobox_changed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )                            
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),getattr(self.rot, str(m_val)))     
-        
-        for m_key, m_val in self.connections_for_ObjRot_slider_changed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("valueChanged(int)"),getattr(self.rot, str(m_val)))        
-        
-        for m_key, m_val in self.connections_for_ObjRot_return_pressed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("returnPressed()"),getattr(self.rot, str(m_val)))
-                                   
+                                       
         # Connect to Translation functions
         for m_key, m_val in self.connections_for_ObjTrans_button_pressed.items():
             #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
