@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'WFGui_2015.ui'
 #
-# Created: Wed Nov  4 07:10:00 2015
+# Created: Sat Nov  7 20:09:36 2015
 #      by: PySide UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -2321,7 +2321,7 @@ class Ui_Form(object):
         self.gridLayout_34.addLayout(self.horizontalLayout_43, 1, 0, 1, 1)
 
         self.retranslateUi(Form)
-        self.tabWidget_7.setCurrentIndex(0)
+        self.tabWidget_7.setCurrentIndex(4)
         self.point_loc_comboBox.setCurrentIndex(1)
         self.tabWidget_8.setCurrentIndex(0)
         self.transition_comboBox.setCurrentIndex(2)
@@ -2475,7 +2475,9 @@ class Ui_Form(object):
         self.button_object_axis.setText(_translate("Form", "Object(s) X, Y, Z Axes", None))
         self.button_twopoints_axis.setToolTip(_translate("Form", "Create an Axis crossing 2 Points.", None))
         self.button_twopoints_axis.setText(_translate("Form", "Two Points Axis", None))
-        self.extension_twopoints_axis.setToolTip(_translate("Form", "Distance for the extensions on extrema", None))
+        self.extension_twopoints_axis.setToolTip(_translate("Form", "Distance for the extensions on extrema.\n"
+"Positive values will enlarge the Axis.\n"
+"Negative values will start to shrink it (then reverse when middle reached). ", None))
         self.extension_twopoints_axis.setText(_translate("Form", "0.0", None))
         self.button_Npoints_axis.setToolTip(_translate("Form", "Axis=(Points):\n"
 "Create a \"best fit\" line from a set of points using Singular Value Decomposition..\n"
@@ -2515,8 +2517,12 @@ class Ui_Form(object):
 "(These selections can also be done into the Combined View)", None))
         self.button_face_normal.setText(_translate("Form", "Face Normal", None))
         self.extension_face_normal.setToolTip(_translate("Form", "Length of external part of the (Normal) Axis.\n"
-"  If zero In case of cylinder axis the extension will be a percentage of the object length.\n"
-"  If zero and plane of face Normal, the extension will be 10 units.", None))
+"  If zero In case of cylinder axis the extension will be a percentage (10%) of the object length.\n"
+"  If zero and plane of face Normal, the extension will be 10 units.\n"
+"\n"
+"For \"Cylinder Axis\", \"Planes Axes\" and \"Face Normal\"\n"
+"  Positive values will enlarge the Axis toward OUTSIDE of the Face Object;\n"
+"  Negative values will  enlarge the Axis toward INSIDE of the Face Object.", None))
         self.extension_face_normal.setText(_translate("Form", "0.0", None))
         self.button_point_line_axis.setToolTip(_translate("Form", "Create an Axis Parallel to an Axis (as Direction) and crossing a Point.\n"
 "- Select one Axis and one (or several) Point(s) NOT on the previous Axis.\n"
@@ -2536,7 +2542,9 @@ class Ui_Form(object):
         self.button_line_point_axis.setToolTip(_translate("Form", "Create an Axis Perpendicular to an Axis and crossing a Point\n"
 "-Select one Axis and one (or several) Point(s) NOT on the previous Axis.", None))
         self.button_line_point_axis.setText(_translate("Form", "Axis=(Axis,Point)", None))
-        self.extension_line_point_axis.setToolTip(_translate("Form", "Distance for the extensions on extrema.", None))
+        self.extension_line_point_axis.setToolTip(_translate("Form", "Distance for the extensions on extrema.\n"
+"Positive values will enlarge the Axis.\n"
+"Negative values will start to shrink it (then reverse when middle reached). ", None))
         self.extension_line_point_axis.setText(_translate("Form", "0.0", None))
         self.button_twolines_axis.setToolTip(_translate("Form", "Create an Axis between two Axes.\n"
 "-Select two Axes.", None))
@@ -2631,7 +2639,11 @@ class Ui_Form(object):
 "NB: \n"
 " - The percentage of  the extension can be defined first.", None))
         self.button_extension_axis.setText(_translate("Form", "Enlarge(Axis)", None))
-        self.extension_axis.setToolTip(_translate("Form", "Extension of the Line in  percentage.", None))
+        self.extension_axis.setToolTip(_translate("Form", "Extension of the Line in percentage of original length of the Line.\n"
+"If the extension is 50% it means that each side is extended with 25% length.\n"
+"\n"
+"Positive values will enlarge the Axis.\n"
+"Negative values will start to shrink it. ", None))
         self.extension_axis.setText(_translate("Form", "50.0", None))
         self.button_click_for_axis.setToolTip(_translate("Form", "Create a set of Lines on a Plane perpendicular to the view at location of 2 mouse clicks.\n"
 "- Click first on the Button then at least twice click on the View (with no object in background).\n"

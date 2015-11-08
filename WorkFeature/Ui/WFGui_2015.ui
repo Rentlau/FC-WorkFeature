@@ -57,7 +57,7 @@
           <enum>QTabWidget::West</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="Origin_Tab_2">
           <attribute name="icon">
@@ -921,7 +921,9 @@ Then click on this button.</string>
                 </size>
                </property>
                <property name="toolTip">
-                <string>Distance for the extensions on extrema</string>
+                <string>Distance for the extensions on extrema.
+Positive values will enlarge the Axis.
+Negative values will start to shrink it (then reverse when middle reached). </string>
                </property>
                <property name="text">
                 <string>0.0</string>
@@ -1106,8 +1108,12 @@ To create several Normal of the face:
                   </property>
                   <property name="toolTip">
                    <string>Length of external part of the (Normal) Axis.
-  If zero In case of cylinder axis the extension will be a percentage of the object length.
-  If zero and plane of face Normal, the extension will be 10 units.</string>
+  If zero In case of cylinder axis the extension will be a percentage (10%) of the object length.
+  If zero and plane of face Normal, the extension will be 10 units.
+
+For &quot;Cylinder Axis&quot;, &quot;Planes Axes&quot; and &quot;Face Normal&quot;
+  Positive values will enlarge the Axis toward OUTSIDE of the Face Object;
+  Negative values will  enlarge the Axis toward INSIDE of the Face Object.</string>
                   </property>
                   <property name="text">
                    <string>0.0</string>
@@ -1253,7 +1259,9 @@ End of the Axis.</string>
                 </size>
                </property>
                <property name="toolTip">
-                <string>Distance for the extensions on extrema.</string>
+                <string>Distance for the extensions on extrema.
+Positive values will enlarge the Axis.
+Negative values will start to shrink it (then reverse when middle reached). </string>
                </property>
                <property name="text">
                 <string>0.0</string>
@@ -1775,7 +1783,11 @@ NB:
                 </size>
                </property>
                <property name="toolTip">
-                <string>Extension of the Line in  percentage.</string>
+                <string>Extension of the Line in percentage of original length of the Line.
+If the extension is 50% it means that each side is extended with 25% length.
+
+Positive values will enlarge the Axis.
+Negative values will start to shrink it. </string>
                </property>
                <property name="text">
                 <string>50.0</string>

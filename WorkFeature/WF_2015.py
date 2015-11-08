@@ -64,7 +64,7 @@ from   WF_Utils_2015 import *
 from   WF_ObjParCurve_2015 import *
 
 global myRelease
-myRelease = "2015_10_20"
+myRelease = "2015_11_08"
 
 import os.path
 import time
@@ -3450,7 +3450,9 @@ def plot_2PointsAxis():
                     Axis_E2 = Axis_A -  Axis_dir.normalize().multiply(m_extensionTwoPointsAxis)
                 else:
                     Axis_E2 = Axis_A +  Axis_dir.normalize().multiply(m_extensionTwoPointsAxis)
-            
+            if Axis_E1 == Axis_E2:
+                Axis_E1 = Axis_E1 + Axis_dir.multiply(0.1)
+                Axis_E2 = Axis_E2 - Axis_dir.multiply(0.9)            
             Axis_User_Name, axis = plot_axis(Axis_E1, Axis_E2, part, name)
 
             print_msg(str(Axis_User_Name) + result_msg )
@@ -3605,14 +3607,21 @@ def plot_cylinderAxis():
                 if m_extensionFaceNormal != 0.0:
                     Axis_dir_norm = Axis_B - Axis_A
                     Axis_dir_norm = Axis_dir_norm.normalize()
-                    Axis_dir_norm = Axis_dir_norm.multiply(m_extensionFaceNormal)
-                    Axis_E1 = Axis_B + Axis_dir_norm
-                    Axis_E2 = Axis_A - Axis_dir_norm
+                    Axis_dir_norm = Axis_dir_norm.multiply(abs(m_extensionFaceNormal))
+                    if m_extensionFaceNormal > 0.0:
+                        Axis_E1 = Axis_B + Axis_dir_norm
+                        Axis_E2 = Axis_A - Axis_dir_norm
+                    else :
+                        Axis_E1 = Axis_B - Axis_dir_norm
+                        Axis_E2 = Axis_A + Axis_dir_norm         
                 else:
                     Axis_E1 = Axis_B + Axis_dir.multiply(0.1)           
                     Axis_E2 = Axis_A - Axis_dir.multiply(0.9)
                 
-                
+                if Axis_E1 == Axis_E2:
+                    Axis_E1 = Axis_E1 + Axis_dir.multiply(0.1)
+                    Axis_E2 = Axis_E2 - Axis_dir.multiply(0.9)
+
                 Axis_User_Name, axis = plot_axis(Axis_E1, Axis_E2, part, name)
                           
                 print_msg(str(Axis_User_Name) + result_msg )
@@ -4087,6 +4096,9 @@ def plot_linePointAxis():
                     else:
                         Axis_E2 = Vector_T +  Axis_dir.normalize().multiply(m_extensionLinePointAxis)
                 
+                if Axis_E1 == Axis_E2:
+                    Axis_E1 = Axis_E1 + Axis_dir.multiply(0.1)
+                    Axis_E2 = Axis_E2 - Axis_dir.multiply(0.9)
                 Axis_User_Name, axis = plot_axis(Axis_E1, Axis_E2, part, name)
     
                 print_msg(str(Axis_User_Name) + result_msg )
@@ -4400,7 +4412,7 @@ def extensionAxis(value):
         m_extensionAxis  = float(value)
         print_msg("New Axis extension is :" + str(m_extensionAxis))
     except ValueError:
-        printError_msg("Axis extension must be valid number 5percentage)!")
+        printError_msg("Axis extension must be valid number percentage)!")
 
 
 def plot_extensionAxis():
@@ -4433,11 +4445,15 @@ def plot_extensionAxis():
                     print_point(Point_A, msg="Selected_Edge.Vertexes[0]  Point_A : ")
                     print_point(Point_B, msg="Selected_Edge.Vertexes[-1] Point_B : ") 
                 AB_Vector = Point_B.sub(Point_A)
-                demi_add_length = Selected_Edge.Length * ((m_extensionAxis/50))
+                demi_add_length = Selected_Edge.Length * ((m_extensionAxis/200))
+                print_msg("demi_add_length=" + str(demi_add_length))
                 add_Vector = AB_Vector.normalize().multiply(demi_add_length)
                 Point_A = Point_A.sub(add_Vector)
                 Point_B = Point_B.add(add_Vector)
                 
+                if Point_A == Point_B:
+                    Point_A = Point_A.sub(add_Vector.multiply(0.1))
+                    Point_B = Point_B.add(add_Vector.multiply(0.9))
                 Axis_User_Name, axis = plot_axis(Point_A, Point_B, part, name)
 
                 print_msg(str(Axis_User_Name) + result_msg )
@@ -5064,7 +5080,7 @@ def edgeToSketch(edges, sketch):
             geoList.append(Part.Line(Projection1,Projection3))                
             return_edges.append(Part.Line(Projection2,Projection4))
             num_edge = num_edge + 1
-        m_sketch.addGeometry(geoList)       
+    m_sketch.addGeometry(geoList)       
         
     return num_edge, return_edges, num_point, return_points
 
@@ -7774,7 +7790,6 @@ def plot_sectionSweep():
 
         if msg != 0:
             print_msg("03-Get the list of sections in case of first section is a Compound")
-            print_msg(m_msg)
             print_msg("m_sections = " + str(m_sections))
             
         # Loop on sections
