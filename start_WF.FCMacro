@@ -2,6 +2,10 @@
 import sys
 import os.path
 
+# Change this by your own FreeCAD lib path to import FreeCAD
+if not sys.path.__contains__("/usr/lib/freecad/lib"): 
+    sys.path.append("/usr/lib/freecad/lib")
+    
 try:
     # try import
     import WorkFeature.WF_2015 as WF

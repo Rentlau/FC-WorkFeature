@@ -94,7 +94,7 @@ class Parametric():
         self.updateOptions()
 
 
-    def plot_matriz(self, matriz):
+    def plot_matriz_old(self, matriz):
         """ Plot the dataset with different options.
         """
         if self.debug != 0:
@@ -116,7 +116,44 @@ class Parametric():
                     Draft.upgrade(FreeCADGui.Selection.getSelection(),delete=True)
                     FreeCAD.ActiveDocument.recompute() 
  
-                
+    def plot_matriz(self, matriz):
+        """ Plot the dataset with different options.
+        """
+        if self.debug != 0:
+            print self.plot_matriz.__name__       
+               
+        doc = FreeCAD.ActiveDocument
+        if doc == None:
+            doc = FreeCAD.newDocument()
+ 
+        if self.points == True:
+            for point in matriz:
+                a = Draft.makePoint(point)
+                FreeCAD.ActiveDocument.ActiveObject.Label = str(a.Name)+"_Point_"+str(self.name.text())
+        else:
+            curva = Part.makePolygon(matriz)
+            if self.bspline == True:
+                a = Draft.makeBSpline(curva,closed=self.close,face=False)
+                FreeCAD.ActiveDocument.ActiveObject.Label = str(a.Name)+"_BSpline_"+str(self.name.text())
+            if self.bezier == True:
+                a = Draft.makeBezCurve(curva,closed=self.close,face=False)
+                FreeCAD.ActiveDocument.ActiveObject.Label = str(a.Name)+"_BezCurve_"+str(self.name.text())
+            if self.poly == True:
+                a = Draft.makeWire(curva,closed=self.close,face=False)
+                FreeCAD.ActiveDocument.ActiveObject.Label = str(a.Name)+"_Wire_"+str(self.name.text())
+#             if self.arcs == True:
+#                 s=Part.BSplineCurve()
+#                 s.interpolate(matriz, True)
+#                 s.buildFromPoles(matriz)
+#                 #Part.show(s.toShape())
+#                 arcs=s.toBiArcs(0.1)
+#                 wire=Part.Wire([Part.Edge(i) for i in arcs])
+#                 Part.show(wire)
+        if self.close == True and self.face == True:
+            Draft.upgrade(FreeCADGui.Selection.getSelection(),delete=True)
+        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.ActiveView.fitAll()
+               
     def edit(self):
         """ Launch the edit panel curve.
         """

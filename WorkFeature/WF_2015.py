@@ -14,6 +14,7 @@
 *   - Ulrich Brammer for Geodesic dome code                               *
 *   - Wmayer Many Thanks for active help on testing and debbuging         *
 *   - Gaël Ecorchard for HighlightDifference Macro                        *
+*   - lorenz_l for Beam tool Macro                                        *
 *   Special thanks to Mario52 for diverse MACRO codes as FCCamera,        *
 *   cutCircle, cutWire, Delta xyz, bounding box ...                       *
 *   and other diverse pieces of codes                                     * 
@@ -54,7 +55,7 @@
 # First two lines to be able to launch with python
 import sys
 from WorkFeature import WF_ObjParCurve_2015
-# change this by your own FreeCAD lib path import FreeCAD
+# Change this by your own FreeCAD lib path to import FreeCAD
 if not sys.path.__contains__("/usr/lib/freecad/lib"): 
     sys.path.append("/usr/lib/freecad/lib")     
  
@@ -64,7 +65,7 @@ from   WF_Utils_2015 import *
 from   WF_ObjParCurve_2015 import *
 
 global myRelease
-myRelease = "2015_11_08"
+myRelease = "2015_12_16"
 
 import os.path
 import time
@@ -380,7 +381,7 @@ def get_typefromSelection(objectType="Edge", info=0):
             if info != 0:
                 print("SubObject  = " + str(SubObject))
                 print("SubObject.ShapeType  = " + str(SubObject.ShapeType))
-            if SubObject.ShapeType == "Edge":
+            if SubObject.ShapeType == objectType:
                 m_found = True
                 break
     if m_found:
@@ -443,7 +444,6 @@ def get_InfoObjects(info=0, printError=True):
                   ", m_objs=" + str(m_objs) +
                   ", m_objNames=" + str(m_objNames))
     return m_num, m_selEx, m_objs, m_objNames
-
 
 def reset_SelectedObjects(Selection, info=0):
     """ Reset the selection changed by Draft.rotate for example
@@ -514,7 +514,6 @@ def get_SelectedObjectsWithParent(info=0, printError=True):
     else:
         printError_msg("No active document !")
     return 
-
 
 def get_SelectedObjects(info=0, printError=True):
     """ Return selected objects as
@@ -717,7 +716,6 @@ def getEdgeType(edge):
     except:
         return "Unknown"
         
-
 def getShapeType(subObject):
     try:       
         if isinstance(subObject,Part.Edge):
@@ -733,9 +731,8 @@ def getShapeType(subObject):
     except:
         return "Unknown"
 
-
 def definePropOfActiveObj():
-    Gui.activeDocument().activeObject().LineColor = (red, green, blue)
+    Gui.activeDocument().activeObject().LineColor = (1.00,0.67,0.00)
     Gui.activeDocument().activeObject().ShapeColor = (0.33,1.00,1.00)
     Gui.activeDocument().activeObject().Transparency = (50)
     
@@ -747,7 +744,6 @@ def addObjectToGrp(obj,grp,info=0):
     if info != 0:
         print_msg("Object " + str(m_obj) + " added to Group : " + str(m_grp))
     
-
 def addObjectToGrp2(obj,grp,info=0):
     m_obj = obj
     m_grp = grp
@@ -911,6 +907,7 @@ def minMaxObjectsLimits(objs,info=0):
     return xmax, xmin, ymax, ymin, zmax, zmin
 
 
+
 def baseObjectPoint(obj,info=0):
     """ Return the base point of selected Object.
     """
@@ -920,7 +917,6 @@ def baseObjectPoint(obj,info=0):
     if info != 0:
         print_point(base,"Base of object selected is :")           
     return base
-
 
 def meanVectorsPoint(vertx,info=0):
     """ Return the mean point of all selected Vectors. 
@@ -955,7 +951,6 @@ def meanVectorsPoint(vertx,info=0):
         print_point(mean,"Mean of all vectors selected is : ")
     return mean
             
-
 def centerBBVectorsPoint(vertx,info=0):
     """ Return the center point of the bounding box of all selected Vectors. 
     """
@@ -1037,7 +1032,6 @@ def distanceBetween(A, B):
     except Part.OCCError:
         return 0.0
    
-
 def angleBetween(e1, e2):
     """ Return the angle (in degrees) between 2 edges.
     """
@@ -1636,7 +1630,6 @@ def attachPoint(*argc):
     if msg != 0:
         print_msg("argc is " + str(*argc) + " and Attach point " + str(m_attach_point) + " selected !")    
 
-
 def intersecPlanePlane(Plane_Normal1, Plane_Point1, Plane_Normal2, Plane_Point2, info=0): 
     """ Return the intersection Line between two Planes.
     """
@@ -2047,6 +2040,9 @@ def plot_sweep(traj, section, makeSolid=True, isFrenet=True, transition=2 , part
 def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=False,info=0):
     """ Create a bounding box.
     """
+    global verbose
+    msg=verbose
+    
     m_grp = grp
     m_l_X = length_X
     m_l_Y = length_Y
@@ -6672,10 +6668,10 @@ def plot_boundingBoxes():
             m_grp=m_actDoc.getObject( str(m_dir) )
             # Create a solid out of the shells of a shape
             try:
-              m_s = m_obj.Shape
+                m_s = m_obj.Shape
             except:
-              printError_msg( "This object has no attribute 'Shape' !\nSelect another one !\n")
-              break
+                printError_msg( "This object has no attribute 'Shape' !\nSelect another one !\n")
+                break
             # Get a boundBox A bounding box is an orthographic cube which is a way to describe outer boundaries
             m_boundBox = m_s.BoundBox
             if msg != 0:
@@ -7727,7 +7723,7 @@ def plot_sectionSweep():
     "INCORRECT Object(s) Selection :\n" +\
     "First select the wire you want as section for Section Sweep (must be closed for solid creation!)\n" +\
     "Then select the second wire for the trajectory of the Sweep !"
-    result_msg = " : Section Sweep created !"
+    result_msg = " : Section Sweep created into WorkFeatures/WorkObjects!"
     name = "SectionSweep"
     part = "Part::Feature"
 
@@ -7909,7 +7905,54 @@ def plot_sectionSweep():
 
     except:
         printError_msg(error_msg)
+        
+        
+def plot_sectionBeam():
+    """Section Beam:
+    """
+    import WorkFeature.Beam.beam as BM
+    msg=verbose
+    msg=1
     
+    createFolders('WorkObjects')
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "First select the wire you want as section for Section Beam \n" +\
+    "Then select the second wire for the strait path trajectory of the Beam !"
+    result_msg = " : Section Beam created into WorkFeatures/WorkObjects!"
+    name = "Beam"
+    part = "Part::FeaturePython"
+    
+    m_actDoc=App.activeDocument()
+    if m_actDoc.Name:     
+        m_sel = Gui.Selection.getSelection(m_actDoc.Name)
+        m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    else:
+        return
+        
+    try:
+        m_profile = m_sel[0]
+        if msg != 0: 
+            print_msg("m_profile !" + str(m_profile))
+            print_msg("m_selEx !" + str(m_selEx))
+        for m_path_selected in m_selEx[1:]:
+            m_path = m_path_selected.Object
+            #m_path_name = m_path_selected.SubElementNames[0]
+            for m_path_name in m_path_selected.SubElementNames:
+                if msg != 0: 
+                    print_msg("m_path !" + str(m_path))
+                    print_msg("m_path_name !" + str(m_path_name)) 
+                m_beam = App.ActiveDocument.addObject(part,name)
+                BM.Beam(m_beam, m_profile, m_path, m_path_name)
+                BM.ViewProviderBeam(m_beam.ViewObject)
+                App.ActiveDocument.getObject( 'WorkObjects' ).addObject(m_beam)
+            
+        App.ActiveDocument.recompute()
+        print_msg(m_beam.Label + str(result_msg))
+    except:
+        printError_msg(error_msg)
+     
+      
 def plot_sectionSweep2():
     """
     Beam Sweep:
@@ -9306,6 +9349,7 @@ def line_length():
     msg=verbose
             
     error_msg = "INCORRECT Object(s) Selection :\n\nYou Must Select One Line !"
+    m_length = None
     
     Selection = get_SelectedObjects(info=msg, printError=False)
     try:
@@ -9337,24 +9381,73 @@ def line_length():
         if msg!=0:
             print_msg("Distance is : " + str(m_dist))
             
+        if hasattr(edge, 'Length'):
+            m_length = edge.Length
+            
         msg=\
         "Begin : X1 "+str(pos_X1)+" Y1: "+str(pos_Y1)+" Z1: "+str(pos_Z1)+"\n\n" +\
         "End : X2 "+str(pos_X2)+" Y2: "+str(pos_Y2)+" Z2: "+str(pos_Z2)+"\n\n" +\
         "Delta X : "+str(abs(pos_X1-pos_X2))+"\n" +\
         "Delta Y : "+str(abs(pos_Y1-pos_Y2))+"\n" +\
         "Delta Z : "+str(abs(pos_Z1-pos_Z2))+"\n\n" +\
-        "Distance : " + str(m_dist)        
+        "Distance : " + str(m_dist)+"\n\n"
+        
+        if m_length:
+            msg+="Length along edge/arc : " + str(m_length)
+                  
 
         print_gui_msg(msg)
     except:
         printError_msg(error_msg)
 
+
+def object_radius():
+    """
+    Check for Radius:
+
+    """
+    msg=verbose
+    error_msg = "INCORRECT Object(s) Selection :\n\nYou Must Select One Arc!"
+    
+    Selection = Gui.Selection.getSelectionEx()
+
+    try:
+        result = "Radius :"
+        m_found = False
+        for m_sel in Selection:
+            m_name = m_sel.ObjectName
+            if hasattr(m_sel, 'SubObjects'):                 
+                for m_sub,m_sub_name in zip(m_sel.SubObjects,m_sel.SubElementNames):
+                    if hasattr(m_sub, 'Curve'):  
+                        r = m_sub.Curve
+                        if hasattr(r, 'Radius'):
+                            m_radius = r.Radius
+                            result += "\nObject : " + str(m_name) + "." + str(m_sub_name)
+                            result += "\nRadius is " + str(m_radius)
+                            m_found = True
+            else:
+                if hasattr(m_sel, 'Curve'):
+                    r = m_sel.Curve
+                    if hasattr(r, 'Radius'):
+                        m_radius = r.Radius
+                        result += "\nObject : " + str(m_name) 
+                        result += "\nRadius is " + str(m_radius)
+                        m_found = True
+
         
+        if m_found:
+            print_gui_msg(result)
+        else :
+            printError_msg(error_msg)
+    except:
+        printError_msg(error_msg)
+        
+           
 def plane_area():
     """
     Check for surface Area:
         Area measurement for a Plane or a set of Planes.
-        - Select One or several Planes and
+        - Select One or several Face(s)
 
     """
     msg=verbose
@@ -9745,6 +9838,82 @@ def angleAlignFaces(value):
     except ValueError:
         printError_msg("Angle must be valid number !")
         
+               
+def object_copy():
+    """
+    Duplicate:
+    Make a copy of an object or a selected subObject part:
+    - Select one or several object(s) or subobject(s)
+       
+    Original code from Macro_ReproWire
+    Authors = 2015 Mario52
+    """
+    msg=verbose
+    msg=1
+            
+    error_msg = "INCORRECT Object(s) Selection :\n\nYou Must Select at least one Object !"
+    
+    sel = Gui.Selection.getSelection()
+    s  = Gui.Selection.getSelectionEx()
+    
+    try:
+        if len(sel) != 0:
+#            print "Object(s) : ", len(sel), " , SubObject(s) : ", len(s)
+            i2 = ii2 = -1 
+            for i in s:
+                i2 += 1
+                ii2 = -1
+                try:
+                    FreeCADGui.Selection.getSelectionEx()[i2].SubObjects[ii2]
+                    for ii in i.SubElementNames:
+#                        print "SubObject"
+                        ii2 += 1
+                        # create repro shape subObject
+                        Part.show(FreeCADGui.Selection.getSelectionEx()[i2].SubObjects[ii2].copy())   
+                        # display the info SubObject
+                        print i2+1 ,"/", ii2+1 ,"/", len(s) ," ", i.ObjectName ," ", ii               
+                        
+                        a = App.ActiveDocument.ActiveObject
+                        # Label for the repro shape
+                        #          object Name  / original object Name / SubObject Name
+                        a.Label = a.Name + " " + i.ObjectName + " " + ii                              
+                        try:
+                            # give LineColor
+                            FreeCADGui.activeDocument().activeObject().LineColor  = (1.0,0.0,0.0)
+                            # give PointColor     
+                            FreeCADGui.activeDocument().activeObject().PointColor = (1.0,0.0,0.0)     
+                            # give ShapeColor
+                            FreeCADGui.activeDocument().activeObject().ShapeColor = (1.0,0.0,0.0)     
+                            
+                        except Exception:
+                            None
+                except Exception:
+#                    print "Not SubObject"
+                    # create repro shape object
+                    Part.show(sel[i2].Shape)                                                          
+                    # display the info SubObject
+                    print i2+1 ,"/", ii2+1 ,"/", len(s) ," ", sel[i2].Name                            
+                    
+                    a = App.ActiveDocument.ActiveObject
+                    # Label for the repro shape
+                    #        object Name  /  original object Name
+                    a.Label =a.Name + " " +  sel[i2].Name                                             
+                    
+                    try:
+                        # give LineColor
+                        FreeCADGui.activeDocument().activeObject().LineColor  = (1.0,0.0,0.0)         
+                        # give PointColor
+                        FreeCADGui.activeDocument().activeObject().PointColor = (1.0,0.0,0.0)         
+                        # give ShapeColor
+                        FreeCADGui.activeDocument().activeObject().ShapeColor = (1.0,0.0,0.0)         
+                        
+                    except Exception:
+                        None
+        else :
+            printError_msg(error_msg) 
+        pass
+    except:
+        printError_msg(error_msg)    
         
 def object_alignFaces():
     """
@@ -10247,7 +10416,9 @@ class WorkFeatureTab():
                              "button_revolve"              : "plot_revolution",
                              "button_common"               : "object_common",
                              "button_difference"           : "object_difference",
+                             "button_copy_objects"         : "object_copy",
                              "button_sweep"                : "plot_sectionSweep",
+                             "button_beam"                 : "plot_sectionBeam",
                              
                              "button_alignview"            : "view_align",
                              "button_trackcamera"          : "view_trackCamera",                            
@@ -10265,6 +10436,7 @@ class WorkFeatureTab():
                              "button_isAngle"              : "object_angle",
                              "button_isDistance"           : "points_distance",
                              "button_isLength"             : "line_length",
+                             "button_isRadius"             : "object_radius",
                              "button_isArea"               : "plane_area",
                              "button_isView"               : "camera_orientation",
                              

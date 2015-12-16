@@ -57,7 +57,7 @@
           <enum>QTabWidget::West</enum>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="Origin_Tab_2">
           <attribute name="icon">
@@ -1745,7 +1745,8 @@ Extend an Axis at two extrema.
 - Second push this button
 
 NB: 
- - The percentage of  the extension can be defined first.</string>
+ - The percentage of  the extension can be defined first.
+ - Negative percentage will shrink the Axis</string>
                </property>
                <property name="text">
                 <string>Enlarge(Axis)</string>
@@ -1908,7 +1909,7 @@ Then click on this button.</string>
              </property>
              <widget class="QWidget" name="tab_14">
               <attribute name="title">
-               <string>2D</string>
+               <string>Parametric 2D</string>
               </attribute>
               <layout class="QGridLayout" name="gridLayout_75">
                <item row="0" column="0">
@@ -2514,7 +2515,7 @@ To save your curve you need to go to &quot;Edit&quot;.</string>
              </widget>
              <widget class="QWidget" name="tab_15">
               <attribute name="title">
-               <string>3D</string>
+               <string>Parametric 3D</string>
               </attribute>
               <layout class="QGridLayout" name="gridLayout_80">
                <item row="0" column="0">
@@ -3412,7 +3413,7 @@ Then click on this button.</string>
           <attribute name="title">
            <string>Sweeping</string>
           </attribute>
-          <layout class="QGridLayout" name="gridLayout_85">
+          <layout class="QGridLayout" name="gridLayout_6">
            <item row="0" column="0">
             <widget class="QFrame" name="frame_9">
              <property name="frameShape">
@@ -3560,7 +3561,7 @@ NB: You can change first:
              </layout>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <spacer name="verticalSpacer_25">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -3572,6 +3573,32 @@ NB: You can change first:
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="button_beam">
+             <property name="toolTip">
+              <string>Beam:
+Will extrude a Section along a Linear Trajectory.
+- Select first one Section wire (Closed wire will generate volumes by default)
+(This Section can be a compound from sketch to realize &quot;tube&quot;)
+- Select one or several wire(s) as Trajectory(ies)
+- Then push this button
+</string>
+             </property>
+             <property name="text">
+              <string>Beam</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Icons/WF_Beam.svg</normaloff>../Icons/WF_Beam.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -4762,6 +4789,29 @@ NB:
             </layout>
            </item>
            <item row="8" column="0">
+            <widget class="QPushButton" name="button_copy_objects">
+             <property name="toolTip">
+              <string>Duplicate:
+Make a copy of an object or a selected subObject part:
+- Select one or several object(s) or subobject(s)
+- Then push this button</string>
+             </property>
+             <property name="text">
+              <string>Duplicate</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Icons/WF_objectCopy.svg</normaloff>../Icons/WF_objectCopy.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
             <widget class="QPushButton" name="button_common">
              <property name="toolTip">
               <string>Compute the common parts between selected shapes.
@@ -4788,7 +4838,7 @@ Original code from HighlightCommon.FCMacro
              </property>
             </widget>
            </item>
-           <item row="9" column="0">
+           <item row="10" column="0">
             <widget class="QPushButton" name="button_difference">
              <property name="toolTip">
               <string>Compute the difference parts between selected shapes.
@@ -4814,7 +4864,7 @@ Original code from HighlightDifference.FCMacro
              </property>
             </widget>
            </item>
-           <item row="10" column="0">
+           <item row="11" column="0">
             <spacer name="verticalSpacer_28">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -6633,19 +6683,6 @@ ReClick with same selection, will reverse the direction.</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_125">
            <item row="9" column="0">
-            <spacer name="verticalSpacer_34">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="8" column="0">
             <widget class="QPushButton" name="button_isView">
              <property name="toolTip">
               <string>Detect the position of the camera.
@@ -6666,6 +6703,19 @@ by the function getCameraOrientation().</string>
               </size>
              </property>
             </widget>
+           </item>
+           <item row="10" column="0">
+            <spacer name="verticalSpacer_34">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
            <item row="0" column="0">
             <widget class="QPushButton" name="button_isParallel">
@@ -6747,30 +6797,6 @@ Click this button
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QPushButton" name="button_isPerpendicular">
-             <property name="toolTip">
-              <string>Check if two faces or two Edges are Perpendicular:
-- Select the 2 faces/planes or 2 Edges/Lines and
-Click this button
-
-NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
-             </property>
-             <property name="text">
-              <string>are Perpendicular ?</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>../Icons/WF_isPerpendicular.svg</normaloff>../Icons/WF_isPerpendicular.svg</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
            <item row="5" column="0">
             <widget class="QPushButton" name="button_isDistance">
              <property name="toolTip">
@@ -6786,29 +6812,6 @@ Click this button
              <property name="icon">
               <iconset>
                <normaloff>../Icons/WF_distanceBetween.svg</normaloff>../Icons/WF_distanceBetween.svg</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0">
-            <widget class="QPushButton" name="button_isArea">
-             <property name="toolTip">
-              <string>Check for surface Area:
-Area measurement for a Plane or a set of Planes.
-- Select One or several Planes and
-Click this button</string>
-             </property>
-             <property name="text">
-              <string>Area ?</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>../Icons/WF_isArea.svg</normaloff>../Icons/WF_isArea.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -6842,6 +6845,53 @@ NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
              </property>
             </widget>
            </item>
+           <item row="7" column="0">
+            <widget class="QPushButton" name="button_isArea">
+             <property name="toolTip">
+              <string>Check for surface Area:
+Area measurement for a Plane or a set of Planes.
+- Select One or several Planes and
+- Then click this button</string>
+             </property>
+             <property name="text">
+              <string>Area ?</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Icons/WF_isArea.svg</normaloff>../Icons/WF_isArea.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="button_isPerpendicular">
+             <property name="toolTip">
+              <string>Check if two faces or two Edges are Perpendicular:
+- Select the 2 faces/planes or 2 Edges/Lines and
+Click this button
+
+NB: You can change the tolerance in &quot;Ori. Pref.&quot;  TAB</string>
+             </property>
+             <property name="text">
+              <string>are Perpendicular ?</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Icons/WF_isPerpendicular.svg</normaloff>../Icons/WF_isPerpendicular.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="0">
             <widget class="QPushButton" name="button_isClearance">
              <property name="toolTip">
@@ -6856,6 +6906,29 @@ Click this button</string>
              <property name="icon">
               <iconset>
                <normaloff>../Icons/WF_isClearance.svg</normaloff>../Icons/WF_isClearance.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QPushButton" name="button_isRadius">
+             <property name="toolTip">
+              <string>Check for Radius:
+Radius measurement for a Circle or an Arc.
+- Select One Circle or Arc
+- Then click this button</string>
+             </property>
+             <property name="text">
+              <string>Radius ?</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../Icons/WF_isRadius.svg</normaloff>../Icons/WF_isRadius.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
