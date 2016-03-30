@@ -233,11 +233,6 @@ class DefineAndConnectEvents():
             #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.obj, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("returnPressed()"),getattr(self.obj, str(m_val)))
-            
-        for m_key, m_val in self.connections_for_return_pressed.items():
-            #print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.obj, str(m_val))) )
-            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
-                                   QtCore.SIGNAL("editingFinished()"),getattr(self.obj, str(m_val)))
 
 if __name__ == '__main__':
     myObject = DefineAndConnectEvents(None, None)

@@ -23,7 +23,21 @@ from FreeCAD import Base
 
 from PySide import QtCore, QtGui
 
-
+#Print x,y and z of a point:vector.
+def print_point(point, msg=""):
+    """ Print x,y and z of a point:vector.
+    """
+    if point.__class__.__name__ != "Vector":
+        print_msg("Not a Vector to print !")
+        return
+    #print_msg(str(point))
+    #m_type = point.__class__.__name__
+    #print_msg(str(m_type))
+    print_msg(str(msg) + " " +
+              "x =" + str(point.x) + ", "
+              "y =" + str(point.y) + ", "
+              "z =" + str(point.z))
+    return
 
 def plot_point(Vector_point, part="Part::Feature", name="CenterObjects", grp="Rot_Trans"):
     if not(App.ActiveDocument.getObject( grp )):
@@ -242,6 +256,9 @@ class Translation():
     def enable(self, flag=True):
         """ Enable or not most of the buttons.
         """
+        if self.msg != 0:
+            func.print_msg("Translation.enable :")
+            
         self.comb_start.setEnabled(flag)
         self.but_start.setEnabled(flag)
         self.comb_end.setEnabled(flag)      
@@ -253,7 +270,10 @@ class Translation():
 
     def setEnabledStartInput(self, flag=True):
         """ Enable or not the input boxes for start point.
-        """        
+        """
+        if self.msg != 0:
+            func.print_msg("Translation.setEnabledStartInput :")
+                    
         self.start_x.setEnabled(flag)
         self.start_y.setEnabled(flag)
         self.start_z.setEnabled(flag)
@@ -261,7 +281,10 @@ class Translation():
 
     def setEnabledEndInput(self, flag=True):
         """ Enable or not the input boxes for end point.
-        """ 
+        """
+        if self.msg != 0:
+            func.print_msg("Translation.setEnabledEndInput :")
+             
         self.end_x.setEnabled(flag)
         self.end_y.setEnabled(flag)
         self.end_z.setEnabled(flag)
@@ -269,14 +292,17 @@ class Translation():
     
     def numberCopies(self,value):
         """ Respond to the change in number of part value from the spin box.
-        """            
+        """
+        if self.msg != 0:
+            
+            func.print_msg("Translation.numberCopies :")             
         try:
             # First we check if a valid number have been entered
             if str(value) == '-':
                 return
             self.m_num_cpy  = int(value)
         except ValueError:
-           func.printError_msg("Number must be valid !")
+            func.printError_msg("Number must be valid !")
            
         if self.msg != 0:
             func.print_msg("New copy number is :" + str(self.m_num_cpy))   
@@ -289,7 +315,8 @@ class Translation():
         """ Respond to the change of deep copy flag.
         """
         if self.msg != 0:
-            func.print_msg("deepCopyFlag !")
+            func.print_msg("Translation.deepCopyFlag :")
+            
         self.deep = flag
         
        
@@ -297,7 +324,8 @@ class Translation():
         """ Respond to the change of duplicate flag.
         """
         if self.msg != 0:
-            func.print_msg("copyFlag !")        
+            func.print_msg("Translation.copyFlag :")
+                    
         if flag == False:
             self.m_num_cpy = 1
             self.dup_num.setValue(self.m_num_cpy)
@@ -325,7 +353,7 @@ class Translation():
         """ Clean the list of Duplicated objects.
         """
         if self.msg != 0:
-            func.print_msg("cleanDuplication :")
+            func.print_msg("Translation.cleanDuplication :")
             
         for m_objdup in self.m_objs_dup:
             if self.msg != 0:
@@ -339,7 +367,7 @@ class Translation():
         """ Reset the list of Duplicated objects.
         """
         if self.msg != 0:
-            func.print_msg("resetDuplication :")
+            func.print_msg("Translation.resetDuplication :")
         
         self.cleanDuplication()
         
@@ -359,7 +387,7 @@ class Translation():
         into internal placement lists.
         """
         if self.msg != 0:
-            func.print_msg("initialize !")
+            func.print_msg("Translation.initialize :")
             
         func.createFolders("Rot_Trans")
             
@@ -440,7 +468,7 @@ class Translation():
             func.print_msg("self.placement0[" + str(m_i) + "].Base=" + str(self.placement0[m_i].Base ))
             func.print_msg("self.placement0[" + str(m_i) + "].Rotation=" + str(self.placement0[m_i].Rotation ))
         
-        self.base = self.placement0[0].Base
+        self.base   = self.placement0[0].Base
         self.center = func.centerObjectsPoint(self.m_objs, info=0)
         self.origin = App.Vector(0,0,0)
         
@@ -466,7 +494,7 @@ class Translation():
         """ Remove all the visualization objects.
         """ 
         if self.msg != 0:
-            func.print_msg("removeVisu :")
+            func.print_msg("Translation.removeVisu :")
             
         for i in range(len(self.visuObjects)):
             App.getDocument(str(App.activeDocument().Name)).removeObject(self.visuObjects[i])        
@@ -477,7 +505,7 @@ class Translation():
         """ Set the visualization objects.
         """
         if self.msg != 0:
-            func.print_msg("visu :") 
+            func.print_msg("Translation.visu :") 
         
         m_start  = self.start        
         m_base   = self.base
@@ -517,7 +545,8 @@ class Translation():
 
     def start_x_entered(self):
         if self.msg != 0:
-            func.print_msg("start_x_entered :")       
+            func.print_msg("Translation.start_x_entered :") 
+                  
         try:
             # First we check if a valid number have been entered
             self.start.x = float(self.start_x.text())
@@ -532,7 +561,8 @@ class Translation():
 
     def start_y_entered(self):
         if self.msg != 0:
-            func.print_msg("start_y_entered :")       
+            func.print_msg("Translation.start_y_entered :")
+                   
         try:
             # First we check if a valid number have been entered
             self.start.y = float(self.start_y.text())
@@ -547,7 +577,8 @@ class Translation():
 
     def start_z_entered(self):
         if self.msg != 0:
-            func.print_msg("start_z_entered :")       
+            func.print_msg("Translation.start_z_entered :")
+                   
         try:
             # First we check if a valid number have been entered
             self.start.z = float(self.start_z.text())
@@ -562,7 +593,7 @@ class Translation():
             
     def print_start(self, point):
         if self.msg != 0:
-            func.print_msg("print_start :")
+            func.print_msg("Translation.print_start :")
             
         self.start_x.setText(str(point.x))
         self.start_y.setText(str(point.y))
@@ -573,7 +604,7 @@ class Translation():
         """ Selection of Start point of translation by button.
         """
         if self.msg != 0:
-            func.print_msg("select_start : Selection of Start point of translation by button !")  
+            func.print_msg("Translation.select_start : Selection of Start point of translation by button !")  
         
         error_msg = "Select one point !"
         
@@ -600,7 +631,8 @@ class Translation():
         """ Reset the combo box for start button.
         """ 
         if self.msg != 0:
-            func.print_msg("reset_start_value :")
+            func.print_msg("Translation.reset_start_value :")
+            
         # DeActivate select button 
         self.but_start.setEnabled(False) 
         button_text = "Select"
@@ -614,7 +646,7 @@ class Translation():
         """ Start point of translation by combo box.
         """
         if self.msg != 0:
-            func.print_msg("select_start_type : Start point of translation by combo box !") 
+            func.print_msg("Translation.select_start_type : Start point of translation by combo box !") 
             
         self.reset_start_value()
                
@@ -636,9 +668,9 @@ class Translation():
         self.visu()
         
 
-    def end_x_entered(self):
+    def end_x_entered(self): 
         if self.msg != 0:
-            func.print_msg("end_x_entered :")       
+            func.print_msg("Translation.end_x_entered :")       
         try:
             # First we check if a valid number have been entered
             self.relative.x = float(self.end_x.text())
@@ -660,7 +692,7 @@ class Translation():
 
     def end_y_entered(self):
         if self.msg != 0:
-            func.print_msg("end_y_entered :")       
+            func.print_msg("Translation.end_y_entered :")       
         try:
             # First we check if a valid number have been entered
             self.relative.y = float(self.end_y.text())
@@ -682,7 +714,7 @@ class Translation():
 
     def end_z_entered(self):
         if self.msg != 0:
-            func.print_msg("end_z_entered :")       
+            func.print_msg("Translation.end_z_entered :")       
         try:
             # First we check if a valid number have been entered
             self.relative.z = float(self.end_z.text())
@@ -704,7 +736,7 @@ class Translation():
 
     def print_end(self, point):
         if self.msg != 0:
-            func.print_msg("print_end :")
+            func.print_msg("Translation.print_end :")
             
         self.end_x.setText(str(point.x))
         self.end_y.setText(str(point.y))
@@ -715,7 +747,7 @@ class Translation():
         """ Selection of End point(s) of translation by button.
         """
         if self.msg != 0:
-            func.print_msg("select_end : Selection of End point(s) of translation by button !")
+            func.print_msg("Translation.select_end : Selection of End point(s) of translation by button !")
             
         error_msg = "Select at least one point !"
         
@@ -748,7 +780,7 @@ class Translation():
         """ Reset the combo box for end button.
         """
         if self.msg != 0:
-            func.print_msg("reset_end_value :")
+            func.print_msg("Translation.reset_end_value :")
             
         # DeActivate select button 
         self.but_end.setEnabled(False)
@@ -763,7 +795,7 @@ class Translation():
         """ End point of translation by combo box.
         """
         if self.msg != 0:
-            func.print_msg("select_end_type : End point of translation by combo box !")
+            func.print_msg("Translation.select_end_type : End point of translation by combo box !")
         
         self.reset_end_value()
                 
@@ -798,7 +830,7 @@ class Translation():
         """ Preview the placement.
         """
         if self.msg != 0:
-            func.print_msg("Preview the placement !")
+            func.print_msg("Translation.Preview the placement !")
             
         if self.selection() == False:
             return
@@ -868,7 +900,7 @@ class Translation():
         """ Application by saving into internal placements list.
         """
         if self.msg != 0:
-            func.print_msg("Apply button pressed !")
+            func.print_msg("Translation.application :")
         
         if self.selection() == False:
             if self.msg != 0:
@@ -892,11 +924,12 @@ class Translation():
         self.applied = True
         self.initialize()
 
+
     def reset(self):
         """ Reset to original placement.
         """
         if self.msg != 0:
-            func.print_msg("reset :")
+            func.print_msg("Translation.reset :")
             
         if self.selection() == False:
             if self.msg != 0:
@@ -904,7 +937,7 @@ class Translation():
             return
                      
         if self.msg != 0:
-             func.print_msg("Selection detected !")
+            func.print_msg("Selection detected !")
              
         for m_i_obj in range(self.m_num_obj):
             self.m_objs[m_i_obj].Placement     = self.placement0[m_i_obj]
@@ -1446,6 +1479,7 @@ class TranslationEvents(DefineAndConnectEvents):
                              "ObjTrans_end_y"             : "end_y_entered",
                              "ObjTrans_end_z"             : "end_z_entered",
                              }
+        
 ####################################################################################
 class ObjectRotationTab():
     def __init__(self):
@@ -1477,6 +1511,8 @@ class ObjectRotationTab():
         self.ui.setupUi(self.m_dialog)
         self.m_tab.setCurrentIndex(i+1)
         
+        # Create a Rotation object
+        #self.rot = Rotation(self.ui)
         # Create a Translation object
         self.trans = Translation(self.ui)
         
