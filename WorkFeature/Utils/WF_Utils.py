@@ -8,6 +8,8 @@ try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
+    
+import FreeCAD as App
 
 
 ###############################################################################
@@ -154,7 +156,7 @@ def read_text(filename):
             print "\nERROR : " + str(filename) + " not a valid file !"                  
         return None
 
-              
+
 ###############################################################################                
 # Classes
 class DefineAndConnectEvents():

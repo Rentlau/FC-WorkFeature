@@ -18,3 +18,5 @@ Name, a (t), b (a,t),c (a,b,t), X (a,b,c,t), Y (a,b,c,t), Z (a,b,c,t), tmin, tma
 ['3D Lissajous', '10  ', '10', '0', 'a*cos(3*t)', 'a*sin(2*t)', 'b*sin(7*t)', '0.0', '2*pi', '0.01']
 ['Trefoil knot', '10', '0', '1  #-1 senestre', 'a*(cos(t)+2*cos(2*t))', 'a*(sin(t)-2*sin(2*t))', 'a*2*c*sin(3*t)', '0.0', '2*pi', '0.01']
 ['Nfoil knot', '10', '10 #number of foils', '1  #-1 senestre', 'a*(cos(t)+2*cos((b-1)*t))', 'a*(sin(t)-2*sin((b-1)*t))', 'a*2*c*sin(b*t)', '0.0', '2*pi', '0.01']
+['Hypotrochoid-3', '4.5', 'a/1.5', '1', 'a*((a/b -1)*cos(t) + (c/(a/b -1))*cos((a/b -1)*t))', 'a*((a/b -1)*sin(t) - (c/(a/b -1))*sin((a/b -1)*t))', '0.5*t', '0.0', '10*4*pi', '0.1']
+['Helix on Circle', '30', '10', '0.05', '(a+b*cos(t))*cos(c*t)', '(a+b*cos(t))*sin(c*t)', 'b*sin(t)', '0.0', '24*2*pi', '0.1']
