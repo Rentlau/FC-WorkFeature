@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'WF_ObjParCurve3DEditGui_2015.ui'
+# Form implementation generated from reading ui file 'WF_ObjParCurve3DEditGui_2016.ui'
 #
-# Created: Tue Oct 27 06:56:50 2015
-#      by: PySide UI code generator 4.11.2
+# Created: Fri Dec 30 15:42:28 2016
+#      by: PySide UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
-        Form.resize(1039, 460)
+        Form.resize(1247, 460)
         self.gridLayout_3 = QtGui.QGridLayout(Form)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.groupBox_2 = QtGui.QGroupBox(Form)
@@ -47,7 +47,7 @@ class Ui_Form(object):
         self.gridLayout_3.addWidget(self.groupBox_2, 0, 0, 1, 1)
         self.tableWidget = QtGui.QTableWidget(Form)
         self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
-        self.tableWidget.setColumnCount(11)
+        self.tableWidget.setColumnCount(12)
         self.tableWidget.setRowCount(3)
         item = QtGui.QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(0, item)
@@ -77,6 +77,8 @@ class Ui_Form(object):
         self.tableWidget.setHorizontalHeaderItem(9, item)
         item = QtGui.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(10, item)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(11, item)
         item = QtGui.QTableWidgetItem()
         self.tableWidget.setItem(0, 0, item)
         item = QtGui.QTableWidgetItem()
@@ -191,6 +193,8 @@ class Ui_Form(object):
         item = self.tableWidget.horizontalHeaderItem(9)
         item.setText(_translate("Form", "t step", None))
         item = self.tableWidget.horizontalHeaderItem(10)
+        item.setText(_translate("Form", "Cartesian", None))
+        item = self.tableWidget.horizontalHeaderItem(11)
         item.setText(_translate("Form", "Comments", None))
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)

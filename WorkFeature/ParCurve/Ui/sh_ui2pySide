@@ -1,0 +1,10 @@
+#!/bin/sh
+
+m_ui_file=$1
+m_ui_base=`basename ${m_ui_file} .ui`
+pyuic4 ${m_ui_base}.ui > ${m_ui_base}.py
+cat ${m_ui_base}.py | sed 's#Icons/#icons:#g ' | sed 's#PyQt4#PySide#g ' | sed 's#QtCore.QString.fromUtf8(#_fromUtf8(#g ' | sed 's#../icons:#icons:#g '>tmp.py
+mv tmp.py ${m_ui_base}.py
+#cp ${m_ui_base}.py ../${m_ui_base}.py
+
+

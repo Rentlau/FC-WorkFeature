@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1039</width>
+    <width>1247</width>
     <height>460</height>
    </rect>
   </property>
@@ -84,97 +84,112 @@
      </column>
      <column>
       <property name="text">
-       <string>a (t) </string>
+       <string>a</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>b (a, t) </string>
+       <string>b (a) </string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>c (a, b, t) </string>
+       <string>c (a, b) </string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>X (a,b,c,t)</string>
+       <string>X (a,b,c,u,v)</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Y (a,b,c,t)</string>
+       <string>Y (a,b,c,u,v)</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Z (a,b,c,t)</string>
+       <string>Z (a,b,c,u,v)</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>t min</string>
+       <string>u min</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>t max</string>
+       <string>u max</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>t step</string>
+       <string>u step</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Comments</string>
+       <string>v min</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>v max</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>v step</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>comments</string>
       </property>
      </column>
      <item row="0" column="0">
       <property name="text">
-       <string>Cylindrical helix</string>
+       <string>Astroid</string>
       </property>
      </item>
      <item row="0" column="1">
       <property name="text">
-       <string>10*0.05 #Vert. step</string>
+       <string>4</string>
       </property>
      </item>
      <item row="0" column="2">
       <property name="text">
-       <string>1</string>
+       <string>3</string>
       </property>
      </item>
      <item row="0" column="3">
       <property name="text">
-       <string>10     # Radius</string>
+       <string>2</string>
       </property>
      </item>
      <item row="0" column="4">
       <property name="text">
-       <string>c*sin(t)</string>
+       <string>a*pow(cos(v),3)*pow(cos(u),3)</string>
       </property>
      </item>
      <item row="0" column="5">
       <property name="text">
-       <string>c*cos(t)</string>
+       <string>b*pow(cos(v),3)*pow(sin(u),3)</string>
       </property>
      </item>
      <item row="0" column="6">
       <property name="text">
-       <string>a*t</string>
+       <string>c*pow(sin(v),3)</string>
       </property>
      </item>
      <item row="0" column="7">
       <property name="text">
-       <string>0</string>
+       <string>0.0</string>
       </property>
      </item>
      <item row="0" column="8">
       <property name="text">
-       <string>5*2*pi   #5 circles</string>
+       <string>2*pi</string>
       </property>
      </item>
      <item row="0" column="9">
@@ -182,54 +197,74 @@
        <string>0.01</string>
       </property>
      </item>
+     <item row="0" column="10">
+      <property name="text">
+       <string>-2.0</string>
+      </property>
+     </item>
+     <item row="0" column="11">
+      <property name="text">
+       <string>2.0</string>
+      </property>
+     </item>
+     <item row="0" column="12">
+      <property name="text">
+       <string>0.01</string>
+      </property>
+     </item>
      <item row="1" column="0">
       <property name="text">
-       <string>Circle with Teeth</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="1">
       <property name="text">
-       <string>37</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="2">
       <property name="text">
-       <string>1</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="3">
       <property name="text">
-       <string>(a+cos(a*t)*2)*b</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="4">
       <property name="text">
-       <string>c*cos(t)</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="5">
       <property name="text">
-       <string>c*sin(t)</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="6">
       <property name="text">
-       <string>0</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="7">
       <property name="text">
-       <string>0</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="8">
       <property name="text">
-       <string>2*pi</string>
+       <string> </string>
       </property>
      </item>
      <item row="1" column="9">
       <property name="text">
-       <string>0.01</string>
+       <string> </string>
+      </property>
+     </item>
+     <item row="1" column="10">
+      <property name="text">
+       <string/>
       </property>
      </item>
     </widget>

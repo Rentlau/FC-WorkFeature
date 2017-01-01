@@ -1,0 +1,3351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>803</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_41">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="tabWidget_6">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Curves and Surfaces</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea_8">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_8">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>358</width>
+            <height>654</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_38">
+           <item row="0" column="0">
+            <widget class="QTabWidget" name="tabWidget_8">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="Wire_Tab1_3">
+              <attribute name="title">
+               <string>Regression 2D</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_20">
+               <item row="0" column="0">
+                <widget class="QTabWidget" name="tabWidget_4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="currentIndex">
+                  <number>0</number>
+                 </property>
+                 <widget class="QWidget" name="tab_5">
+                  <attribute name="title">
+                   <string>Input Data</string>
+                  </attribute>
+                  <layout class="QGridLayout" name="gridLayout_19">
+                   <item row="0" column="0">
+                    <widget class="QPushButton" name="Reg2DCurve_button_select_points">
+                     <property name="toolTip">
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select point(s) used for 2D regression.&lt;/p&gt;&lt;p&gt;- Select as much as Points as needed ;&lt;/p&gt;&lt;p&gt;- Then click on this button.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                     </property>
+                     <property name="text">
+                      <string>Select 2D Points</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QTextEdit" name="Reg2DCurve_input_textEdit">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="html">
+                      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="tab_6">
+                  <attribute name="title">
+                   <string>Estimation by</string>
+                  </attribute>
+                  <layout class="QGridLayout" name="gridLayout_33">
+                   <item row="0" column="0">
+                    <widget class="QComboBox" name="Reg2DCurve_comboBox">
+                     <item>
+                      <property name="text">
+                       <string>Least squares Polynomial Regression</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_18">
+                     <item>
+                      <widget class="QLabel" name="label">
+                       <property name="text">
+                        <string>Degree</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSpinBox" name="Reg2DCurve_degree_select">
+                       <property name="minimum">
+                        <number>1</number>
+                       </property>
+                       <property name="value">
+                        <number>2</number>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="2" column="0">
+                    <spacer name="verticalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QGroupBox" name="groupBox_20">
+                     <property name="title">
+                      <string>Type of 2D Curve :</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_34">
+                      <item row="0" column="0">
+                       <widget class="QCheckBox" name="checkBox_points_reg1">
+                        <property name="text">
+                         <string>Points</string>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QCheckBox" name="checkBox_polyline_reg1">
+                        <property name="text">
+                         <string>Polyline</string>
+                        </property>
+                        <property name="checked">
+                         <bool>true</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QCheckBox" name="checkBox_bezier_reg1">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="text">
+                         <string>Bezier</string>
+                        </property>
+                        <property name="checked">
+                         <bool>false</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QCheckBox" name="checkBox_bspline_reg1">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="text">
+                         <string>Bspline</string>
+                        </property>
+                        <property name="checked">
+                         <bool>false</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="tab_7">
+                  <attribute name="title">
+                   <string>Function</string>
+                  </attribute>
+                  <layout class="QGridLayout" name="gridLayout_37">
+                   <item row="0" column="0">
+                    <widget class="QScrollArea" name="scrollArea_3">
+                     <property name="widgetResizable">
+                      <bool>true</bool>
+                     </property>
+                     <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                      <property name="geometry">
+                       <rect>
+                        <x>0</x>
+                        <y>0</y>
+                        <width>294</width>
+                        <height>485</height>
+                       </rect>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_35">
+                       <item row="0" column="0">
+                        <widget class="QTextEdit" name="Reg2DCurve_function_textEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <layout class="QGridLayout" name="gridLayout_25">
+                         <item row="0" column="0">
+                          <layout class="QHBoxLayout" name="horizontalLayout_28">
+                           <item>
+                            <widget class="QLabel" name="label_regmin_1">
+                             <property name="maximumSize">
+                              <size>
+                               <width>70</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Minimum value of the Abscissa to plot</string>
+                             </property>
+                             <property name="layoutDirection">
+                              <enum>Qt::LeftToRight</enum>
+                             </property>
+                             <property name="text">
+                              <string>absc.  min</string>
+                             </property>
+                             <property name="alignment">
+                              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="Reg2DCurve_min">
+                             <property name="sizePolicy">
+                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                               <horstretch>0</horstretch>
+                               <verstretch>0</verstretch>
+                              </sizepolicy>
+                             </property>
+                             <property name="minimumSize">
+                              <size>
+                               <width>40</width>
+                               <height>0</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>150</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="maxLength">
+                              <number>32769</number>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                         <item row="1" column="0">
+                          <layout class="QHBoxLayout" name="horizontalLayout_29">
+                           <item>
+                            <widget class="QLabel" name="label_regmax_1">
+                             <property name="maximumSize">
+                              <size>
+                               <width>70</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Maximum value of the Abscissa to plot</string>
+                             </property>
+                             <property name="layoutDirection">
+                              <enum>Qt::LeftToRight</enum>
+                             </property>
+                             <property name="text">
+                              <string>absc. max</string>
+                             </property>
+                             <property name="alignment">
+                              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="Reg2DCurve_max">
+                             <property name="sizePolicy">
+                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                               <horstretch>0</horstretch>
+                               <verstretch>0</verstretch>
+                              </sizepolicy>
+                             </property>
+                             <property name="minimumSize">
+                              <size>
+                               <width>40</width>
+                               <height>0</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>150</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="maxLength">
+                              <number>32769</number>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                         <item row="2" column="0">
+                          <layout class="QHBoxLayout" name="horizontalLayout_30">
+                           <item>
+                            <widget class="QLabel" name="label_regstep_1">
+                             <property name="maximumSize">
+                              <size>
+                               <width>70</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="layoutDirection">
+                              <enum>Qt::LeftToRight</enum>
+                             </property>
+                             <property name="text">
+                              <string>step</string>
+                             </property>
+                             <property name="alignment">
+                              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="Reg2DCurve_step">
+                             <property name="sizePolicy">
+                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                               <horstretch>0</horstretch>
+                               <verstretch>0</verstretch>
+                              </sizepolicy>
+                             </property>
+                             <property name="minimumSize">
+                              <size>
+                               <width>40</width>
+                               <height>0</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>150</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="maxLength">
+                              <number>32769</number>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </item>
+                       <item row="2" column="0">
+                        <layout class="QHBoxLayout" name="horizontalLayout_32">
+                         <item>
+                          <widget class="QLabel" name="label_Reg2DCurve_z">
+                           <property name="maximumSize">
+                            <size>
+                             <width>70</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="layoutDirection">
+                            <enum>Qt::LeftToRight</enum>
+                           </property>
+                           <property name="text">
+                            <string>Z cst.</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="Reg2DCurve_z">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>40</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>150</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="toolTip">
+                            <string>The constant coordinate value of the 2D curve</string>
+                           </property>
+                           <property name="text">
+                            <string>0.0</string>
+                           </property>
+                           <property name="maxLength">
+                            <number>32769</number>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_19">
+                 <item>
+                  <widget class="QPushButton" name="Reg2DCurve_button_apply">
+                   <property name="minimumSize">
+                    <size>
+                     <width>40</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>60</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Click to visualize the curve.</string>
+                   </property>
+                   <property name="text">
+                    <string>Apply</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="Wire_Tab2_3">
+              <attribute name="title">
+               <string>Parametric 2D</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_36">
+               <item row="0" column="0">
+                <widget class="QScrollArea" name="scrollArea_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>303</width>
+                    <height>652</height>
+                   </rect>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout">
+                   <item row="0" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_59">
+                     <item>
+                      <widget class="QComboBox" name="ParCurve_comboBox_2">
+                       <property name="toolTip">
+                        <string>Choose another curve from the list.</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="ParCurve_button_edit_2">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to access to a table where you can edit all parameters of all curves and 
+save your custom curves.</string>
+                       </property>
+                       <property name="text">
+                        <string>Edit</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="1" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_60">
+                     <item>
+                      <widget class="QLabel" name="label_name_2">
+                       <property name="frameShape">
+                        <enum>QFrame::Box</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Raised</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>3</number>
+                       </property>
+                       <property name="text">
+                        <string>Name</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="ParCurve_name_2">
+                       <property name="text">
+                        <string>Circle</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="2" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_2">
+                     <item>
+                      <widget class="QLabel" name="label_dim_2">
+                       <property name="text">
+                        <string>Select 2 axis</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QComboBox" name="ParCurve_combo_dim_2D">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                       <item>
+                        <property name="text">
+                         <string>XY</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>YX</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>XZ</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>ZX</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>YZ</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>ZY</string>
+                        </property>
+                       </item>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="4" column="0">
+                    <widget class="QGroupBox" name="groupBox_16">
+                     <property name="title">
+                      <string>Type of 2D Curve :</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_2">
+                      <item row="0" column="0">
+                       <widget class="QCheckBox" name="checkBox_points_2">
+                        <property name="text">
+                         <string>Points</string>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QCheckBox" name="checkBox_polyline_2">
+                        <property name="text">
+                         <string>Polyline</string>
+                        </property>
+                        <property name="checked">
+                         <bool>true</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QCheckBox" name="checkBox_bezier_2">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="text">
+                         <string>Bezier</string>
+                        </property>
+                        <property name="checked">
+                         <bool>false</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QCheckBox" name="checkBox_bspline_2">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="text">
+                         <string>Bspline</string>
+                        </property>
+                        <property name="checked">
+                         <bool>false</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item row="5" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_61">
+                     <item>
+                      <widget class="QCheckBox" name="checkBox_close_2">
+                       <property name="enabled">
+                        <bool>true</bool>
+                       </property>
+                       <property name="text">
+                        <string>Closed curve</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QCheckBox" name="checkBox_face_2">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                       <property name="text">
+                        <string>Create Face</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="6" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_62">
+                     <item>
+                      <widget class="QPushButton" name="ParCurve_button_store_2">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to store the current edited curve into the table.
+To save your curve you need to go to &quot;Edit&quot;.</string>
+                       </property>
+                       <property name="text">
+                        <string>Store</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <spacer name="horizontalSpacer_8">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>40</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="ParCurve_button_apply_2">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to visualize the curve.</string>
+                       </property>
+                       <property name="text">
+                        <string>Apply</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QTabWidget" name="tabWidget">
+                     <property name="currentIndex">
+                      <number>0</number>
+                     </property>
+                     <widget class="QWidget" name="Equation_tab_2">
+                      <attribute name="title">
+                       <string>Equation</string>
+                      </attribute>
+                      <layout class="QGridLayout" name="gridLayout_23">
+                       <item row="0" column="0">
+                        <widget class="QGroupBox" name="groupBox_14">
+                         <property name="toolTip">
+                          <string/>
+                         </property>
+                         <property name="title">
+                          <string/>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_22">
+                          <item row="0" column="0">
+                           <layout class="QHBoxLayout" name="horizontalLayout_7">
+                            <item>
+                             <layout class="QVBoxLayout" name="verticalLayout_6">
+                              <item>
+                               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                                <item>
+                                 <widget class="QLabel" name="label_a_3">
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>70</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="layoutDirection">
+                                   <enum>Qt::LeftToRight</enum>
+                                  </property>
+                                  <property name="text">
+                                   <string>a (t) </string>
+                                  </property>
+                                  <property name="alignment">
+                                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QLineEdit" name="ParCurve_a_2">
+                                  <property name="sizePolicy">
+                                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                   </sizepolicy>
+                                  </property>
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>40</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>150</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="toolTip">
+                                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The function 'range' from Python and 'np.arange' from numpy module can be used here:&lt;/p&gt;&lt;p&gt;range([start,] stop[, step])&lt;/p&gt;&lt;p&gt;  start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;  stop : Generate numbers up to, but not including this number.&lt;/p&gt;&lt;p&gt;  step : Difference between each number in  the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;np.arange([start,] stop[, step,]dtype=None)&lt;/p&gt;&lt;p&gt;Return evenly spaced values within a given interval.&lt;/p&gt;&lt;p&gt;  start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;  stop : &lt;span style=&quot; vertical-align:top;&quot;&gt;End of interval. The interval does not include this value, except in some cases where &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is not an integer and floating point round-off affects the length of &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;  step : Difference between each number in  the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;For any output &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;, this is the distance between two adjacent values. The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;If &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is specified, &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;start&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; must also be given.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;  dtype : The type of the output array. if dtype &lt;span style=&quot; vertical-align:top;&quot;&gt;is not given, infer the data type from the other input arguments.&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                  </property>
+                                  <property name="text">
+                                   <string>10    # Radius</string>
+                                  </property>
+                                  <property name="maxLength">
+                                   <number>32769</number>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
+                              </item>
+                              <item>
+                               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                                <item>
+                                 <widget class="QLabel" name="label_b_3">
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>70</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="text">
+                                   <string>b (a, t) </string>
+                                  </property>
+                                  <property name="alignment">
+                                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QLineEdit" name="ParCurve_b_2">
+                                  <property name="sizePolicy">
+                                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                   </sizepolicy>
+                                  </property>
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>40</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>150</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="toolTip">
+                                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The function 'range' from Python and 'np.arange' from numpy module can be used here:&lt;/p&gt;&lt;p&gt;range([start,] stop[, step])&lt;/p&gt;&lt;p&gt;start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;stop : Generate numbers up to, but not including this number.&lt;/p&gt;&lt;p&gt;step : Difference between each number in the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;np.arange([start,] stop[, step,]dtype=None)&lt;/p&gt;&lt;p&gt;Return evenly spaced values within a given interval.&lt;/p&gt;&lt;p&gt;start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;stop : &lt;span style=&quot; vertical-align:top;&quot;&gt;End of interval. The interval does not include this value, except in some cases where &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is not an integer and floating point round-off affects the length of &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;step : Difference between each number in the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;For any output &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;, this is the distance between two adjacent values. The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;If &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is specified, &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;start&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; must also be given.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;dtype : The type of the output array. if dtype &lt;span style=&quot; vertical-align:top;&quot;&gt;is not given, infer the data type from the other input arguments.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                  </property>
+                                  <property name="text">
+                                   <string>a</string>
+                                  </property>
+                                  <property name="maxLength">
+                                   <number>32769</number>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
+                              </item>
+                             </layout>
+                            </item>
+                           </layout>
+                          </item>
+                          <item row="1" column="0">
+                           <widget class="QCheckBox" name="checkBox_polar_2">
+                            <property name="toolTip">
+                             <string>Toggle for Polar coordinates:
+then FIRST input field is interpreted as radius
+ and SECOND input field is interpreted as angle phi
+
+Polar coordinates (r, phi) as commonly used in physics: 
+ If P(x, y) is the considered point in 3D space;
+    Radial distance r ( &gt; 0.0 ),  is the Euclidean distance from 
+    the origin O (0, 0) to P(x, y).The symbol rho is often used instead of r.
+    The azimuthal angle phi (or azimuth) is the signed angle measured from the 
+    azimuth reference direction to the segment OP on the reference plane XY ( 0 &lt;= phi &lt;= pi radians (0 deg and 180 deg)).</string>
+                            </property>
+                            <property name="text">
+                             <string> Polar coord.</string>
+                            </property>
+                            <property name="autoExclusive">
+                             <bool>true</bool>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="2" column="0">
+                           <layout class="QGridLayout" name="gridLayout_4">
+                            <item row="0" column="0">
+                             <layout class="QHBoxLayout" name="horizontalLayout_6">
+                              <item>
+                               <widget class="QLabel" name="label_x_2">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>70</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="text">
+                                 <string>X (a,b,t) </string>
+                                </property>
+                                <property name="alignment">
+                                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <spacer name="horizontalSpacer_2">
+                                <property name="orientation">
+                                 <enum>Qt::Horizontal</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                 <size>
+                                  <width>40</width>
+                                  <height>20</height>
+                                 </size>
+                                </property>
+                               </spacer>
+                              </item>
+                             </layout>
+                            </item>
+                            <item row="1" column="0">
+                             <widget class="QLineEdit" name="ParCurve_x_2">
+                              <property name="sizePolicy">
+                               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                               </sizepolicy>
+                              </property>
+                              <property name="minimumSize">
+                               <size>
+                                <width>0</width>
+                                <height>0</height>
+                               </size>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>16777215</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                              <property name="toolTip">
+                               <string>The function from Python math module can be used here:
+safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
+ 'degrees', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp',
+ 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',
+ 'tanh']</string>
+                              </property>
+                              <property name="text">
+                               <string>a*cos(t)</string>
+                              </property>
+                              <property name="maxLength">
+                               <number>32769</number>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                          <item row="3" column="0">
+                           <layout class="QGridLayout" name="gridLayout_21">
+                            <item row="0" column="0">
+                             <layout class="QHBoxLayout" name="horizontalLayout_5">
+                              <item>
+                               <widget class="QLabel" name="label_y_2">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>70</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="text">
+                                 <string>Y (a,b,t) </string>
+                                </property>
+                                <property name="alignment">
+                                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <spacer name="horizontalSpacer">
+                                <property name="orientation">
+                                 <enum>Qt::Horizontal</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                 <size>
+                                  <width>40</width>
+                                  <height>20</height>
+                                 </size>
+                                </property>
+                               </spacer>
+                              </item>
+                             </layout>
+                            </item>
+                            <item row="1" column="0">
+                             <widget class="QLineEdit" name="ParCurve_y_2">
+                              <property name="sizePolicy">
+                               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                               </sizepolicy>
+                              </property>
+                              <property name="minimumSize">
+                               <size>
+                                <width>0</width>
+                                <height>0</height>
+                               </size>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>16777215</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                              <property name="toolTip">
+                               <string>The function from Python math module can be used here:
+safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
+ 'degrees', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp',
+ 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',
+ 'tanh']</string>
+                              </property>
+                              <property name="text">
+                               <string>b*sin(t)</string>
+                              </property>
+                              <property name="maxLength">
+                               <number>32769</number>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                     <widget class="QWidget" name="Variables_tab_2">
+                      <attribute name="title">
+                       <string>Variables</string>
+                      </attribute>
+                      <layout class="QGridLayout" name="gridLayout_6">
+                       <item row="0" column="0">
+                        <widget class="QGroupBox" name="groupBox_15">
+                         <property name="title">
+                          <string/>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_44">
+                          <item row="0" column="0">
+                           <layout class="QGridLayout" name="gridLayout_5">
+                            <item row="0" column="0">
+                             <layout class="QHBoxLayout" name="horizontalLayout_8">
+                              <item>
+                               <widget class="QLabel" name="label_tmin_3">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>70</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="layoutDirection">
+                                 <enum>Qt::LeftToRight</enum>
+                                </property>
+                                <property name="text">
+                                 <string>t min</string>
+                                </property>
+                                <property name="alignment">
+                                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QLineEdit" name="ParCurve_tmin_2">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>40</width>
+                                  <height>0</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>150</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="toolTip">
+                                 <string>Minimun value of the t parameter</string>
+                                </property>
+                                <property name="text">
+                                 <string>0</string>
+                                </property>
+                                <property name="maxLength">
+                                 <number>32769</number>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </item>
+                            <item row="1" column="0">
+                             <layout class="QHBoxLayout" name="horizontalLayout_9">
+                              <item>
+                               <widget class="QLabel" name="label_tmax_3">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>70</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="layoutDirection">
+                                 <enum>Qt::LeftToRight</enum>
+                                </property>
+                                <property name="text">
+                                 <string>t max</string>
+                                </property>
+                                <property name="alignment">
+                                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QLineEdit" name="ParCurve_tmax_2">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>40</width>
+                                  <height>0</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>150</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="toolTip">
+                                 <string>Maximun value of the t parameter</string>
+                                </property>
+                                <property name="text">
+                                 <string>2*pi</string>
+                                </property>
+                                <property name="maxLength">
+                                 <number>32769</number>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </item>
+                            <item row="2" column="0">
+                             <layout class="QHBoxLayout" name="horizontalLayout_10">
+                              <item>
+                               <widget class="QLabel" name="label_tstep_3">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>70</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="layoutDirection">
+                                 <enum>Qt::LeftToRight</enum>
+                                </property>
+                                <property name="text">
+                                 <string>step</string>
+                                </property>
+                                <property name="alignment">
+                                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QLineEdit" name="ParCurve_tstep_2">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>40</width>
+                                  <height>0</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>150</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="toolTip">
+                                 <string>Step between two consecutive values of the t parameter</string>
+                                </property>
+                                <property name="text">
+                                 <string>0.01</string>
+                                </property>
+                                <property name="maxLength">
+                                 <number>32769</number>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </item>
+                           </layout>
+                          </item>
+                          <item row="0" column="1">
+                           <spacer name="horizontalSpacer_4">
+                            <property name="orientation">
+                             <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>131</width>
+                              <height>20</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                          <item row="1" column="0">
+                           <spacer name="verticalSpacer_4">
+                            <property name="orientation">
+                             <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>17</width>
+                              <height>125</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="Wire_Tab3_3">
+              <attribute name="title">
+               <string>Parametric 3D</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_27">
+               <item row="0" column="0">
+                <widget class="QScrollArea" name="scrollArea_6">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scrollAreaWidgetContents_4">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>316</width>
+                    <height>579</height>
+                   </rect>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_15">
+                   <item row="0" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_63">
+                     <item>
+                      <widget class="QComboBox" name="ParCurve_comboBox_3">
+                       <property name="toolTip">
+                        <string>Choose another curve from the list.</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="ParCurve_button_edit_3">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to access to a table where you can edit all parameters of all curves and 
+save your custom curves.</string>
+                       </property>
+                       <property name="text">
+                        <string>Edit</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="1" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_64">
+                     <item>
+                      <widget class="QLabel" name="label_name_3">
+                       <property name="frameShape">
+                        <enum>QFrame::Box</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Raised</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>3</number>
+                       </property>
+                       <property name="text">
+                        <string>Name</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="ParCurve_name_3">
+                       <property name="text">
+                        <string>Cylindrical helix</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QGroupBox" name="groupBox_19">
+                     <property name="title">
+                      <string>Type of 3D Curve :</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_3">
+                      <item row="0" column="1">
+                       <widget class="QCheckBox" name="checkBox_points_3">
+                        <property name="text">
+                         <string>Points</string>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="2">
+                       <widget class="QCheckBox" name="checkBox_polyline_3">
+                        <property name="text">
+                         <string>Polyline</string>
+                        </property>
+                        <property name="checked">
+                         <bool>true</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="2">
+                       <widget class="QCheckBox" name="checkBox_bspline_3">
+                        <property name="text">
+                         <string>Bspline</string>
+                        </property>
+                        <property name="checked">
+                         <bool>false</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QCheckBox" name="checkBox_bezier_3">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="text">
+                         <string>Bezier</string>
+                        </property>
+                        <property name="checked">
+                         <bool>false</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item row="4" column="0">
+                    <widget class="QCheckBox" name="checkBox_close_3">
+                     <property name="text">
+                      <string>Closed curve</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_65">
+                     <item>
+                      <widget class="QPushButton" name="ParCurve_button_store_3">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to store the current edited curve into the table.
+To save your curve you need to go to &quot;Edit&quot;.</string>
+                       </property>
+                       <property name="text">
+                        <string>Store</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <spacer name="horizontalSpacer_9">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>40</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="ParCurve_button_apply_3">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to visualize the curve.</string>
+                       </property>
+                       <property name="text">
+                        <string>Apply</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QTabWidget" name="tabWidget_2">
+                     <property name="currentIndex">
+                      <number>0</number>
+                     </property>
+                     <widget class="QWidget" name="Equation_tab_3">
+                      <attribute name="title">
+                       <string>Equation</string>
+                      </attribute>
+                      <layout class="QGridLayout" name="gridLayout_18">
+                       <item row="0" column="0">
+                        <widget class="QScrollArea" name="scrollArea_4">
+                         <property name="widgetResizable">
+                          <bool>true</bool>
+                         </property>
+                         <widget class="QWidget" name="scrollAreaWidgetContents_3">
+                          <property name="geometry">
+                           <rect>
+                            <x>0</x>
+                            <y>0</y>
+                            <width>305</width>
+                            <height>383</height>
+                           </rect>
+                          </property>
+                          <layout class="QGridLayout" name="gridLayout_14">
+                           <item row="0" column="0">
+                            <layout class="QHBoxLayout" name="horizontalLayout_14">
+                             <item>
+                              <layout class="QGridLayout" name="gridLayout_9">
+                               <item row="0" column="0">
+                                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                                 <item>
+                                  <widget class="QLabel" name="label_a_4">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>70</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="layoutDirection">
+                                    <enum>Qt::LeftToRight</enum>
+                                   </property>
+                                   <property name="text">
+                                    <string>a (t) </string>
+                                   </property>
+                                   <property name="alignment">
+                                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLineEdit" name="ParCurve_a_3">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>40</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>150</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="toolTip">
+                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The function 'range' from Python and 'np.arange' from numpy module can be used here:&lt;/p&gt;&lt;p&gt;range([start,] stop[, step])&lt;/p&gt;&lt;p&gt;start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;stop : Generate numbers up to, but not including this number.&lt;/p&gt;&lt;p&gt;step : Difference between each number in the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;np.arange([start,] stop[, step,]dtype=None)&lt;/p&gt;&lt;p&gt;Return evenly spaced values within a given interval.&lt;/p&gt;&lt;p&gt;start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;stop : &lt;span style=&quot; vertical-align:top;&quot;&gt;End of interval. The interval does not include this value, except in some cases where &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is not an integer and floating point round-off affects the length of &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;step : Difference between each number in the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;For any output &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;, this is the distance between two adjacent values. The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;If &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is specified, &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;start&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; must also be given.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;dtype : The type of the output array. if dtype &lt;span style=&quot; vertical-align:top;&quot;&gt;is not given, infer the data type from the other input arguments.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                   </property>
+                                   <property name="text">
+                                    <string>10*0.05 #Vert. step</string>
+                                   </property>
+                                   <property name="maxLength">
+                                    <number>32769</number>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </item>
+                               <item row="1" column="0">
+                                <layout class="QHBoxLayout" name="horizontalLayout_12">
+                                 <item>
+                                  <widget class="QLabel" name="label_b_4">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>70</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="text">
+                                    <string>b (a, t) </string>
+                                   </property>
+                                   <property name="alignment">
+                                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLineEdit" name="ParCurve_b_3">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>40</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>150</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="toolTip">
+                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The function 'range' from Python and 'np.arange' from numpy module can be used here:&lt;/p&gt;&lt;p&gt;range([start,] stop[, step])&lt;/p&gt;&lt;p&gt;start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;stop : Generate numbers up to, but not including this number.&lt;/p&gt;&lt;p&gt;step : Difference between each number in the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;np.arange([start,] stop[, step,]dtype=None)&lt;/p&gt;&lt;p&gt;Return evenly spaced values within a given interval.&lt;/p&gt;&lt;p&gt;start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;stop : &lt;span style=&quot; vertical-align:top;&quot;&gt;End of interval. The interval does not include this value, except in some cases where &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is not an integer and floating point round-off affects the length of &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;step : Difference between each number in the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;For any output &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;, this is the distance between two adjacent values. The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;If &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is specified, &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;start&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; must also be given.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;dtype : The type of the output array. if dtype &lt;span style=&quot; vertical-align:top;&quot;&gt;is not given, infer the data type from the other input arguments.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                   </property>
+                                   <property name="text">
+                                    <string>1</string>
+                                   </property>
+                                   <property name="maxLength">
+                                    <number>32769</number>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </item>
+                               <item row="2" column="0">
+                                <layout class="QHBoxLayout" name="horizontalLayout_13">
+                                 <item>
+                                  <widget class="QLabel" name="label_c_2">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>70</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="text">
+                                    <string>c (a, b, t) </string>
+                                   </property>
+                                   <property name="alignment">
+                                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLineEdit" name="ParCurve_c_3">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>40</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>150</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="toolTip">
+                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The function 'range' from Python and 'np.arange' from numpy module can be used here:&lt;/p&gt;&lt;p&gt;range([start,] stop[, step])&lt;/p&gt;&lt;p&gt;start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;stop : Generate numbers up to, but not including this number.&lt;/p&gt;&lt;p&gt;step : Difference between each number in the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;np.arange([start,] stop[, step,]dtype=None)&lt;/p&gt;&lt;p&gt;Return evenly spaced values within a given interval.&lt;/p&gt;&lt;p&gt;start : Starting number of the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;The interval includes this value. The default value is 0&lt;/span&gt;&lt;/p&gt;&lt;p&gt;stop : &lt;span style=&quot; vertical-align:top;&quot;&gt;End of interval. The interval does not include this value, except in some cases where &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is not an integer and floating point round-off affects the length of &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;step : Difference between each number in the sequence. &lt;span style=&quot; vertical-align:top;&quot;&gt;For any output &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;out&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;, this is the distance between two adjacent values. The default value is 1.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt;If &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;step&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; is specified, &lt;/span&gt;&lt;span style=&quot; font-style:italic; vertical-align:top;&quot;&gt;start&lt;/span&gt;&lt;span style=&quot; vertical-align:top;&quot;&gt; must also be given.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;dtype : The type of the output array. if dtype &lt;span style=&quot; vertical-align:top;&quot;&gt;is not given, infer the data type from the other input arguments.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                   </property>
+                                   <property name="text">
+                                    <string>10     # Radius</string>
+                                   </property>
+                                   <property name="maxLength">
+                                    <number>32769</number>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </item>
+                              </layout>
+                             </item>
+                            </layout>
+                           </item>
+                           <item row="1" column="0">
+                            <layout class="QGridLayout" name="gridLayout_13">
+                             <item row="0" column="0">
+                              <widget class="QCheckBox" name="checkBox_cylind_3">
+                               <property name="toolTip">
+                                <string>Toggle for Cylindrical coordinates:</string>
+                               </property>
+                               <property name="text">
+                                <string> Cylindrical coord.</string>
+                               </property>
+                               <property name="autoExclusive">
+                                <bool>false</bool>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="0" column="1">
+                              <widget class="QCheckBox" name="checkBox_spheric_3">
+                               <property name="toolTip">
+                                <string>Toggle for Sperical coordinates:</string>
+                               </property>
+                               <property name="text">
+                                <string>Spherical coord.</string>
+                               </property>
+                               <property name="autoExclusive">
+                                <bool>false</bool>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                           <item row="2" column="0">
+                            <layout class="QGridLayout" name="gridLayout_12">
+                             <item row="0" column="0">
+                              <layout class="QHBoxLayout" name="horizontalLayout_17">
+                               <item>
+                                <widget class="QLabel" name="label_x_3">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>100</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>X (a,b,c,t) </string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <spacer name="horizontalSpacer_11">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>40</width>
+                                   <height>20</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                              </layout>
+                             </item>
+                             <item row="1" column="0">
+                              <widget class="QLineEdit" name="ParCurve_x_3">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>40</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
+                               <property name="maximumSize">
+                                <size>
+                                 <width>16777215</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="toolTip">
+                                <string>The function from Python math module can be used here:
+safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
+ 'degrees', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp',
+ 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',
+ 'tanh']</string>
+                               </property>
+                               <property name="text">
+                                <string>c*sin(t)</string>
+                               </property>
+                               <property name="maxLength">
+                                <number>32769</number>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                           <item row="3" column="0">
+                            <layout class="QGridLayout" name="gridLayout_11">
+                             <item row="0" column="0">
+                              <layout class="QHBoxLayout" name="horizontalLayout_16">
+                               <item>
+                                <widget class="QLabel" name="label_y_3">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>100</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>Y (a,b,c,t) </string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <spacer name="horizontalSpacer_10">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>40</width>
+                                   <height>20</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                              </layout>
+                             </item>
+                             <item row="1" column="0">
+                              <widget class="QLineEdit" name="ParCurve_y_3">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>40</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
+                               <property name="maximumSize">
+                                <size>
+                                 <width>16777215</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="toolTip">
+                                <string>The function from Python math module can be used here:
+safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
+ 'degrees', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp',
+ 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',
+ 'tanh']</string>
+                               </property>
+                               <property name="text">
+                                <string>c*cos(t)</string>
+                               </property>
+                               <property name="maxLength">
+                                <number>32769</number>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                           <item row="4" column="0">
+                            <layout class="QGridLayout" name="gridLayout_10">
+                             <item row="0" column="0">
+                              <layout class="QHBoxLayout" name="horizontalLayout_15">
+                               <item>
+                                <widget class="QLabel" name="label_z_3">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>100</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>Z (a,b,c,t) </string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <spacer name="horizontalSpacer_7">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>40</width>
+                                   <height>20</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                              </layout>
+                             </item>
+                             <item row="1" column="0">
+                              <widget class="QLineEdit" name="ParCurve_z_3">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>40</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
+                               <property name="maximumSize">
+                                <size>
+                                 <width>16777215</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="toolTip">
+                                <string>The function from Python math module can be used here:
+safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
+ 'degrees', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp',
+ 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',
+ 'tanh']</string>
+                               </property>
+                               <property name="text">
+                                <string>a*t</string>
+                               </property>
+                               <property name="maxLength">
+                                <number>32769</number>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                          </layout>
+                         </widget>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                     <widget class="QWidget" name="Variables_tab_3">
+                      <attribute name="title">
+                       <string>Variables</string>
+                      </attribute>
+                      <layout class="QGridLayout" name="gridLayout_16">
+                       <item row="0" column="0">
+                        <layout class="QGridLayout" name="gridLayout_17">
+                         <item row="0" column="0">
+                          <widget class="QLabel" name="label_tmin_4">
+                           <property name="maximumSize">
+                            <size>
+                             <width>70</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="layoutDirection">
+                            <enum>Qt::LeftToRight</enum>
+                           </property>
+                           <property name="text">
+                            <string>t min</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QLineEdit" name="ParCurve_tmin_3">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>40</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>150</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>0</string>
+                           </property>
+                           <property name="maxLength">
+                            <number>32769</number>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0">
+                          <widget class="QLabel" name="label_tmax_4">
+                           <property name="maximumSize">
+                            <size>
+                             <width>70</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="layoutDirection">
+                            <enum>Qt::LeftToRight</enum>
+                           </property>
+                           <property name="text">
+                            <string>t max</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="1">
+                          <widget class="QLineEdit" name="ParCurve_tmax_3">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>40</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>150</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>5*2*pi   #5 circles</string>
+                           </property>
+                           <property name="maxLength">
+                            <number>32769</number>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="label_tstep_4">
+                           <property name="maximumSize">
+                            <size>
+                             <width>70</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="layoutDirection">
+                            <enum>Qt::LeftToRight</enum>
+                           </property>
+                           <property name="text">
+                            <string>step</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QLineEdit" name="ParCurve_tstep_3">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>40</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>150</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>0.01</string>
+                           </property>
+                           <property name="maxLength">
+                            <number>32769</number>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item row="0" column="1">
+                        <spacer name="horizontalSpacer_12">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>29</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="1" column="0">
+                        <spacer name="verticalSpacer_2">
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>162</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="Surface_Tab1">
+              <attribute name="title">
+               <string>Surface</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_40">
+               <item row="0" column="0">
+                <widget class="QScrollArea" name="scrollArea_7">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scrollAreaWidgetContents_7">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>316</width>
+                    <height>579</height>
+                   </rect>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_7">
+                   <item row="0" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_68">
+                     <item>
+                      <widget class="QComboBox" name="Surf_comboBox">
+                       <property name="toolTip">
+                        <string>Choose another curve from the list.</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="Surf_button_edit">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to access to a table where you can edit all parameters of all curves and 
+save your custom curves.</string>
+                       </property>
+                       <property name="text">
+                        <string>Edit</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="1" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_67">
+                     <item>
+                      <widget class="QLabel" name="label_name_4">
+                       <property name="frameShape">
+                        <enum>QFrame::Box</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Raised</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>3</number>
+                       </property>
+                       <property name="text">
+                        <string>Name</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="Surf_name">
+                       <property name="text">
+                        <string>Astroid</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QTabWidget" name="tabWidget_5">
+                     <property name="currentIndex">
+                      <number>0</number>
+                     </property>
+                     <widget class="QWidget" name="tab_8">
+                      <attribute name="title">
+                       <string>Equation</string>
+                      </attribute>
+                      <layout class="QGridLayout" name="gridLayout_26">
+                       <item row="0" column="0">
+                        <widget class="QScrollArea" name="scrollArea">
+                         <property name="widgetResizable">
+                          <bool>true</bool>
+                         </property>
+                         <widget class="QWidget" name="scrollAreaWidgetContents">
+                          <property name="geometry">
+                           <rect>
+                            <x>0</x>
+                            <y>0</y>
+                            <width>261</width>
+                            <height>343</height>
+                           </rect>
+                          </property>
+                          <layout class="QGridLayout" name="gridLayout_24">
+                           <item row="0" column="0">
+                            <layout class="QVBoxLayout" name="verticalLayout">
+                             <item>
+                              <layout class="QHBoxLayout" name="horizontalLayout_20">
+                               <item>
+                                <widget class="QLabel" name="label_a_5">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>70</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="layoutDirection">
+                                  <enum>Qt::LeftToRight</enum>
+                                 </property>
+                                 <property name="text">
+                                  <string>a</string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QLineEdit" name="Surf_a">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
+                                 </property>
+                                 <property name="minimumSize">
+                                  <size>
+                                   <width>40</width>
+                                   <height>0</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>150</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>4</string>
+                                 </property>
+                                 <property name="maxLength">
+                                  <number>32769</number>
+                                 </property>
+                                </widget>
+                               </item>
+                              </layout>
+                             </item>
+                             <item>
+                              <layout class="QHBoxLayout" name="horizontalLayout_21">
+                               <item>
+                                <widget class="QLabel" name="label_b_5">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>70</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>b (a) </string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QLineEdit" name="Surf_b">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
+                                 </property>
+                                 <property name="minimumSize">
+                                  <size>
+                                   <width>40</width>
+                                   <height>0</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>150</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>3</string>
+                                 </property>
+                                 <property name="maxLength">
+                                  <number>32769</number>
+                                 </property>
+                                </widget>
+                               </item>
+                              </layout>
+                             </item>
+                             <item>
+                              <layout class="QHBoxLayout" name="horizontalLayout_22">
+                               <item>
+                                <widget class="QLabel" name="label_c_3">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>70</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>c (a, b) </string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QLineEdit" name="Surf_c">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
+                                 </property>
+                                 <property name="minimumSize">
+                                  <size>
+                                   <width>40</width>
+                                   <height>0</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>150</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>2</string>
+                                 </property>
+                                 <property name="maxLength">
+                                  <number>32769</number>
+                                 </property>
+                                </widget>
+                               </item>
+                              </layout>
+                             </item>
+                            </layout>
+                           </item>
+                           <item row="1" column="0">
+                            <layout class="QGridLayout" name="gridLayout_29">
+                             <item row="0" column="0">
+                              <layout class="QHBoxLayout" name="horizontalLayout_23">
+                               <item>
+                                <widget class="QLabel" name="label_x_4">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>80</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>X (a,b,c,u,v) </string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <spacer name="horizontalSpacer_5">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>40</width>
+                                   <height>20</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                              </layout>
+                             </item>
+                             <item row="1" column="0">
+                              <widget class="QLineEdit" name="Surf_x">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
+                               <property name="maximumSize">
+                                <size>
+                                 <width>16777215</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="toolTip">
+                                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The function from Python math module can be used here:&lt;/p&gt;&lt;p&gt;safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',&lt;/p&gt;&lt;p&gt; 'degrees', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp',&lt;/p&gt;&lt;p&gt; 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',&lt;/p&gt;&lt;p&gt; 'tanh']&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                               </property>
+                               <property name="text">
+                                <string>a*pow(cos(v),3)*pow(cos(u),3)</string>
+                               </property>
+                               <property name="maxLength">
+                                <number>32769</number>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="2" column="0">
+                              <layout class="QHBoxLayout" name="horizontalLayout_24">
+                               <item>
+                                <widget class="QLabel" name="label_y_4">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>80</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>Y (a,b,c,u,v) </string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <spacer name="horizontalSpacer_13">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>40</width>
+                                   <height>20</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                              </layout>
+                             </item>
+                             <item row="3" column="0">
+                              <widget class="QLineEdit" name="Surf_y">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
+                               <property name="maximumSize">
+                                <size>
+                                 <width>16777215</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="toolTip">
+                                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The function from Python math module can be used here:&lt;/p&gt;&lt;p&gt;safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',&lt;/p&gt;&lt;p&gt; 'degrees', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp',&lt;/p&gt;&lt;p&gt; 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',&lt;/p&gt;&lt;p&gt; 'tanh']&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                               </property>
+                               <property name="text">
+                                <string>b*pow(cos(v),3)*pow(sin(u),3)</string>
+                               </property>
+                               <property name="maxLength">
+                                <number>32769</number>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="4" column="0">
+                              <layout class="QHBoxLayout" name="horizontalLayout_25">
+                               <item>
+                                <widget class="QLabel" name="label_z_2">
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>80</width>
+                                   <height>16777215</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>Z (a,b,c,u,v) </string>
+                                 </property>
+                                 <property name="alignment">
+                                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <spacer name="horizontalSpacer_14">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>40</width>
+                                   <height>20</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                              </layout>
+                             </item>
+                             <item row="5" column="0">
+                              <widget class="QLineEdit" name="Surf_z">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
+                               <property name="maximumSize">
+                                <size>
+                                 <width>16777215</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="toolTip">
+                                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The function from Python math module can be used here:&lt;/p&gt;&lt;p&gt;safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',&lt;/p&gt;&lt;p&gt; 'degrees', 'e', 'exp', 'fabs', 'floor', 'fmod', 'frexp', 'hypot', 'ldexp',&lt;/p&gt;&lt;p&gt; 'log', 'log10', 'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',&lt;/p&gt;&lt;p&gt; 'tanh']&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                               </property>
+                               <property name="text">
+                                <string>c*pow(sin(v),3)</string>
+                               </property>
+                               <property name="maxLength">
+                                <number>32769</number>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                          </layout>
+                         </widget>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                     <widget class="QWidget" name="tab_9">
+                      <attribute name="title">
+                       <string>Variables</string>
+                      </attribute>
+                      <layout class="QGridLayout" name="gridLayout_28">
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_umin">
+                         <property name="maximumSize">
+                          <size>
+                           <width>70</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::LeftToRight</enum>
+                         </property>
+                         <property name="text">
+                          <string>u min</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QLineEdit" name="Surf_umin">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>150</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>0.0</string>
+                         </property>
+                         <property name="maxLength">
+                          <number>32769</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QLabel" name="label_umax">
+                         <property name="maximumSize">
+                          <size>
+                           <width>70</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::LeftToRight</enum>
+                         </property>
+                         <property name="text">
+                          <string>u max</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="QLineEdit" name="Surf_umax">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>150</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>2*pi</string>
+                         </property>
+                         <property name="maxLength">
+                          <number>32769</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="label_ustep">
+                         <property name="maximumSize">
+                          <size>
+                           <width>70</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::LeftToRight</enum>
+                         </property>
+                         <property name="text">
+                          <string>u step</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QLineEdit" name="Surf_ustep">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>150</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>0.01</string>
+                         </property>
+                         <property name="maxLength">
+                          <number>32769</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="0">
+                        <widget class="QLabel" name="label_umin_2">
+                         <property name="maximumSize">
+                          <size>
+                           <width>70</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::LeftToRight</enum>
+                         </property>
+                         <property name="text">
+                          <string>v min</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="1">
+                        <widget class="QLineEdit" name="Surf_vmin">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>150</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>-2</string>
+                         </property>
+                         <property name="maxLength">
+                          <number>32769</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="0">
+                        <widget class="QLabel" name="label_umax_2">
+                         <property name="maximumSize">
+                          <size>
+                           <width>70</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::LeftToRight</enum>
+                         </property>
+                         <property name="text">
+                          <string>v max</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="1">
+                        <widget class="QLineEdit" name="Surf_vmax">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>150</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>2</string>
+                         </property>
+                         <property name="maxLength">
+                          <number>32769</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="5" column="0">
+                        <widget class="QLabel" name="label_ustep_2">
+                         <property name="maximumSize">
+                          <size>
+                           <width>70</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="layoutDirection">
+                          <enum>Qt::LeftToRight</enum>
+                         </property>
+                         <property name="text">
+                          <string>v step</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="5" column="1">
+                        <widget class="QLineEdit" name="Surf_vstep">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>40</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>150</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>0.01</string>
+                         </property>
+                         <property name="maxLength">
+                          <number>32769</number>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </widget>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QGroupBox" name="groupBox_9">
+                     <property name="title">
+                      <string>Type of Surface</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_43">
+                      <item row="0" column="0">
+                       <layout class="QGridLayout" name="gridLayout_31">
+                        <item row="0" column="0">
+                         <widget class="QCheckBox" name="Surf_points">
+                          <property name="text">
+                           <string>Points</string>
+                          </property>
+                          <property name="checked">
+                           <bool>false</bool>
+                          </property>
+                          <property name="autoExclusive">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="1">
+                         <widget class="QCheckBox" name="Surf_polyline">
+                          <property name="text">
+                           <string>Polyline</string>
+                          </property>
+                          <property name="checked">
+                           <bool>false</bool>
+                          </property>
+                          <property name="autoExclusive">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="2">
+                         <widget class="QCheckBox" name="Surf_bspline">
+                          <property name="text">
+                           <string>Bspline</string>
+                          </property>
+                          <property name="checked">
+                           <bool>false</bool>
+                          </property>
+                          <property name="autoExclusive">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="0" colspan="2">
+                         <widget class="QCheckBox" name="Surf_bspline_surf">
+                          <property name="text">
+                           <string>Surf Bspline (Nurbs)</string>
+                          </property>
+                          <property name="checked">
+                           <bool>true</bool>
+                          </property>
+                          <property name="autoExclusive">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="2">
+                         <widget class="QCheckBox" name="Surf_meshes">
+                          <property name="enabled">
+                           <bool>false</bool>
+                          </property>
+                          <property name="text">
+                           <string>Meshes</string>
+                          </property>
+                          <property name="checked">
+                           <bool>false</bool>
+                          </property>
+                          <property name="autoExclusive">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item row="4" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_66">
+                     <item>
+                      <widget class="QPushButton" name="Surf_button_store">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to store the current edited curve into the table.
+To save your curve you need to go to &quot;Edit&quot;.</string>
+                       </property>
+                       <property name="text">
+                        <string>Store</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <spacer name="horizontalSpacer_15">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>40</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="Surf_button_apply">
+                       <property name="minimumSize">
+                        <size>
+                         <width>40</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>60</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>Click to visualize the curve.</string>
+                       </property>
+                       <property name="text">
+                        <string>Apply</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Origin</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_45">
+       <item row="1" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QPushButton" name="button_select_point">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select point(s) to define reference locations for parametric curves and surfaces.&lt;/p&gt;&lt;p&gt;- Select as much as Points as needed ;&lt;/p&gt;&lt;p&gt;- Then click on this button.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Select Point(s)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_35">
+             <item>
+              <widget class="QLabel" name="label_x_6">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>X cst.</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="Par_x_ref">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reference point (X value) where to attach the 2D curve.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>0.0</string>
+               </property>
+               <property name="maxLength">
+                <number>32769</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_36">
+             <item>
+              <widget class="QLabel" name="label_y_6">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>Y cst.</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="Par_y_ref">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reference point (Y value) where to attach the 2D curve.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>0.0</string>
+               </property>
+               <property name="maxLength">
+                <number>32769</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_37">
+             <item>
+              <widget class="QLabel" name="label_z_6">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>Z cst.</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="Par_z_ref">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reference point (Z value) where to attach the 2D curve.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>0.0</string>
+               </property>
+               <property name="maxLength">
+                <number>32769</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer_16">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>208</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>156</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Examples &lt;/p&gt;&lt;p&gt;from http://www.mathcurve.com/ &lt;/p&gt;&lt;p&gt;and &lt;/p&gt;&lt;p&gt;https://en.wikipedia.org/wiki/List_of_curves&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Examples from http://www.mathcurve.com/ and https://en.wikipedia.org/wiki/List_of_curves</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+      <zorder>lineEdit</zorder>
+      <zorder>verticalSpacer_5</zorder>
+      <zorder></zorder>
+      <zorder>horizontalSpacer_16</zorder>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QProgressBar" name="progressBar">
+     <property name="value">
+      <number>24</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="button_quit">
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_release">
+       <property name="text">
+        <string>2016</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

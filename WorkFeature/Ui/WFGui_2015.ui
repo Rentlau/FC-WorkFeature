@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
-    <height>845</height>
+    <width>396</width>
+    <height>610</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,23 +41,17 @@
         <x>0</x>
         <y>0</y>
         <width>365</width>
-        <height>773</height>
+        <height>593</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_128">
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget_7">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
          <property name="tabPosition">
           <enum>QTabWidget::West</enum>
          </property>
          <property name="currentIndex">
-          <number>8</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="Origin_Tab_2">
           <attribute name="icon">
@@ -231,7 +225,7 @@
            <item row="0" column="0">
             <widget class="QTabWidget" name="tabWidget">
              <property name="currentIndex">
-              <number>0</number>
+              <number>2</number>
              </property>
              <widget class="QWidget" name="Point_Tab1_3">
               <attribute name="title">
@@ -577,8 +571,17 @@ Be aware that if the plane is not extended enough the intersection Point is stil
                <item row="0" column="0">
                 <widget class="QPushButton" name="button_twolines_point">
                  <property name="toolTip">
-                  <string>Plot one or two Point(s) at minimum distance of two Lines
-Create a Point at intersection of 2 crossing Lines.</string>
+                  <string>Point(s)=(Line(s),Line(s)):
+Plot one or two Point(s) at minimum distance of two Lines
+Create a unique Point at intersection of 2 crossing Lines.
+
+First
+  - Select two or more Line/Edge(s) and
+  - Then Click on the button
+    
+Plot the point A on the first Line given and the point  B on the second Line.
+The Vector AB perpendicular to the first and second Line.
+    </string>
                  </property>
                  <property name="text">
                   <string>Point=(Line,Line) </string>
@@ -967,7 +970,7 @@ Then click on this button.</string>
               <attribute name="title">
                <string>Point 3/3</string>
               </attribute>
-              <layout class="QGridLayout" name="gridLayout_12">
+              <layout class="QGridLayout" name="gridLayout_2">
                <item row="0" column="0">
                 <widget class="QPushButton" name="button_points_load">
                  <property name="toolTip">
@@ -1023,6 +1026,101 @@ One (x, y, z) triplet per line seperated by blank.
                 </widget>
                </item>
                <item row="2" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                 <item>
+                  <widget class="QPushButton" name="button_points_random">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create random Point(s).&lt;/p&gt;&lt;p&gt;Define first the number of points to create and the coordinates limits.&lt;/p&gt;&lt;p&gt;- Then push the button, &lt;/p&gt;&lt;p&gt;or&lt;/p&gt;&lt;p&gt;- Select first one point to the center desired location;&lt;/p&gt;&lt;p&gt;- Then push the button.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>Random Points</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../Icons/WF_pointsRandom.svg</normaloff>../Icons/WF_pointsRandom.svg</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="spin_random_points">
+                   <property name="minimumSize">
+                    <size>
+                     <width>40</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>50</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The number indicates in how many point(s) will be generated  (Max 100).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                   <property name="singleStep">
+                    <number>1</number>
+                   </property>
+                   <property name="value">
+                    <number>1</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="distance_random_points">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>50</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>60</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If set to 10.0 return random floats coordinates in the half-open interval [-10.0, 10.0).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>10.0</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="3" column="0">
                 <spacer name="verticalSpacer_35">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -1053,7 +1151,7 @@ One (x, y, z) triplet per line seperated by blank.
            <item row="0" column="0">
             <widget class="QTabWidget" name="tabWidget_2">
              <property name="currentIndex">
-              <number>0</number>
+              <number>2</number>
              </property>
              <widget class="QWidget" name="Axis_Tab1_3">
               <attribute name="title">
@@ -1497,6 +1595,121 @@ For &quot;Cylinder Axis&quot;, &quot;Planes Axes&quot; and &quot;Face Normal&quo
                  <property name="icon">
                   <iconset>
                    <normaloff>../Icons/WF_twoLinesAxis.svg</normaloff>../Icons/WF_twoLinesAxis.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="Axis_Tab31_3">
+              <attribute name="title">
+               <string>Axis 3/3</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_16">
+               <item row="0" column="0">
+                <widget class="QPushButton" name="button_object_base_axes">
+                 <property name="toolTip">
+                  <string>Create 3 Axes at Base location of all selected Object(s).</string>
+                 </property>
+                 <property name="text">
+                  <string>Object(s) Base Axes</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../Icons/WF_baseObjectsAxes.svg</normaloff>../Icons/WF_baseObjectsAxes.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="button_object_Naxes">
+                 <property name="toolTip">
+                  <string>Create a set of axes from selected Objetcs:
+- Select object(s)
+    to create axes from these object(s) !
+    if you select a Plane : 4 axes will be created;
+    if you select an Object : many axes will be created.
+- Then click on this button.</string>
+                 </property>
+                 <property name="text">
+                  <string>Object(s) N Axes(s)</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../Icons/WF_objectNAxes.svg</normaloff>../Icons/WF_objectNAxes.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <spacer name="verticalSpacer_22">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>483</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="button_line_to_sketch">
+                 <property name="toolTip">
+                  <string>Transform Line(s) in Sketch's Line(s) by projection onto the Sketch's Plane:
+- First select an existing Skecth;
+- Select as much as Lines needed;
+Then click on this button.</string>
+                 </property>
+                 <property name="text">
+                  <string>Axis(es) to Sketch</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../Icons/WF_2Sketch.svg</normaloff>../Icons/WF_2Sketch.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QPushButton" name="button_object_3axes">
+                 <property name="toolTip">
+                  <string>Create a set of 2 or 3 main axes from selected Objetcs:
+The most representative axes will be selected from all axis.
+The length of main axes will be the cumulative length of all axes with the same direction.
+- Select object(s)
+    to create axes from these object(s) !
+    if you select a Plane : 2 axes will be created;
+    if you select an Object : 3 axes will be created.
+- Then click on this button.</string>
+                 </property>
+                 <property name="text">
+                  <string>Object(s) 3 Axes(s)</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../Icons/WF_object3Axes.svg</normaloff>../Icons/WF_object3Axes.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -2036,121 +2249,6 @@ MB2 and MB3 can still be used for view zoom and view rotation.</string>
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="Axis_Tab31_3">
-              <attribute name="title">
-               <string>Axis 3/3</string>
-              </attribute>
-              <layout class="QGridLayout" name="gridLayout_16">
-               <item row="0" column="0">
-                <widget class="QPushButton" name="button_object_base_axes">
-                 <property name="toolTip">
-                  <string>Create 3 Axes at Base location of all selected Object(s).</string>
-                 </property>
-                 <property name="text">
-                  <string>Object(s) Base Axes</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../Icons/WF_baseObjectsAxes.svg</normaloff>../Icons/WF_baseObjectsAxes.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="button_object_Naxes">
-                 <property name="toolTip">
-                  <string>Create a set of axes from selected Objetcs:
-- Select object(s)
-    to create axes from these object(s) !
-    if you select a Plane : 4 axes will be created;
-    if you select an Object : many axes will be created.
-- Then click on this button.</string>
-                 </property>
-                 <property name="text">
-                  <string>Object(s) N Axes(s)</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../Icons/WF_objectNAxes.svg</normaloff>../Icons/WF_objectNAxes.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QPushButton" name="button_object_3axes">
-                 <property name="toolTip">
-                  <string>Create a set of 2 or 3 main axes from selected Objetcs:
-The most representative axes will be selected from all axis.
-The length of main axes will be the cumulative length of all axes with the same direction.
-- Select object(s)
-    to create axes from these object(s) !
-    if you select a Plane : 2 axes will be created;
-    if you select an Object : 3 axes will be created.
-- Then click on this button.</string>
-                 </property>
-                 <property name="text">
-                  <string>Object(s) 3 Axes(s)</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../Icons/WF_object3Axes.svg</normaloff>../Icons/WF_object3Axes.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QPushButton" name="button_line_to_sketch">
-                 <property name="toolTip">
-                  <string>Transform Line(s) in Sketch's Line(s) by projection onto the Sketch's Plane:
-- First select an existing Skecth;
-- Select as much as Lines needed;
-Then click on this button.</string>
-                 </property>
-                 <property name="text">
-                  <string>Axis(es) to Sketch</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../Icons/WF_2Sketch.svg</normaloff>../Icons/WF_2Sketch.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <spacer name="verticalSpacer_22">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>483</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
             </widget>
            </item>
           </layout>
@@ -2165,19 +2263,9 @@ Then click on this button.</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_74">
            <item row="0" column="0">
-            <widget class="QLineEdit" name="lineEdit">
-             <property name="text">
-              <string>Examples from http://www.mathcurve.com/</string>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
             <widget class="QTabWidget" name="tabWidget_8">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -2227,1283 +2315,57 @@ Create a Wire (Bezier Cubic) from 4 selected points.
                 </widget>
                </item>
                <item row="0" column="0">
-                <widget class="QPushButton" name="button_wire_on_plane">
+                <widget class="QPushButton" name="button_points_to_polygon">
                  <property name="toolTip">
-                  <string>Projects Wires on a Plane:
-
-- First select an existing Face/Plane  or 3 Points
-- Second one or several Wires
-- Then push this button</string>
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wire=(N Points):&lt;/p&gt;&lt;p&gt;Create a Polygon (wire) from a set of points.&lt;/p&gt;&lt;p&gt;- First select several Points (at least 2);&lt;/p&gt;&lt;p&gt;- Then push this button&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
-                  <string>Flatten Wire</string>
+                  <string>Make Wire</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../Icons/WF_makePolygon.svg</normaloff>../Icons/WF_makePolygon.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
                  </property>
                 </widget>
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="Wire_Tab2_3">
+             <widget class="QWidget" name="Wire_Tab1_4">
               <attribute name="title">
-               <string>Parametric 2D</string>
+               <string>Curves And Surfaces</string>
               </attribute>
-              <layout class="QGridLayout" name="gridLayout_75">
+              <layout class="QGridLayout" name="gridLayout_3">
                <item row="0" column="0">
-                <widget class="QScrollArea" name="scrollArea_2">
-                 <property name="widgetResizable">
-                  <bool>true</bool>
+                <widget class="QToolButton" name="button_curves_and_surfaces">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
                  </property>
-                 <widget class="QWidget" name="scrollAreaWidgetContents_5">
-                  <property name="geometry">
-                   <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>245</width>
-                    <height>648</height>
-                   </rect>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_76">
-                   <item row="7" column="0">
-                    <spacer name="verticalSpacer">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>20</width>
-                       <height>40</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QGroupBox" name="groupBox_14">
-                     <property name="title">
-                      <string>Equation :</string>
-                     </property>
-                     <layout class="QGridLayout" name="gridLayout_77">
-                      <item row="3" column="0">
-                       <widget class="QLabel" name="label_y_3">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Y (a,b,t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QLineEdit" name="ParCurve_a_2">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>10    # Radius</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_b_3">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>b (a, t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="3" column="1">
-                       <widget class="QLineEdit" name="ParCurve_y_2">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>b*sin(t)</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="4" column="1">
-                       <widget class="QCheckBox" name="checkBox_polar_2">
-                        <property name="toolTip">
-                         <string>Toggle for Polar coordinates:
-then x is interpreted as radius
- and y is interpreted as angle teta.</string>
-                        </property>
-                        <property name="text">
-                         <string> Polar coord.</string>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0">
-                       <widget class="QLabel" name="label_x_3">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>X (a,b,t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="1">
-                       <widget class="QLineEdit" name="ParCurve_x_2">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>a*cos(t)</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="label_a_3">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>a (t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QLineEdit" name="ParCurve_b_2">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>a</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <layout class="QHBoxLayout" name="horizontalLayout_59">
-                     <item>
-                      <widget class="QComboBox" name="ParCurve_comboBox_2">
-                       <property name="toolTip">
-                        <string>Choose another curve from the list.</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="ParCurve_button_edit_2">
-                       <property name="minimumSize">
-                        <size>
-                         <width>40</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>60</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="toolTip">
-                        <string>Click to access to a table where you can edit all parameters of all curves and 
-save your custom curves.</string>
-                       </property>
-                       <property name="text">
-                        <string>Edit</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="5" column="0">
-                    <layout class="QHBoxLayout" name="horizontalLayout_61">
-                     <item>
-                      <widget class="QCheckBox" name="checkBox_close_2">
-                       <property name="enabled">
-                        <bool>true</bool>
-                       </property>
-                       <property name="text">
-                        <string>Closed curve</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="checkBox_face_2">
-                       <property name="enabled">
-                        <bool>false</bool>
-                       </property>
-                       <property name="text">
-                        <string>Create Face</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="1" column="0">
-                    <layout class="QHBoxLayout" name="horizontalLayout_60">
-                     <item>
-                      <widget class="QLabel" name="label_name_2">
-                       <property name="frameShape">
-                        <enum>QFrame::Box</enum>
-                       </property>
-                       <property name="frameShadow">
-                        <enum>QFrame::Raised</enum>
-                       </property>
-                       <property name="lineWidth">
-                        <number>3</number>
-                       </property>
-                       <property name="text">
-                        <string>Name</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignCenter</set>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLineEdit" name="ParCurve_name_2">
-                       <property name="text">
-                        <string>Circle</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="3" column="0">
-                    <widget class="QGroupBox" name="groupBox_15">
-                     <property name="title">
-                      <string>Parameter :</string>
-                     </property>
-                     <layout class="QGridLayout" name="gridLayout_78">
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="label_tmin_3">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>t min</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QLineEdit" name="ParCurve_tmin_2">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>0</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_tmax_3">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>t max</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QLineEdit" name="ParCurve_tmax_2">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>2*pi</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0">
-                       <widget class="QLabel" name="label_tstep_3">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>step</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="1">
-                       <widget class="QLineEdit" name="ParCurve_tstep_2">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>0.01</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item row="4" column="0">
-                    <widget class="QGroupBox" name="groupBox_16">
-                     <property name="title">
-                      <string>Type of 2D Curve :</string>
-                     </property>
-                     <layout class="QGridLayout" name="gridLayout_2">
-                      <item row="0" column="0">
-                       <widget class="QCheckBox" name="checkBox_points_2">
-                        <property name="text">
-                         <string>Points</string>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QCheckBox" name="checkBox_polyline_2">
-                        <property name="text">
-                         <string>Polyline</string>
-                        </property>
-                        <property name="checked">
-                         <bool>true</bool>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QCheckBox" name="checkBox_bezier_2">
-                        <property name="enabled">
-                         <bool>true</bool>
-                        </property>
-                        <property name="text">
-                         <string>Bezier</string>
-                        </property>
-                        <property name="checked">
-                         <bool>false</bool>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QCheckBox" name="checkBox_bspline_2">
-                        <property name="enabled">
-                         <bool>true</bool>
-                        </property>
-                        <property name="text">
-                         <string>Bspline</string>
-                        </property>
-                        <property name="checked">
-                         <bool>false</bool>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item row="6" column="0">
-                    <layout class="QHBoxLayout" name="horizontalLayout_62">
-                     <item>
-                      <widget class="QPushButton" name="ParCurve_button_store_2">
-                       <property name="minimumSize">
-                        <size>
-                         <width>40</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>60</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="toolTip">
-                        <string>Click to store the current edited curve into the table.
-To save your curve you need to go to &quot;Edit&quot;.</string>
-                       </property>
-                       <property name="text">
-                        <string>Store</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_8">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="ParCurve_button_apply_2">
-                       <property name="minimumSize">
-                        <size>
-                         <width>40</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>60</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="toolTip">
-                        <string>Click to visualize the curve.</string>
-                       </property>
-                       <property name="text">
-                        <string>Apply</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </widget>
+                 <property name="text">
+                  <string>Launch Curves and Surfaces Menu...</string>
+                 </property>
                 </widget>
                </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="Wire_Tab3_3">
-              <attribute name="title">
-               <string>Parametric 3D</string>
-              </attribute>
-              <layout class="QGridLayout" name="gridLayout_80">
-               <item row="0" column="0">
-                <widget class="QScrollArea" name="scrollArea_5">
-                 <property name="widgetResizable">
-                  <bool>true</bool>
+               <item row="1" column="0">
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
                  </property>
-                 <widget class="QWidget" name="scrollAreaWidgetContents_6">
-                  <property name="geometry">
-                   <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>202</width>
-                    <height>692</height>
-                   </rect>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_81">
-                   <item row="0" column="0">
-                    <layout class="QHBoxLayout" name="horizontalLayout_63">
-                     <item>
-                      <widget class="QComboBox" name="ParCurve_comboBox_3">
-                       <property name="toolTip">
-                        <string>Choose another curve from the list.</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="ParCurve_button_edit_3">
-                       <property name="minimumSize">
-                        <size>
-                         <width>40</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>60</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="toolTip">
-                        <string>Click to access to a table where you can edit all parameters of all curves and 
-save your custom curves.</string>
-                       </property>
-                       <property name="text">
-                        <string>Edit</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="1" column="0">
-                    <layout class="QHBoxLayout" name="horizontalLayout_64">
-                     <item>
-                      <widget class="QLabel" name="label_name_3">
-                       <property name="frameShape">
-                        <enum>QFrame::Box</enum>
-                       </property>
-                       <property name="frameShadow">
-                        <enum>QFrame::Raised</enum>
-                       </property>
-                       <property name="lineWidth">
-                        <number>3</number>
-                       </property>
-                       <property name="text">
-                        <string>Name</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignCenter</set>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLineEdit" name="ParCurve_name_3">
-                       <property name="text">
-                        <string>Cylindrical helix</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QGroupBox" name="groupBox_17">
-                     <property name="title">
-                      <string>Equation :</string>
-                     </property>
-                     <layout class="QFormLayout" name="formLayout_3">
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="label_a_4">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>a (t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QLineEdit" name="ParCurve_a_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>10*0.05 #Vert. step</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_b_4">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>b (a, t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QLineEdit" name="ParCurve_b_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>1</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0">
-                       <widget class="QLabel" name="label_c_2">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>c (a, b, t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="1">
-                       <widget class="QLineEdit" name="ParCurve_c_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>10     # Radius</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="3" column="0">
-                       <widget class="QLabel" name="label_x_4">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>X (a,b,c,t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="3" column="1">
-                       <widget class="QLineEdit" name="ParCurve_x_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>c*sin(t)</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="4" column="0">
-                       <widget class="QLabel" name="label_y_4">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Y (a,b,c,t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="5" column="0">
-                       <widget class="QLabel" name="label_z_2">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Z (a,b,c,t) </string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="5" column="1">
-                       <widget class="QLineEdit" name="ParCurve_z_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>a*t</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="4" column="1">
-                       <widget class="QLineEdit" name="ParCurve_y_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>c*cos(t)</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item row="3" column="0">
-                    <widget class="QGroupBox" name="groupBox_18">
-                     <property name="title">
-                      <string>Parameter :</string>
-                     </property>
-                     <layout class="QGridLayout" name="gridLayout_82">
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="label_tmin_4">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>t min</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_tmax_4">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>t max</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QLineEdit" name="ParCurve_tmax_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>5*2*pi   #5 circles</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0">
-                       <widget class="QLabel" name="label_tstep_4">
-                        <property name="maximumSize">
-                         <size>
-                          <width>70</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="layoutDirection">
-                         <enum>Qt::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                         <string>step</string>
-                        </property>
-                        <property name="alignment">
-                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="1">
-                       <widget class="QLineEdit" name="ParCurve_tstep_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>0.01</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QLineEdit" name="ParCurve_tmin_3">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>40</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>150</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>0</string>
-                        </property>
-                        <property name="maxLength">
-                         <number>32769</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item row="5" column="0">
-                    <widget class="QCheckBox" name="checkBox_close_3">
-                     <property name="text">
-                      <string>Closed curve</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="0">
-                    <layout class="QHBoxLayout" name="horizontalLayout_65">
-                     <item>
-                      <widget class="QPushButton" name="ParCurve_button_store_3">
-                       <property name="minimumSize">
-                        <size>
-                         <width>40</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>60</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="toolTip">
-                        <string>Click to store the current edited curve into the table.
-To save your curve you need to go to &quot;Edit&quot;.</string>
-                       </property>
-                       <property name="text">
-                        <string>Store</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_9">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="ParCurve_button_apply_3">
-                       <property name="minimumSize">
-                        <size>
-                         <width>40</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>60</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="toolTip">
-                        <string>Click to visualize the curve.</string>
-                       </property>
-                       <property name="text">
-                        <string>Apply</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="7" column="0">
-                    <spacer name="verticalSpacer_2">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>20</width>
-                       <height>40</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item row="4" column="0">
-                    <widget class="QGroupBox" name="groupBox_19">
-                     <property name="title">
-                      <string>Type of 3D Curve :</string>
-                     </property>
-                     <layout class="QGridLayout" name="gridLayout_3">
-                      <item row="0" column="1">
-                       <widget class="QCheckBox" name="checkBox_points_3">
-                        <property name="text">
-                         <string>Points</string>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="2">
-                       <widget class="QCheckBox" name="checkBox_polyline_3">
-                        <property name="text">
-                         <string>Polyline</string>
-                        </property>
-                        <property name="checked">
-                         <bool>true</bool>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="2">
-                       <widget class="QCheckBox" name="checkBox_bspline_3">
-                        <property name="text">
-                         <string>Bspline</string>
-                        </property>
-                        <property name="checked">
-                         <bool>false</bool>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QCheckBox" name="checkBox_bezier_3">
-                        <property name="enabled">
-                         <bool>true</bool>
-                        </property>
-                        <property name="text">
-                         <string>Bezier</string>
-                        </property>
-                        <property name="checked">
-                         <bool>false</bool>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </widget>
@@ -3776,7 +2638,7 @@ in &quot;Ori. Pref.&quot;  TAB</string>
            <item row="0" column="0">
             <widget class="QTabWidget" name="tabWidget_3">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="Plane_Tab1_2">
               <attribute name="title">
@@ -5532,7 +4394,7 @@ Note that some options are invalid regarding the image's plane.</string>
            <item row="0" column="0">
             <widget class="QTabWidget" name="tabWidget_9">
              <property name="currentIndex">
-              <number>0</number>
+              <number>2</number>
              </property>
              <widget class="QWidget" name="align_tab_2">
               <attribute name="title">
@@ -6670,9 +5532,15 @@ NB:
               <attribute name="title">
                <string>Translate</string>
               </attribute>
-              <layout class="QGridLayout" name="gridLayout_110">
+              <layout class="QGridLayout" name="gridLayout_60">
                <item row="0" column="0">
                 <widget class="QFrame" name="frame_12">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>220</width>
@@ -6819,6 +5687,12 @@ On the last result the same Sketch is both link to Pad001 but also still to Pad.
                      <layout class="QGridLayout" name="gridLayout_112">
                       <item row="0" column="0">
                        <widget class="QGroupBox" name="groupBox_22">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
                         <property name="minimumSize">
                          <size>
                           <width>150</width>
@@ -7689,7 +6563,7 @@ Radius measurement for a Circle or an Arc.
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_7">
+      <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

@@ -54,17 +54,23 @@
 """
 # First two lines to be able to launch with python
 import sys
+import os.path
 
-from WorkFeature import WF_ObjParCurve_2015
+# get the path of the current python script    
+m_current_path = os.path.realpath(__file__)
+# Change this by your own FreeCAD lib path to import FreeCAD
+if not sys.path.__contains__(m_current_path): 
+    sys.path.append(m_current_path)
+
+from ParCurve.WF_ObjParCurve_2016 import *
 import WFGui_2015 as WFGui
 from   WF_ObjRot_2015 import *
 from   WF_Utils_2015 import *
-from   WF_ObjParCurve_2015 import *
 
 global myRelease
-myRelease = "2016_09_10"
+myRelease = "2016_12_30"
 
-import os.path
+
 import time
 import math
 import itertools
@@ -129,12 +135,14 @@ m_numberLinePart = 2
 m_numberLineCut = 2
 m_numberPointCutWire = 2
 m_numberAxisCutWire = 2
+m_numberRandomPoint = 1
 m_numberCircleCut = 2
 m_numberPlane = 1
 m_numberLine = 1
 m_numberLine2 = 1
 m_numberPoint = 1
 m_distanceLinePoint = 0.0
+m_distanceRandomPoints = 10.0
 m_extensionTwoPointsAxis = 0.0
 m_extensionLinePointAxis = 0.0
 m_extensionLine = 0.0
@@ -2000,6 +2008,35 @@ def plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis", grp="WorkAx
     return axis_User_Name, axis 
 
 
+def plot_curve(Matriz, Close, Face, part="Part::Feature", name="Curve", grp="WorkWires", color=(1.00,0.67,0.00)):
+    m_close = Close
+    m_face = Face
+    if not(App.ActiveDocument.getObject( grp )):
+        App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
+    curvea = Part.makePolygon(Matriz)
+    curve = Draft.makeWire(curvea,closed=m_close,face=m_face)
+    FreeCAD.ActiveDocument.ActiveObject.Label = str(name)
+
+    if m_close == True and m_face == True:
+        Draft.upgrade(FreeCADGui.Selection.getSelection(),delete=True)
+        FreeCAD.ActiveDocument.recompute()
+    App.ActiveDocument.getObject( grp ).addObject(curve)
+    curve_User_Name = curve.Label
+    #Gui.ActiveDocument.getObject(curve_User_Name).LineColor = color    
+    return curve_User_Name, curve
+
+
+def plot_polygon(Matriz, part="Part::Feature", name="Polygon", grp="WorkWires", color=(1.00,0.67,0.00)):
+    if not(App.ActiveDocument.getObject( grp )):
+        App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
+    polygon = App.ActiveDocument.addObject(part, name)
+    polygon.Shape = Part.makePolygon(Matriz)
+    App.ActiveDocument.getObject( grp ).addObject(polygon)
+    polygon_User_Name = polygon.Label
+    Gui.ActiveDocument.getObject(polygon_User_Name).LineColor = color    
+    return polygon_User_Name, polygon
+ 
+
 def plot_circle(Radius, Position, Direction, part="Part::Feature", name="Circle", grp="WorkCircles"):
     if not(App.ActiveDocument.getObject( grp )):
         App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)    
@@ -3141,7 +3178,6 @@ def plot_pointLinePoint():
     Be aware that if the line is not extended enough the intersection Point is still created (as if).
     """
     msg=verbose
-    msg=1
     
     error_msg = """Unable to create (Point,Line) Intersection(s) :
     First
@@ -3272,6 +3308,8 @@ def distanceLinePoint(value):
         #plot_alongLinePoint()
     except ValueError:
         printError_msg("Distance must be valid number !")        
+        
+
 def plot_alongLinePoint():
     """ Plot a point at a certain distance along the line respecting to the choosen 
     reference starting point.
@@ -3348,6 +3386,88 @@ def plot_alongLinePoint():
 
 
 def plot_2LinesPoint():
+    """ Point(s)=(Line(s),Line(s)):
+    Plot one or two Point(s) at minimum distance of two Lines
+    Create a unique Point at intersection of 2 crossing Lines.
+
+    First
+    - Select two or more Line/Edge(s) and
+    - Then Click on the button
+    
+    Plot the point A on the first Line given and the point  B on the second Line.
+    The Vector AB perpendicular to the first and second Line.
+     
+    """
+    msg=verbose 
+    msg=1
+    
+    error_msg = """Unable to create (Line,Line) Intersection(s) :
+    First
+    - Select two or more Line/Edge(s) and
+    - Then Click on the button
+    but at least select two different Lines !"""
+    result_msg = " : (Line,Line) Intersection(s) are created !"
+          
+    createFolders('WorkPoints')
+    m_dir = 'Set'
+    name = "Intersection"
+    part = "Part::Feature"
+    
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None 
+     
+    try:
+        m_r = App.ActiveDocument.getObject("WorkPoints").newObject("App::DocumentObjectGroup", str(m_dir))
+    except:
+        printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")
+        return None
+    m_dir = m_r.Name
+    
+    m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    if msg != 0:
+        print_msg(str(m_selEx))
+    m_sel = Selection(m_selEx)
+    if not m_sel :
+        print_msg("Unable to create a Selection Object !") 
+        return  None      
+    if msg != 0:
+        print_msg(str(m_sel))
+     
+    try:         
+        Number_of_Edges, Edge_List = m_sel.get_segments(getfrom=["Segments","Curves","Planes","Objects"])
+        if msg != 0:        
+            print_msg("Number_of_Edges=" + str(Number_of_Edges))        
+
+        if Number_of_Edges >= 2:
+            for i in range( Number_of_Edges -1 ):
+                f1 = Edge_List[i]
+                f2 = Edge_List[i+1]
+                #print_msg(str(f1))
+                #print_msg(str(f2))
+                d = f1.distToShape(f2)
+                print_msg(str(d))
+                Distance = d[0]
+                Vector_A = d[1][0][0]
+                #print_point(Vector_A,"Vector_A is : ")
+                Vector_B = d[1][0][1]
+                if abs(Distance) <= 1.e-14: 
+                    Center_User_Name = plot_point(Vector_A, part, name, str(m_dir))
+                    print_msg(str(Center_User_Name) + result_msg ) 
+                else:
+                    Center_User_Name = plot_point(Vector_A, part, name, str(m_dir))
+                    print_point(Vector_A,str(Center_User_Name) + result_msg + " at :")
+                    Center_User_Name = plot_point(Vector_B, part, name, str(m_dir))
+                    print_point(Vector_B,str(Center_User_Name) + result_msg + " at :")
+                    print_msg(" Distance between the points is : " + str(Distance))
+        else:
+            printError_msg(error_msg)
+        
+    except:
+        printError_msg(error_msg)
+
+
+def plot_2LinesPoint2():
     """ Plot one or two Point(s) at minimum distance of two Lines. 
     """ 
     msg=0   
@@ -3386,7 +3506,7 @@ def plot_2LinesPoint():
         
     except:
         printError_msg(error_msg)
-        
+                
         
 def numberPoint(value):
     """ Respond to the change in number of point from the spin box.
@@ -3426,6 +3546,112 @@ def distPoint(value):
         
         
 def plot_distPoint():
+    """ Axes=(Axis,Pt,dist)):
+        Create an Axis parallel to a given Axis, Point at a given distance.
+        The Axis is created on the Plane defined by the given Axis and Point.
+        - First select an Axis (or several Axes) and a Point 
+        (you can also select several points to define different Planes)
+
+        NB: The distance to the Axis created can be defined first.
+        Positive number in one direction and negative in the other one.
+        The second number indicates the number of Axes to create.
+                
+        If an Edge of a Cube is selected the Cube is duplicate with the corresponding
+    """
+    global verbose
+    global m_numberPoint
+    global m_distPoint
+    msg=verbose
+    createFolders('WorkPoints')
+    error_msg = "Unable to create Point(s) : \nSelect one (or several) Point and one or several Lines"
+    result_msg = " : Point(s) created !"
+        
+    Selection = get_SelectedObjectsWithParent(info=msg, printError=False)
+    
+    try:
+        SelectedObjects = Selection
+        Number_of_Points = SelectedObjects[0]
+        Number_of_Edges = SelectedObjects[1]
+
+        if  (Number_of_Edges >= 1) and (Number_of_Points >= 1):
+            Edge_List = SelectedObjects[4]
+            Points_List = SelectedObjects[3]
+            if msg !=0:
+                print_msg("Number_of_Points = " + str(Number_of_Points))
+                print_msg("Number_of_Edges = " + str(Number_of_Edges))
+                print_msg("Point List = " + str(Points_List)) 
+                print_msg("Edge List = " + str(Edge_List))
+                
+            # Loop on the Points
+            for Selected_Point_dict in Points_List:
+                if msg != 0:
+                    print_msg("Selected_Point_dict = " + str(Selected_Point_dict))
+                for Selected_Point, Parent_Point in Selected_Point_dict.iteritems():
+                    if msg != 0:
+                        print_msg("Selected_Point = " + str(Selected_Point))
+                        print_msg("Parent_Point = " + str(Parent_Point))
+                    Point_C = Selected_Point.Point
+                    if msg !=0:
+                        print_point(Point_C, msg="Point_C : ")
+                    Placement1 = Selected_Point.Placement
+                    #Placement1 = Parent_Point.Placement
+                    #base1 = Placement1.Base
+                    #base1 = Point_C
+                    rot1 = Placement1.Rotation
+                    center_Vector = Point_C
+                    m_move = Base.Vector(0, 0, 0)
+                    Move_Vector = Base.Vector(0, 0, 0)
+                    # Loop on the Edges
+                    for Selected_Edge_dict in Edge_List:                    
+                        for Selected_Edge, Parent_Edge in Selected_Edge_dict.iteritems():
+                            if msg != 0:
+                                print_msg("Selected_Edge = " + str(Selected_Edge))
+                                print_msg("Parent_Edge = " + str(Parent_Edge))
+                                
+                            Point_A = Selected_Edge.Vertexes[0].Point
+                            Point_B = Selected_Edge.Vertexes[-1].Point 
+                            if msg !=0:
+                                print_point(Point_A, msg="Selected_Edge.Vertexes[0]  Point_A : ")
+                                print_point(Point_B, msg="Selected_Edge.Vertexes[-1] Point_B : ")
+                            AB_Vector = Point_B.sub(Point_A)
+                            AB_Vector = AB_Vector.normalize()
+                            # plot_axis(Base.Vector(0, 0, 0), AB_Vector, "Part::Feature", "AB")
+                            Move_Vector = AB_Vector.multiply(m_distPoint)
+                            Move_Vector = Move_Vector.add(center_Vector)
+                            # plot_axis(Base.Vector(0, 0, 0), Move_Vector, "Part::Feature", "Move_Vector")
+                            m_move = Move_Vector.sub(center_Vector)
+                             
+                            if msg != 0:
+                                print_point(Move_Vector, msg="Move_Vector = ")
+                                print_point(m_move, msg="m_move = ")
+                                print_msg("m_numberPoint  = " + str(m_numberPoint))
+                                    
+                            for m_i in range(m_numberPoint):
+#==============================================================================
+#                                 if objCopy == 1:
+#                                     m_new_point = App.activeDocument().copyObject(Parent_Point)                  
+#                                 else:
+#==============================================================================
+                                m_new_point_shape = Selected_Point.copy()
+                                m_new_point = App.ActiveDocument.addObject("Part::Feature", "Point_at_distance")
+                                m_new_point.Shape = m_new_point_shape
+                                App.ActiveDocument.getObject('WorkPoints').addObject(m_new_point)
+                                Point_User_Name = m_new_point.Label
+
+                                newplace1 = App.Placement(m_move, rot1 )
+                                m_new_point.Placement = newplace1
+                                # Update the move
+                                m_move = m_move.add(Move_Vector.sub(center_Vector))
+ 
+                                properties_point(Point_User_Name)
+                                print_msg(str(Point_User_Name) + result_msg ) 
+
+        else: 
+            printError_msg(error_msg)
+    except:
+        printError_msg(error_msg)
+
+def plot_distPoint2():
     """ Axes=(Axis,Pt,dist)):
         Create an Axis parallel to a given Axis, Point at a given distance.
         The Axis is created on the Plane defined by the given Axis and Point.
@@ -4221,7 +4447,102 @@ def point_toSave2():
     except:
         printError_msg(error_msg)
 
+def numberRandomPoint(value):
+    """ Respond to the change in number of cut value from the spin box.
+    """
+    global verbose
+    msg=verbose
         
+    try:
+        # First we check if a valid number have been entered
+        global m_numberRandomPoint
+        if str(value) == '-':
+            return
+        m_numberRandomPoint  = int(value)
+        if msg != 0:
+            print_msg("New number is :" + str(m_numberRandomPoint))
+    except ValueError:
+        printError_msg("Number must be valid !")  
+
+
+def distanceRandomPoints(value):
+    """ Respond to the change in distance value from the text box.
+    """        
+    try:
+        # First we check if a valid number have been entered
+        global m_distanceRandomPoints
+        if str(value) == '-':
+            return
+        m_distanceRandomPoints  = float(value)
+        print_msg("New distance is :" + str(m_distanceRandomPoints))
+        #plot_alongLinePoint()
+    except ValueError:
+        printError_msg("Distance must be valid number !")
+
+
+def plot_points_random():
+    """Create random Point(s).
+    Define first the number of points to create and the coordinates limits.
+    - Then push the button, 
+    or
+    - Select first one point to the center desired location;
+    - Then push the button.
+    """
+    msg=verbose
+    msg = 1
+    import numpy as np
+    
+    error_msg = """Unable to create random Point(s) :
+    Define first the number of points to create and the coordinates limits.
+    - Then push the button, 
+    or
+    - Select first one point to the center desired location;
+    - Then push the button.
+    """
+    result_msg = " : random Point(s) created !"
+    
+    createFolders('WorkPoints')   
+    m_dir = 'Set' 
+    name = "RandomPoint"
+    part = "Part::Feature"
+        
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None 
+    
+    try:
+        m_r = App.ActiveDocument.getObject("WorkPoints").newObject("App::DocumentObjectGroup", str(m_dir))
+    except:
+        printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")
+        return None
+    m_dir = m_r.Name
+    
+    Number_of_Points = 0
+    
+    m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    if m_selEx:
+        if msg != 0:
+            print_msg(str(m_selEx))
+        m_sel = Selection(m_selEx)
+        Number_of_Points, Point_List = m_sel.get_points(getfrom=["Points"])
+        if msg != 0:
+            print_msg("Number_of_Points=" + str(Number_of_Points))
+    
+    m_limit = m_distanceRandomPoints/2
+    if (Number_of_Points >= 1):
+        m_Point = Point_List[-1]
+        for m_point_id in range(m_numberRandomPoint):
+            x, y, z = m_distanceRandomPoints* np.random.random_sample((3,)) - m_limit
+            x -= m_Point.Point.x
+            y -= m_Point.Point.y
+            z -= m_Point.Point.z
+            plot_point(Base.Vector(x, y, z), part, name, str(m_dir))
+    else:
+        for m_point_id in range(m_numberRandomPoint):
+            x, y, z = m_distanceRandomPoints* np.random.random_sample((3,)) - m_limit
+            plot_point(Base.Vector(x, y, z), part, name, str(m_dir))
+       
+              
 def plot_centerObjectAxes():
     """ Create 3 Axes XY, and Z at center point of all selected objects.
     """
@@ -8037,6 +8358,71 @@ def plot_wire_on_plane():
 #         points.append(p.projectToPlane(p1,p4))
 #     sel.Object.Points = points
 
+
+def plot_bezier():
+    pass
+
+def points_toPolygon():
+    """ Create a polygon from a set of points.
+    - First select several Points
+    
+    """
+    msg=verbose
+    m_close = False
+    m_face = False
+
+    error_msg = """Unable to create Polygon :
+    Select at least two points !"""
+    result_msg = " : Polygon created !"
+    
+    createFolders('WorkWires')
+    m_dir = 'Set'
+    name = "Polygon_from_N_Points"
+    part = "Part::Feature"
+    
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None
+        
+    try:
+        m_r = App.ActiveDocument.getObject("WorkWires").newObject("App::DocumentObjectGroup", str(m_dir))
+    except:
+        printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")
+        return None
+    m_dir = m_r.Name
+    
+    Selection = get_SelectedObjects(info=msg, printError=False)
+        
+    try:
+        SelectedObjects = Selection        
+        Number_of_Points = SelectedObjects[0]
+        if msg != 0:
+            print_msg("Number_of_Points=" + str(Number_of_Points))
+        if Number_of_Points > 1:
+            m_x = 0.0
+            m_y = 0.0
+            m_z = 0.0
+            matriz = []
+            Point_List = SelectedObjects[3]
+            if msg != 0:
+                print_msg("Point_List=" + str(Point_List))
+            
+            for Selected_Point in Point_List:    
+                m_point = Selected_Point.Point
+                m_x = m_point.x
+                m_y = m_point.y
+                m_z = m_point.z   
+                matriz.append(FreeCAD.Vector(m_x,m_y,m_z))
+                
+            curve_User_Name, curve = plot_curve(matriz, m_close, m_face, part, name, str(m_dir))
+            #curve_User_Name, curve = plot_polygon(matriz, part, name, str(m_dir))
+            print_msg(str(curve_User_Name) + result_msg + " into :" + str(m_dir))
+        else:
+            printError_msg(error_msg)
+    except:
+        printError_msg(error_msg) 
+           
+    
 def plot_4points_bezier():
     msg=1
     
@@ -8083,6 +8469,7 @@ def plot_4points_bezier():
             printError_msg(error_msg)        
     except:
         printError_msg(error_msg)
+
 
 def get_all_from_bounding_box(ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,info=0,plot=0):
     """ Returns 8 points ,12 edges and 6 planes from the bounding box
@@ -12636,7 +13023,7 @@ def object_jointFaces():
     except:
         printError_msg(error_msg)
         
-        
+
 ####################################################################################   
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -12757,10 +13144,13 @@ class WorkFeatureTab():
         self.eventsRot = RotationEvents(self.ui)
         # Create a Translation object and connect
         self.eventsTrans = TranslationEvents(self.ui)
-        # Create a Parametric 2D Curve object and connect
-        self.events2D = ParametricCurve2DEvents(self.ui)
-        # Create a Parametric 3D Curve object and connect
-        self.events3D = ParametricCurve3DEvents(self.ui)
+        
+
+        
+        ## Create a Parametric 2D Curve object and connect
+        #self.events2D = ParametricCurve2DEvents(self.ui)
+        ## Create a Parametric 3D Curve object and connect
+        #self.events3D = ParametricCurve3DEvents(self.ui)
                 
         ### Connect to functions
         self.connections_for_checkbox_toggled = {
@@ -12770,7 +13160,8 @@ class WorkFeatureTab():
                              "checkBox_volumBB"             : "volumBBox_toggled", 
                             }
         self.connections_for_button_clicked = {
-                             "button_WF_quit"               : "quit_clicked", 
+                             "button_WF_quit"               : "quit_clicked",
+                             "button_curves_and_surfaces"   : "launch_curvesAndSurfaces", 
                             }                
                 #self.PB_Quit.clicked.connect(self.on_PB_Quit_clicked) # quit
                 
@@ -12798,6 +13189,7 @@ class WorkFeatureTab():
                              "button_point_to_sketch"      : "point_toSketch",
                              "button_points_load"          : "point_toLoad",
                              "button_points_save"          : "point_toSave",
+                             "button_points_random"        : "plot_points_random",
                              
                              "button_object_axis"          : "plot_centerObjectAxes",
                              "button_twopoints_axis"       : "plot_2PointsAxis",
@@ -12823,6 +13215,10 @@ class WorkFeatureTab():
                              "button_object_3axes"         : "plot_object3Axes",                                                
                              "button_line_to_sketch"       : "line_toSketch",
                              
+                             "button_points_to_polygon"    : "points_toPolygon",                        
+                             #"button_wire_on_plane"        : "plot_wire_on_plane",
+                             "button_4points_bezier"       : "plot_4points_bezier",
+                                        
                              "button_linecenter_circle"    : "plot_linecenterCircle",
                              "button_linepoint_circle"     : "plot_linepointCircle",
                              "button_3points_circle"       : "plot_3pointsCircle",
@@ -12845,10 +13241,7 @@ class WorkFeatureTab():
                              "button_extension_plane"      : "plot_extensionPlane",
                              #"button_click_for_plane2"     : "plot_clickForPlane2",
                              "button_object_center_planes" : "plot_centerObjectPlanes",
-                             
-                             #"button_wire_on_plane"        : "plot_wire_on_plane",
-                             "button_4points_bezier"       : "plot_4points_bezier",
-                             
+                                                          
                              "button_boundingboxes"        : "plot_boundingBoxes",
                              "button_boundingbox"          : "plot_boundingBox",
                              "button_cylinder_create"      : "plot_axisPointCylinder",
@@ -12897,6 +13290,8 @@ class WorkFeatureTab():
         self.connections_for_text_changed = {
                              "tolerance_edit"            : "setTolerance",
                              "distance_point_on_line"    : "distanceLinePoint",
+                             "distance_random_points"    : "distanceRandomPoints",
+                             
                              
                              "extension_twopoints_axis"  : "extensionTwoPointsAxis",
                              "extension_face_normal"     : "extensionFaceNormal",
@@ -12941,6 +13336,7 @@ class WorkFeatureTab():
                              "spin_axis_cut"             : "numberLineCut",
                              "spin_wire_cut_point"       : "numberPointCutWire",
                              "spin_wire_cut_axis"        : "numberAxisCutWire",
+                             "spin_random_points"        : "numberRandomPoint",
                              "spin_circle_cut"           : "numberCircleCut",
                              "spin_dist_plane"           : "numberPlane",
                              "spin_dist_line"            : "numberLine",
@@ -13036,8 +13432,20 @@ class WorkFeatureTab():
                 for i in range(2,self.m_tab.count()):
                     if "Work Features" == str(_fromUtf8(self.m_tab.tabText(i))):
                         self.m_tab.removeTab(int(i))
-                        break     
-                
+                        break
+                       
+    def launch_curvesAndSurfaces(self):
+        myObject = ParametricTab(ParCurveGui)
+            
+        # Create a Regression 2D Curve object and connect
+        self.reg_events2D = RegressionCurve2DEvents(self.ui)
+        # Create a Parametric 2D Curve object and connect
+        self.events2D = ParametricCurve2DEvents(self.ui)
+        # Create a Parametric 3D Curve object and connect
+        self.events3D = ParametricCurve3DEvents(self.ui)
+        # Create a Surface object and connect
+        self.surface = SurfaceEvents(self.ui) 
+                   
     def getMainWindow(self):
         """ Returns the main window
         """
