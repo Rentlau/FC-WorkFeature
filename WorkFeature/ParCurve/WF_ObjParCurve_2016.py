@@ -5,7 +5,6 @@ To execute the MACRO in FreeCAD python console:
 """
 import sys
 import os.path
-from wx.lib.pubsub.utils.exchandling import ExcPublisher
             
 # get the path of the current python script    
 #m_current_path = os.path.realpath(__file__)

@@ -18,7 +18,7 @@ Name, a , b (a),c (a,b), X (a,b,c,U,V), Y (a,b,c,U,V), Z (a,b,c,U,V), U min, U m
 ['Sinusoidal cone', '10', '10', '2 #From 1 to 10', 'a*u*cos(v)', 'b*u*sin(v)', 'b*u*cos(c*v)', '-pi-0.01', 'pi+0.01', '0.01', '-pi-0.01', 'pi+0.01', '0.01', '']
 ['Bohemian dome', '10', '10', '10', 'a*cos(u)', 'b*cos(v)', 'a*sin(u)+ b*sin(v)', '-pi-0.01', 'pi+0.01', '0.01', '-pi-0.01', 'pi+0.01', '0.01', '']
 ['Torus', '10', '5', '5', '(a +b*cos(v))*cos(u)', '(a +b*cos(v))*sin(u)', 'c*sin(v)', '-pi-0.01', 'pi+0.01', '0.01', '-pi-0.01', 'pi+0.01', '0.01', '']
-['Sea-shell', '2', '.4926839011', '10', 'exp(u/c)*cos(u)*(1+b*cos(v)) ', 'exp(u/c)*sin(u)*(1+b*cos(v)) ', 'exp(u/c)*(1+b*sin(v))', '-30', '4', '0.01', '-pi-0.01', 'pi+0.01', '0.01', '']
+['Sea-shell', '2', '.4926839011', '10', 'exp(u/c)*cos(u)*(1+b*cos(v)) ', 'exp(u/c)*sin(u)*(1+b*cos(v)) ', '-exp(u/c)*(1+b*sin(v))', '-30', '4', '0.01', '-pi-0.01', 'pi+0.01', '0.01', '']
 ['One-surface Hyperboloid', '10', '10', '10', 'a*cos(u)*cosh(v)', 'b*sin(u)*cosh(v)', 'c*sinh(v)', '-pi-0.01', 'pi+0.01', '0.01', '-1', '1', '0.01', '']
 ['Two-surface Hyperboloid', '10', '10', '10', 'a*cos(u)*sinh(v)', 'b*sin(u)*sinh(v)', 'c*cosh(v)', '-pi-0.01', 'pi+0.01', '0.01', '0', '1', '0.01', '']
 ['Glass', '10', '10', '10', 'a*cos(u)*sin(v)*cos(v)', 'b*sin(u)*sin(v)*cos(v)', 'c*sinh(v)', '-pi-0.01', 'pi+0.01', '0.01', '-0.30', '1', '0.01', '']
