@@ -6,11 +6,19 @@ Created on Sat May 30 18:53:08 2015
 """
 import sys
 import os.path
-sys.path.append(os.path.dirname(__file__))
-#from ParCurve2DEditGui_2015 import Ui_Form
+#sys.path.append(os.path.dirname(__file__))
+##from ParCurve2DEditGui_2015 import Ui_Form
+
+# Get the path of the current python script    
+m_current_path = os.path.realpath(__file__)
+# Update paths
+if not sys.path.__contains__(m_current_path): 
+    sys.path.append(m_current_path)
+    
 import Ui.WF_ObjParCurve2DEditGui_2016 as EDIT_2D
 import Ui.WF_ObjParCurve3DEditGui_2016 as EDIT_3D
 import Ui.WF_ObjSurfaceEditGui_2016 as EDIT_SURF
+
 from Utils.Text import read_text_into_list, write_text, append_text
 
 from PySide import QtCore, QtGui

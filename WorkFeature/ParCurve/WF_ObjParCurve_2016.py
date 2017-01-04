@@ -6,10 +6,10 @@ To execute the MACRO in FreeCAD python console:
 import sys
 import os.path
             
-# get the path of the current python script    
-#m_current_path = os.path.realpath(__file__)
-m_current_path = "/home/laurent/Develop/Workspaces/Python/WF_test/WorkFeature/ParCurve/"
-# Change this by your own FreeCAD lib path to import FreeCAD
+# Get the path of the current python script    
+m_current_path = os.path.realpath(__file__)
+#m_current_path = "/home/laurent/Develop/Workspaces/Python/WF_test/WorkFeature/ParCurve/"
+# Update paths
 if not sys.path.__contains__(m_current_path): 
     sys.path.append(m_current_path)
   
@@ -241,12 +241,7 @@ class Parametric():
         self.msgBox = QtGui.QMessageBox()
         self.pbar   = None
         
-        self.pbar    = self.gui.progressBar
-        self.pbar.setValue(0)
-        
-        self.x_ref    = self.gui.Par_x_ref
-        self.y_ref    = self.gui.Par_y_ref
-        self.z_ref    = self.gui.Par_z_ref
+        self.setGuiStuff()
         
         self.ox, self.oy, self.oz = 0.0, 0.0, 0.0
         
@@ -256,6 +251,13 @@ class Parametric():
             print_msg("Impossible to load Module numpy !")
             return 
 
+    def setGuiStuff(self):
+        self.pbar    = self.gui.progressBar
+        self.pbar.setValue(0)
+        
+        self.x_ref    = self.gui.Par_x_ref
+        self.y_ref    = self.gui.Par_y_ref
+        self.z_ref    = self.gui.Par_z_ref
 
     def updateOptions(self):
         pass        
