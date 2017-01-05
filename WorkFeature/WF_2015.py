@@ -13436,15 +13436,15 @@ class WorkFeatureTab():
                        
     def launch_curvesAndSurfaces(self):
         myObject = ParametricTab(ParCurveGui)
-            
+        
         # Create a Regression 2D Curve object and connect
-        self.reg_events2D = RegressionCurve2DEvents(myObject.gui)
+        self.reg_events2D = RegressionCurve2DEvents(myObject.ui)
         # Create a Parametric 2D Curve object and connect
-        self.events2D = ParametricCurve2DEvents(myObject.gui)
+        self.events2D = ParametricCurve2DEvents(myObject.ui)
         # Create a Parametric 3D Curve object and connect
-        self.events3D = ParametricCurve3DEvents(myObject.gui)
+        self.events3D = ParametricCurve3DEvents(myObject.ui)
         # Create a Surface object and connect
-        self.surface = SurfaceEvents(myObject.gui) 
+        self.surface = SurfaceEvents(myObject.ui) 
                    
     def getMainWindow(self):
         """ Returns the main window
