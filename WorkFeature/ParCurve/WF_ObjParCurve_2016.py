@@ -45,8 +45,8 @@ global myTabName
 myTabName = "Parametric Curves"
 global myObjName
 myObjName = "ParametricCurves"
-global myRelease
-myRelease = "2016_11"
+global ParametricRelease
+ParametricRelease = "2017_01"
 global f2
 def f2(fa,fb,fx,fy,t,i):
     pass
@@ -788,37 +788,54 @@ class ParametricCurve2D(Parametric):
             
         #msgBox = QtGui.QMessageBox()
         import numpy as np
+        t=0.
+        
         fa = str(self.la.text())
         fb = str(self.lb.text())
-        
-        t=0.
+
         a=eval(fa)
         b=eval(fb)
         
-        if hasattr(a, '__iter__') and hasattr(b, '__iter__'):
-            for m_a in a:
-                for m_b  in b:
+        def iterate():
+            if hasattr(a, '__iter__') and hasattr(b, '__iter__'):
+                for m_a in a:
+                    for m_b  in b:
+                        if self.debug != 0:
+                            print "a=" + str(m_a)
+                            print "b=" + str(m_b)
+                        self.draw_par_function(m_a, m_b)
+            elif hasattr(a, '__iter__') and not hasattr(b, '__iter__'):
+                for m_a in a:
                     if self.debug != 0:
                         print "a=" + str(m_a)
+                        print "b=" + str(b)
+                    self.draw_par_function(m_a, b)
+            elif not hasattr(a, '__iter__') and hasattr(b, '__iter__'):
+                for m_b  in b:
+                    if self.debug != 0:
+                        print "a=" + str(a)
                         print "b=" + str(m_b)
-                    self.draw_par_function(m_a, m_b)
-        elif hasattr(a, '__iter__') and not hasattr(b, '__iter__'):
-            for m_a in a:
-                if self.debug != 0:
-                    print "a=" + str(m_a)
-                    print "b=" + str(b)
-                self.draw_par_function(m_a, b)
-        elif not hasattr(a, '__iter__') and hasattr(b, '__iter__'):
-            for m_b  in b:
+                    self.draw_par_function(a, m_b)
+            else:            
                 if self.debug != 0:
                     print "a=" + str(a)
-                    print "b=" + str(m_b)
-                self.draw_par_function(a, m_b)
-        else:            
-            if self.debug != 0:
-                print "a=" + str(a)
-                print "b=" + str(b)
-            self.draw_par_function(a, b)
+                    print "b=" + str(b)
+                self.draw_par_function(a, b)
+                 
+        oxs = eval(str(self.x_ref.text()))
+        oys = eval(str(self.y_ref.text()))
+        ozs = eval(str(self.z_ref.text()))
+        if hasattr(oxs, '__iter__'):
+            for m_ox, m_oy, m_oz  in zip(oxs, oys, ozs):
+                self.ox = float(m_ox)
+                self.oy = float(m_oy)
+                self.oz = float(m_oz)
+                iterate()
+        else:
+            self.ox = float(eval(str(self.x_ref.text())))
+            self.oy = float(eval(str(self.y_ref.text())))
+            self.oz = float(eval(str(self.z_ref.text())))
+            iterate()
             
 
     def draw_par_function(self,fa ,fb):        
@@ -832,9 +849,7 @@ class ParametricCurve2D(Parametric):
         intt = float(eval(str(self.ltstep.text())))
         #fz   = float(eval(str(self.lz.text())))
     
-        ox =   float(eval(str(self.x_ref.text())))
-        oy =   float(eval(str(self.y_ref.text())))
-        oz =   float(eval(str(self.z_ref.text())))
+        ox, oy, oz = self.ox, self.oy, self.oz
         
         d = (tf + intt -t)/intt
         dmax = int(d)
@@ -848,9 +863,9 @@ class ParametricCurve2D(Parametric):
             print "x=" + str(fx)
             print "y=" + str(fy)
             print "Ref Point :"
-            print "ox=" + str(ox)
-            print "oy=" + str(oy)
-            print "oz=" + str(oz)
+            print "x_ref=" + str(ox)
+            print "y_ref=" + str(oy)
+            print "z_ref=" + str(oz)
         
         code = """
 def f2(fa,fb,fx,fy,t,i,msgBox):
@@ -1261,6 +1276,7 @@ class ParametricCurve3D(Parametric):
             print "x=" + str(fx)
             print "y=" + str(fy)
             print "z=" + str(fz)
+            print "Ref Point :"
             print "x_ref=" + str(ox)
             print "y_ref=" + str(oy)
             print "z_ref=" + str(oz)
@@ -1959,6 +1975,8 @@ class SurfaceEvents(DefineAndConnectEvents):
                             #"Reg2DCurve_degree_select"          : "setDegree"
                             }
         self.connections_for_return_pressed = {}
+                
+
         
 ##########################################        
 class RegressionCurve2DEvents(DefineAndConnectEvents):
@@ -2109,7 +2127,17 @@ class ParametricTab():
             self.ui = self.gui.Ui_Form()
             self.ui.setupUi(self.m_dialog)
             self.m_tab.setCurrentIndex(3)
-         
+
+#----------------------------------------------------------------
+        self.connections_for_button_clicked = {
+                            "button_quit"               : "quit_clicked",
+                            }
+                 
+        for m_key, m_val in self.connections_for_button_clicked.items():
+            print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
+            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
+                                   QtCore.SIGNAL("clicked()"),getattr(self,str(m_val)))
+          
         # Create a Regression 2D Curve object and connect
         self.reg_events2D = RegressionCurve2DEvents(self.ui)
         # Create a Parametric 2D Curve object and connect
@@ -2118,7 +2146,12 @@ class ParametricTab():
         self.events3D = ParametricCurve3DEvents(self.ui)
         # Create a Surface object and connect
         self.surface = SurfaceEvents(self.ui)
+    
         
+        m_text=str(ParametricRelease)
+        self.ui.label_release.setText(QtGui.QApplication.translate("Form", m_text, None, QtGui.QApplication.UnicodeUTF8))
+           
+ #----------------------------------------------------------------
         if self.movable:
             t=FreeCADGui.getMainWindow()
             wf = t.findChild(QtGui.QDockWidget, str(self.objname))
@@ -2130,11 +2163,15 @@ class ParametricTab():
                 print_msg( "Tabified done !")               
                 wf.activateWindow()
                 wf.raise_()
-            
+                
+        QtCore.QObject.connect(self.ui.button_quit, QtCore.SIGNAL ('clicked()'), self.quit_clicked)
+   
      
-    def quit_clicked(self): # quit       
+    def quit_clicked(self): # quit
+        print_msg( "quit_clicked !")       
         if self.movable:
             self.dw.close()
+            self.close()
             print_msg( "Close done !")
             return
         else:

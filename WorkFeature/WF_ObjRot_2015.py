@@ -228,17 +228,23 @@ class Translation():
         self.dupli      = self.gui.ObjTrans_duplicate
         self.dup_num    = self.gui.ObjTrans_spin
         self.dup_deep   = self.gui.ObjTrans_deepCopy
+        
+        self.slider     = self.gui.ObjTrans_horizontalSlider
+        self.length_edit = self.gui.ObjTrans_lineEdit_length_seg
+        self.Edge_List  = []
 
-
-        self.valid_start = {  "Origin" : "origin",
-                              "Base Obj." : "base",
+        self.valid_start = {  "Origin"         : "origin",
+                              "Base Obj."      : "base",
                               "Center Obj.(s)" : "center",
-                              "To select" : "select",
-                              "To define" : "define",
-                              "Relative"  : "relative",
+                              "To select"      : "select",
+                              "From Segment"   : "segment",
+                              "To define"      : "define",
+                              "Relative"       : "relative",
                             }
         
         self.visuObjects = []
+        
+        self.internal = False
         
         self.duplicate = False
         self.deep = False
@@ -250,9 +256,11 @@ class Translation():
         self.dup_deep.setEnabled(False)
         self.dup_deep.setChecked(False)
         
+        self.segment = False
+        
         self.enable(False)
-               
-                
+        self.setEnableSlider(False)
+                               
     def enable(self, flag=True):
         """ Enable or not most of the buttons.
         """
@@ -266,7 +274,6 @@ class Translation():
         self.dupli.setEnabled(flag)
         self.but_reset.setEnabled(flag)
         self.but_apply.setEnabled(flag)
-   
 
     def setEnabledStartInput(self, flag=True):
         """ Enable or not the input boxes for start point.
@@ -278,7 +285,6 @@ class Translation():
         self.start_y.setEnabled(flag)
         self.start_z.setEnabled(flag)
         
-
     def setEnabledEndInput(self, flag=True):
         """ Enable or not the input boxes for end point.
         """
@@ -289,6 +295,14 @@ class Translation():
         self.end_y.setEnabled(flag)
         self.end_z.setEnabled(flag)
 
+    def setEnableSlider(self, flag=True):
+        """ Enable or not the slider for segment selection.
+        """
+        if self.msg != 0:
+            func.print_msg("Translation.setEnabledEndInput :")
+            
+        self.slider.setEnabled(flag)
+        self.length_edit.setEnabled(flag)
     
     def numberCopies(self,value):
         """ Respond to the change in number of part value from the spin box.
@@ -318,8 +332,7 @@ class Translation():
             func.print_msg("Translation.deepCopyFlag :")
             
         self.deep = flag
-        
-       
+              
     def copyFlag(self, flag):
         """ Respond to the change of duplicate flag.
         """
@@ -338,7 +351,6 @@ class Translation():
         if self.m_num_obj >= 1 and self.m_num_cpy >= 1:
             self.reset()
             self.preview()             
-
         
     def selection(self):
         """ Check if one object at least is selected.
@@ -348,7 +360,7 @@ class Translation():
             return False
         return True
 
-        
+       
     def cleanDuplication(self):
         """ Clean the list of Duplicated objects.
         """
@@ -606,25 +618,47 @@ class Translation():
         if self.msg != 0:
             func.print_msg("Translation.select_start : Selection of Start point of translation by button !")  
         
-        error_msg = "Select one point !"
+        error_msg = "Select one point or one segment !"
         
         # Get the selected Objects
         SelectedObjects = func.get_SelectedObjects()
         if SelectedObjects == None:
             func.printError_msg(error_msg)
-            return         
-        Number_of_Points = SelectedObjects[0]
-        if Number_of_Points != 1:
-            func.printError_msg(error_msg)
             return
+                 
+        Number_of_Points = SelectedObjects[0]
+        Number_of_Edges = SelectedObjects[1]
+        if self.segment:
+            error_msg = "Select one segment only !"
+            if Number_of_Edges != 1:
+                func.printError_msg(error_msg)
+                return
+            else:
+                self.Edge_List = SelectedObjects[4]
+                self.start = self.Edge_List[0].Vertexes[0].Point
+                self.m_num_end = Number_of_Edges
+                for m_i_end in range(Number_of_Edges):
+                    self.end.append(self.Edge_List[m_i_end].Vertexes[-1].Point)
+                button_text = "Selected !"
+                self.but_start.setText(QtGui.QApplication.translate("Form", button_text, None, QtGui.QApplication.UnicodeUTF8))        
+                self.print_start(self.start)
+                self.print_end(self.end[0])
+                self.set_percentage(100.0)
+                self.visu()
+                self.preview()
         else:
-            Point_List = SelectedObjects[3]
-            self.start = Point_List[0].Point
-            button_text = "Selected !"
-            self.but_start.setText(QtGui.QApplication.translate("Form", button_text, None, QtGui.QApplication.UnicodeUTF8))        
-            self.print_start(self.start)
-            self.visu()
-            self.preview()
+            error_msg = "Select one point !"
+            if Number_of_Points != 1:
+                func.printError_msg(error_msg)
+                return
+            else:
+                Point_List = SelectedObjects[3]
+                self.start = Point_List[0].Point
+                button_text = "Selected !"
+                self.but_start.setText(QtGui.QApplication.translate("Form", button_text, None, QtGui.QApplication.UnicodeUTF8))        
+                self.print_start(self.start)
+                self.visu()
+                self.preview()
 
 
     def reset_start_value(self):
@@ -640,8 +674,11 @@ class Translation():
         # DeActivate Start Input
         self.setEnabledStartInput(False)
         self.print_start(self.origin)
+        
+        self.set_percentage(100.0)
+        self.setEnableSlider(False)
+        self.segment = False
  
-
     def select_start_type(self, *argc):
         """ Start point of translation by combo box.
         """
@@ -649,14 +686,30 @@ class Translation():
             func.print_msg("Translation.select_start_type : Start point of translation by combo box !") 
             
         self.reset_start_value()
-               
+        self.reset_end_value()
+        self.but_end.setEnabled(True)
+        self.comb_end.setEnabled(True)
+              
         if str(*argc) == "To select":
             # Activate select button and wait for selection
             self.but_start.setEnabled(True)
+            self.setEnableSlider(False)
             self.start = None
+        elif str(*argc) == "From Segment":
+            # Activate select button and wait for selection
+            self.but_start.setEnabled(True)
+            self.segment = True
+            self.setEnableSlider(True)
+            self.setEnabledStartInput(False)
+            self.setEnabledEndInput(False)
+            self.but_end.setEnabled(False)
+            self.comb_end.setEnabled(False)
+            self.start = None
+            
         elif str(*argc) == "To define":
             # Activate define input boxes and wait for entering values
             self.setEnabledStartInput(True)
+            self.setEnableSlider(False)
             self.start = App.Vector(0,0,0)
         else:
             button_text = "Select"
@@ -755,7 +808,8 @@ class Translation():
         SelectedObjects = func.get_SelectedObjects()
         if SelectedObjects == None:
             func.printError_msg(error_msg)
-            return        
+            return
+                
         Number_of_Points = SelectedObjects[0]
         self.m_num_end = Number_of_Points
         if Number_of_Points == 0:
@@ -950,7 +1004,64 @@ class Translation():
         self.comb_start.setCurrentIndex(3)
         self.but_end.setEnabled(True)
 
-
+    def set_percentage(self, value = 100.0):
+        """ Put 100 into edit box and on slider.
+        """
+        self.internal = True
+        self.slider.setValue(value)
+        self.length_edit.setText(str(value))
+        self.internal = False
+        
+    def length_value_changed(self, value):
+        """ Respond to the change in value of a slider, update the text box
+        """
+        # If the value was changed internally, ignore event.
+        if self.internal:
+            return
+        
+        self.length_edit.setText(str(value))
+        self.length_value_entered()
+            
+               
+    def length_value_entered(self):
+        #if self.msg != 0:
+            #func.print_msg("angle_value_entered entered!")       
+        try:
+            # First we check if a valid number have been entered
+            self.length = float(self.length_edit.text())
+            if self.length < -1000.0 or self.length > 1000.0 :
+                func.printError_msg("Length must be valid number in percentage [-1000,1000] !")
+                self.length_edit.setText(str(100.0))
+                self.length_value_entered()
+            # Update the slider by internal update
+            self.internal = True
+            self.slider.setValue(self.length)
+            self.internal = False
+            if self.segment:
+                self.start      = self.origin
+                self.end        = []
+                print "length = " +str(self.length)
+                Number_of_Edges = len(self.Edge_List)
+                m_id_start = int(0)
+                m_id_end = int(-1)
+                m_mult = 1
+                if self.length < 0.0 :
+                    m_id_start = int(-1)
+                    m_id_end = int(0)
+                    m_mult = -1
+                self.start = self.Edge_List[0].Vertexes[m_id_start].Point
+                Vector_A = self.start
+                for m_i_end in range(Number_of_Edges):                   
+                    Vector_B = self.Edge_List[m_i_end].Vertexes[m_id_end].Point
+                    distance = Vector_B.sub(Vector_A).Length
+                    distance = ( distance / 100.0 ) * self.length * m_mult
+                    Vector_C = Vector_A.add(Vector_B.sub(Vector_A).normalize().multiply( distance ))   
+                    self.end.append(Vector_C)
+            self.visu()                
+            # Update the view
+            self.preview()
+        except ValueError:
+            func.printError_msg("Length must be valid number in percentage !")  
             
 class Rotation():
     """ A rotation object
@@ -1425,7 +1536,7 @@ class RotationEvents(DefineAndConnectEvents):
 
     def defineEvents(self): 
         self.connections_for_slider_changed = {                    
-                             "ObjRot_horizontalSlider"    : "angle_value_changed",
+                             "ObjRot_horizontalSlider"        : "angle_value_changed",
                              }
         self.connections_for_button_pressed = { 
                              "ObjRot_button_select"           : "initialize",
@@ -1435,13 +1546,13 @@ class RotationEvents(DefineAndConnectEvents):
                              "ObjRot_button_apply"            : "application",
                              }                      
         self.connections_for_combobox_changed = {
-                             "ObjRot_comboBox_center"        : "center_value",
-                             "ObjRot_comboBox_axis"          : "axis_value",
+                             "ObjRot_comboBox_center"         : "center_value",
+                             "ObjRot_comboBox_axis"           : "axis_value",
                             }
         self.connections_for_checkbox_toggled = {}
         self.connections_for_spin_changed = {}
         self.connections_for_return_pressed = { 
-                             "ObjRot_lineEdit_angle"           : "angle_value_entered",
+                             "ObjRot_lineEdit_angle"          : "angle_value_entered",
                              }
                              
 class TranslationEvents(DefineAndConnectEvents):
@@ -1452,7 +1563,9 @@ class TranslationEvents(DefineAndConnectEvents):
         DefineAndConnectEvents.__init__(self, self.ui, self.trans)
 
     def defineEvents(self): 
-        self.connections_for_slider_changed = {}
+        self.connections_for_slider_changed = {
+                             "ObjTrans_horizontalSlider"      : "length_value_changed",
+                             }
         self.connections_for_button_pressed = { 
                              "ObjTrans_button_select"         : "initialize",
                              "ObjTrans_button_select_start"   : "select_start",
@@ -1469,15 +1582,18 @@ class TranslationEvents(DefineAndConnectEvents):
                             "ObjTrans_deepCopy"               : "deepCopyFlag",        
                             }
         self.connections_for_spin_changed = {
-                            "ObjTrans_spin"                  : "numberCopies",
+                            "ObjTrans_spin"                   : "numberCopies",
                             }
         self.connections_for_return_pressed = { 
-                             "ObjTrans_start_x"           : "start_x_entered",
-                             "ObjTrans_start_y"           : "start_y_entered",
-                             "ObjTrans_start_z"           : "start_z_entered",
-                             "ObjTrans_end_x"             : "end_x_entered",
-                             "ObjTrans_end_y"             : "end_y_entered",
-                             "ObjTrans_end_z"             : "end_z_entered",
+                             "ObjTrans_start_x"               : "start_x_entered",
+                             "ObjTrans_start_y"               : "start_y_entered",
+                             "ObjTrans_start_z"               : "start_z_entered",
+                             "ObjTrans_end_x"                 : "end_x_entered",
+                             "ObjTrans_end_y"                 : "end_y_entered",
+                             "ObjTrans_end_z"                 : "end_z_entered",
+                             
+                             "ObjTrans_lineEdit_length_seg"   : "length_value_entered",
+                             
                              }
         
 ####################################################################################
@@ -1550,7 +1666,27 @@ class ObjectRotationTab():
                              "ObjTrans_end_z"             : "end_z_entered",
                              }
                                            
-                            
+#        self.connections_for_ObjRot_slider_changed = {                    
+#                             "ObjRot_horizontalSlider"    : "angle_value_changed",
+#                             }
+#                             
+#        self.connections_for_ObjRot_button_pressed = { 
+#                             "ObjRot_button_select"           : "initialize",
+#                             "ObjRot_button_select_center"    : "select_center",
+#                             "ObjRot_button_select_axis"      : "select_axis",
+#                             "ObjRot_button_reset"            : "reset",
+#                             "ObjRot_button_apply"            : "application",
+#                             }
+#                             
+#        self.connections_for_ObjRot_combobox_changed = {
+#                             "ObjRot_comboBox_center"        : "center_value",
+#                             "ObjRot_comboBox_axis"          : "axis_value",
+#                            }
+#                              
+#        self.connections_for_ObjRot_return_pressed = { 
+#                             "ObjRot_lineEdit_angle"           : "angle_value_entered",
+#                             }
+                             
         self.connections_for_button_clicked = {
                              "button_quit"               : "quit_clicked", 
                             }
@@ -1559,31 +1695,53 @@ class ObjectRotationTab():
             #print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("clicked()"),getattr(self,str(m_val))) 
-                                       
+       
+        # Connect to Rotation functions 
+#        for m_key, m_val in self.connections_for_ObjRot_button_pressed.items():
+#            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+#            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
+#                                   QtCore.SIGNAL("pressed()"),getattr(self.rot, str(m_val)))                   
+#                                           
+#        for m_key, m_val in self.connections_for_ObjRot_combobox_changed.items():
+#            print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )                            
+#            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
+#                                   QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),getattr(self.rot, str(m_val)))     
+#        
+#        for m_key, m_val in self.connections_for_ObjRot_slider_changed.items():
+#            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+#            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
+#                                   QtCore.SIGNAL("valueChanged(int)"),getattr(self.rot, str(m_val)))        
+#        
+#        for m_key, m_val in self.connections_for_ObjRot_return_pressed.items():
+#            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.rot, str(m_val))) )
+#            QtCore.QObject.connect(getattr(self.ui, str(m_key)),
+#                                   QtCore.SIGNAL("returnPressed()"),getattr(self.rot, str(m_val)))
+                                   
         # Connect to Translation functions
         for m_key, m_val in self.connections_for_ObjTrans_button_pressed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
+            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("pressed()"),getattr(self.trans, str(m_val)))
                                         
         for m_key, m_val in self.connections_for_ObjTrans_combobox_changed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )                            
+            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )                            
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),getattr(self.trans, str(m_val)))     
 
         for m_key, m_val in self.connections_for_ObjTrans_checkbox_toggled.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
+            #print_msg( "Connecting : " + str(m_key) + " and " + str(m_val) )
+            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL(_fromUtf8("toggled(bool)")),getattr(self.trans, str(m_val)))  
               
 
         for m_key, m_val in self.connections_for_ObjTrans_spin_changed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
+            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) ) 
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("valueChanged(int)"),getattr(self.trans, str(m_val))) 
 
         for m_key, m_val in self.connections_for_ObjTrans_return_pressed.items():
-            #func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
+            func.print_msg( "Connecting : " + str(getattr(self.ui, str(m_key))) + " and " + str(getattr(self.trans, str(m_val))) )
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("returnPressed()"),getattr(self.trans, str(m_val)))
                                    

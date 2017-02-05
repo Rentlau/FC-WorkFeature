@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>396</width>
-    <height>610</height>
+    <height>701</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <iconset>
     <normaloff>../Icons/WF_wf.svg</normaloff>../Icons/WF_wf.svg</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout_34">
+  <layout class="QGridLayout" name="gridLayout_13">
    <item row="0" column="0">
     <widget class="QScrollArea" name="scrollArea">
      <property name="frameShape">
@@ -40,8 +40,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>365</width>
-        <height>593</height>
+        <width>376</width>
+        <height>642</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_128">
@@ -225,7 +225,7 @@
            <item row="0" column="0">
             <widget class="QTabWidget" name="tabWidget">
              <property name="currentIndex">
-              <number>2</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="Point_Tab1_3">
               <attribute name="title">
@@ -511,6 +511,95 @@ Be aware that if the plane is not extended enough the intersection Point is stil
                 </widget>
                </item>
                <item row="8" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_59">
+                 <item>
+                  <widget class="QPushButton" name="button_points_projection">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create projected point(s) on the choosen main planes.&lt;/p&gt;&lt;p&gt;- Select one (or several) Point(s) and/or one (or several) Axis.&lt;/p&gt;&lt;p&gt;Define the projection plane if needed.&lt;/p&gt;&lt;p&gt;It can be either&lt;/p&gt;&lt;p&gt;XY plane,&lt;/p&gt;&lt;p&gt;YZ plane,&lt;/p&gt;&lt;p&gt;XZ plane or&lt;/p&gt;&lt;p&gt;All 3 planes&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>Projected Points</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../Icons/WF_projectedPoint.svg</normaloff>../Icons/WF_projectedPoint.svg</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="point_proj_comboBox">
+                   <property name="maximumSize">
+                    <size>
+                     <width>60</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The projection plane(s)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="currentIndex">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>All</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>XY plane</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>YZ plane</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>XZ plane</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="9" column="0">
+                <spacer name="verticalSpacer_19">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>252</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="Point_Tab2_3">
+              <attribute name="title">
+               <string>Point 2/3</string>
+              </attribute>
+              <attribute name="toolTip">
+               <string>Create Point(s)</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="0" column="0">
                 <widget class="QPushButton" name="button_point_line_point">
                  <property name="toolTip">
                   <string>Point(s)=(Point(s),Line(s)):
@@ -545,30 +634,7 @@ Be aware that if the plane is not extended enough the intersection Point is stil
                  </property>
                 </widget>
                </item>
-               <item row="9" column="0">
-                <spacer name="verticalSpacer_19">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>252</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="Point_Tab2_3">
-              <attribute name="title">
-               <string>Point 2/3</string>
-              </attribute>
-              <attribute name="toolTip">
-               <string>Create Point(s)</string>
-              </attribute>
-              <layout class="QGridLayout" name="gridLayout_13">
-               <item row="0" column="0">
+               <item row="1" column="0">
                 <widget class="QPushButton" name="button_twolines_point">
                  <property name="toolTip">
                   <string>Point(s)=(Line(s),Line(s)):
@@ -598,7 +664,7 @@ The Vector AB perpendicular to the first and second Line.
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
+               <item row="2" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_47">
                  <property name="sizeConstraint">
                   <enum>QLayout::SetFixedSize</enum>
@@ -666,7 +732,7 @@ respecting to the choosen reference starting point.</string>
                  </item>
                 </layout>
                </item>
-               <item row="2" column="0">
+               <item row="3" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_48">
                  <item>
                   <widget class="QPushButton" name="button_distPoint">
@@ -767,7 +833,7 @@ Can be negative for the reverse direction!</string>
                  </item>
                 </layout>
                </item>
-               <item row="3" column="0">
+               <item row="4" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_49">
                  <item>
                   <widget class="QPushButton" name="button_cut_wire_point">
@@ -833,7 +899,7 @@ An object must also be seleted but before any Wire to cut all his edges!	</strin
                  </item>
                 </layout>
                </item>
-               <item row="4" column="0">
+               <item row="5" column="0">
                 <widget class="QRadioButton" name="button_click_for_point">
                  <property name="toolTip">
                   <string>Create a set of Points on a Plane perpendicular to the view at location of mouse clicks.
@@ -862,7 +928,7 @@ MB2 and MB3 can still be used for view zoom and view rotation.
                  </property>
                 </widget>
                </item>
-               <item row="5" column="0">
+               <item row="6" column="0">
                 <widget class="QPushButton" name="button_object_base_point">
                  <property name="toolTip">
                   <string>Create Base Point of all selected Object(s).</string>
@@ -882,7 +948,7 @@ MB2 and MB3 can still be used for view zoom and view rotation.
                  </property>
                 </widget>
                </item>
-               <item row="6" column="0">
+               <item row="7" column="0">
                 <widget class="QPushButton" name="button_object_center_mass_point">
                  <property name="toolTip">
                   <string>Create Center of Mass Point of all selected Object(s).</string>
@@ -902,7 +968,7 @@ MB2 and MB3 can still be used for view zoom and view rotation.
                  </property>
                 </widget>
                </item>
-               <item row="7" column="0">
+               <item row="8" column="0">
                 <widget class="QPushButton" name="button_object_Npoint">
                  <property name="toolTip">
                   <string>Create a set of points from selected Objetcs:
@@ -919,29 +985,6 @@ MB2 and MB3 can still be used for view zoom and view rotation.
                  <property name="icon">
                   <iconset>
                    <normaloff>../Icons/WF_objectNPoints.svg</normaloff>../Icons/WF_objectNPoints.svg</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>32</width>
-                   <height>32</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="0">
-                <widget class="QPushButton" name="button_point_to_sketch">
-                 <property name="toolTip">
-                  <string>Transform Point(s) in Sketch's Point(s) by projection onto the Sketch's Plane:
-- First select an existing Sketch;
-- Select as much as Points needed;
-Then click on this button.</string>
-                 </property>
-                 <property name="text">
-                  <string>Point(s) to Sketch</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../Icons/WF_2Sketch.svg</normaloff>../Icons/WF_2Sketch.svg</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -970,7 +1013,7 @@ Then click on this button.</string>
               <attribute name="title">
                <string>Point 3/3</string>
               </attribute>
-              <layout class="QGridLayout" name="gridLayout_2">
+              <layout class="QGridLayout" name="gridLayout_22">
                <item row="0" column="0">
                 <widget class="QPushButton" name="button_points_load">
                  <property name="toolTip">
@@ -1121,6 +1164,29 @@ One (x, y, z) triplet per line seperated by blank.
                 </layout>
                </item>
                <item row="3" column="0">
+                <widget class="QPushButton" name="button_point_to_sketch">
+                 <property name="toolTip">
+                  <string>Transform Point(s) in Sketch's Point(s) by projection onto the Sketch's Plane:
+- First select an existing Sketch;
+- Select as much as Points needed;
+Then click on this button.</string>
+                 </property>
+                 <property name="text">
+                  <string>Point(s) to Sketch</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../Icons/WF_2Sketch.svg</normaloff>../Icons/WF_2Sketch.svg</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>32</width>
+                   <height>32</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
                 <spacer name="verticalSpacer_35">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -1151,7 +1217,7 @@ One (x, y, z) triplet per line seperated by blank.
            <item row="0" column="0">
             <widget class="QTabWidget" name="tabWidget_2">
              <property name="currentIndex">
-              <number>2</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="Axis_Tab1_3">
               <attribute name="title">
@@ -2278,20 +2344,87 @@ MB2 and MB3 can still be used for view zoom and view rotation.</string>
                <string>Wire</string>
               </attribute>
               <layout class="QGridLayout" name="gridLayout_7">
-               <item row="2" column="0">
-                <spacer name="verticalSpacer_3">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="button_points_to_polygon">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wire=(N Points):&lt;/p&gt;&lt;p&gt;Create a Polygon (wire) from a set of points.&lt;/p&gt;&lt;p&gt;- First select several Points (at least 2);&lt;/p&gt;&lt;p&gt;- Then push this button&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
-                 <property name="sizeHint" stdset="0">
+                 <property name="text">
+                  <string>Make Polygon</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>../Icons/WF_makePolygon.svg</normaloff>../Icons/WF_makePolygon.svg</iconset>
+                 </property>
+                 <property name="iconSize">
                   <size>
-                   <width>20</width>
-                   <height>588</height>
+                   <width>32</width>
+                   <height>32</height>
                   </size>
                  </property>
-                </spacer>
+                </widget>
                </item>
                <item row="1" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QPushButton" name="button_points_to_convex_2Dpolygon">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wire=(N Points):&lt;/p&gt;&lt;p&gt;Create a Convex 2D Polygon (wire) from a set of points.&lt;/p&gt;&lt;p&gt;The Convex Polygon is the outer limit of all selected Points.&lt;/p&gt;&lt;p&gt; - First select several Points (at least 3);&lt;/p&gt;&lt;p&gt;    Define the projection plane if needed.&lt;/p&gt;&lt;p&gt;    It can be either&lt;/p&gt;&lt;p&gt;    XY plane,&lt;/p&gt;&lt;p&gt;    YZ plane,&lt;/p&gt;&lt;p&gt;    XZ plane or&lt;/p&gt;&lt;p&gt;    All 3 planes&lt;/p&gt;&lt;p&gt;- Then push the button.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>Convex 2D Polygon</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../Icons/WF_convexPolygon.svg</normaloff>../Icons/WF_convexPolygon.svg</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="point_proj_comboBox_2">
+                   <property name="maximumSize">
+                    <size>
+                     <width>60</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The projection plane(s)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="currentIndex">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>All</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>XY plane</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>YZ plane</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>XZ plane</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="2" column="0">
                 <widget class="QPushButton" name="button_4points_bezier">
                  <property name="toolTip">
                   <string>Bezier Cubic=(4 Points):
@@ -2314,25 +2447,18 @@ Create a Wire (Bezier Cubic) from 4 selected points.
                  </property>
                 </widget>
                </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="button_points_to_polygon">
-                 <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wire=(N Points):&lt;/p&gt;&lt;p&gt;Create a Polygon (wire) from a set of points.&lt;/p&gt;&lt;p&gt;- First select several Points (at least 2);&lt;/p&gt;&lt;p&gt;- Then push this button&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <item row="3" column="0">
+                <spacer name="verticalSpacer_3">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
                  </property>
-                 <property name="text">
-                  <string>Make Wire</string>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>../Icons/WF_makePolygon.svg</normaloff>../Icons/WF_makePolygon.svg</iconset>
-                 </property>
-                 <property name="iconSize">
+                 <property name="sizeHint" stdset="0">
                   <size>
-                   <width>32</width>
-                   <height>32</height>
+                   <width>20</width>
+                   <height>588</height>
                   </size>
                  </property>
-                </widget>
+                </spacer>
                </item>
               </layout>
              </widget>
@@ -2648,10 +2774,7 @@ in &quot;Ori. Pref.&quot;  TAB</string>
                <item row="0" column="0">
                 <widget class="QPushButton" name="button_threepoints_plane">
                  <property name="toolTip">
-                  <string>Plane=(3 Points):
-Create a Plane crossing 3 Points.
-- First select 3 different points
-- Second push this button</string>
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Plane=(3 Points):&lt;/p&gt;&lt;p&gt;Create a Plane crossing 3 Points.&lt;/p&gt;&lt;p&gt; - Select at least 3 Points and/or&lt;/p&gt;&lt;p&gt;    Select at least 2 Line/Edge(s)&lt;/p&gt;&lt;p&gt;- Second push this button&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
                   <string>Plane=(3 Points)</string>
@@ -4184,60 +4307,6 @@ Original code from HighlightDifference.FCMacro
           </attribute>
           <layout class="QGridLayout" name="gridLayout_8">
            <item row="0" column="0">
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QPushButton" name="button_rotate_image">
-               <property name="text">
-                <string>Rotate</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="Image_comboBox_axis_rotate">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>60</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="layoutDirection">
-                <enum>Qt::LeftToRight</enum>
-               </property>
-               <property name="currentIndex">
-                <number>0</number>
-               </property>
-               <item>
-                <property name="text">
-                 <string>X</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Y</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Z</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
               <widget class="QPushButton" name="button_scale_image">
@@ -4371,7 +4440,7 @@ Note that some options are invalid regarding the image's plane.</string>
              </item>
             </layout>
            </item>
-           <item row="2" column="0">
+           <item row="1" column="0">
             <spacer name="verticalSpacer_4">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -4394,7 +4463,7 @@ Note that some options are invalid regarding the image's plane.</string>
            <item row="0" column="0">
             <widget class="QTabWidget" name="tabWidget_9">
              <property name="currentIndex">
-              <number>2</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="align_tab_2">
               <attribute name="title">
@@ -5532,7 +5601,7 @@ NB:
               <attribute name="title">
                <string>Translate</string>
               </attribute>
-              <layout class="QGridLayout" name="gridLayout_60">
+              <layout class="QGridLayout" name="gridLayout_20">
                <item row="0" column="0">
                 <widget class="QFrame" name="frame_12">
                  <property name="sizePolicy">
@@ -5671,8 +5740,66 @@ On the last result the same Sketch is both link to Pad001 but also still to Pad.
                     </item>
                    </layout>
                   </item>
+                  <item row="3" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_84">
+                    <item>
+                     <widget class="QPushButton" name="ObjTrans_button_reset">
+                      <property name="minimumSize">
+                       <size>
+                        <width>40</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Reset</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_12">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="ObjTrans_button_apply">
+                      <property name="minimumSize">
+                       <size>
+                        <width>40</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>60</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Apply</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
                   <item row="2" column="0">
                    <widget class="QTabWidget" name="tabWidget_12">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
                     <property name="currentIndex">
                      <number>0</number>
                     </property>
@@ -5705,7 +5832,7 @@ On the last result the same Sketch is both link to Pad001 but also still to Pad.
                         <property name="flat">
                          <bool>false</bool>
                         </property>
-                        <layout class="QGridLayout" name="gridLayout_113">
+                        <layout class="QGridLayout" name="gridLayout_19">
                          <item row="0" column="0">
                           <widget class="QComboBox" name="ObjTrans_comboBox_start">
                            <property name="enabled">
@@ -5729,8 +5856,11 @@ On the last result the same Sketch is both link to Pad001 but also still to Pad.
                              <height>16777215</height>
                             </size>
                            </property>
+                           <property name="toolTip">
+                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose here your starting Point(s)&lt;/p&gt;&lt;p&gt;it can be either:&lt;/p&gt;&lt;p&gt;  - The Origin point (0,0,0),&lt;/p&gt;&lt;p&gt;  - The Base point of the selected object(s),&lt;/p&gt;&lt;p&gt;  - The Center point of the selected object(s),&lt;/p&gt;&lt;p&gt;  - One selected Point by mouse&lt;/p&gt;&lt;p&gt;  - One of the extrema of One Segment/Edge&lt;/p&gt;&lt;p&gt;  - A user defined Points&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
                            <property name="currentIndex">
-                            <number>3</number>
+                            <number>0</number>
                            </property>
                            <property name="sizeAdjustPolicy">
                             <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
@@ -5757,6 +5887,11 @@ On the last result the same Sketch is both link to Pad001 but also still to Pad.
                            </item>
                            <item>
                             <property name="text">
+                             <string>From Segment</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
                              <string>To define</string>
                             </property>
                            </item>
@@ -5769,15 +5904,18 @@ On the last result the same Sketch is both link to Pad001 but also still to Pad.
                            </property>
                            <property name="minimumSize">
                             <size>
-                             <width>50</width>
+                             <width>0</width>
                              <height>0</height>
                             </size>
                            </property>
                            <property name="maximumSize">
                             <size>
-                             <width>120</width>
-                             <height>16777215</height>
+                             <width>100</width>
+                             <height>29</height>
                             </size>
+                           </property>
+                           <property name="toolTip">
+                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Once Point(s) or one Segment selected;&lt;/p&gt;&lt;p&gt;Click this button to activate the selection !&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
                            <property name="text">
                             <string>Select</string>
@@ -5909,278 +6047,351 @@ On the last result the same Sketch is both link to Pad001 but also still to Pad.
                      <attribute name="title">
                       <string>End</string>
                      </attribute>
-                     <layout class="QGridLayout" name="gridLayout_118">
-                      <item row="0" column="0">
-                       <widget class="QGroupBox" name="groupBox_23">
-                        <property name="minimumSize">
-                         <size>
-                          <width>150</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="title">
-                         <string>Ending Point :</string>
-                        </property>
-                        <property name="flat">
-                         <bool>false</bool>
-                        </property>
-                        <layout class="QGridLayout" name="gridLayout_119">
-                         <item row="0" column="0">
-                          <widget class="QComboBox" name="ObjTrans_comboBox_end">
-                           <property name="enabled">
-                            <bool>true</bool>
-                           </property>
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>100</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="maximumSize">
-                            <size>
-                             <width>120</width>
-                             <height>16777215</height>
-                            </size>
-                           </property>
-                           <property name="currentIndex">
-                            <number>0</number>
-                           </property>
-                           <property name="sizeAdjustPolicy">
-                            <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-                           </property>
-                           <item>
-                            <property name="text">
-                             <string>Origin</string>
-                            </property>
+                     <widget class="QGroupBox" name="groupBox_23">
+                      <property name="geometry">
+                       <rect>
+                        <x>9</x>
+                        <y>9</y>
+                        <width>183</width>
+                        <height>225</height>
+                       </rect>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>150</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="title">
+                       <string>Ending Point :</string>
+                      </property>
+                      <property name="flat">
+                       <bool>false</bool>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_12">
+                       <item row="0" column="0">
+                        <widget class="QComboBox" name="ObjTrans_comboBox_end">
+                         <property name="enabled">
+                          <bool>true</bool>
+                         </property>
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>100</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>120</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="currentIndex">
+                          <number>0</number>
+                         </property>
+                         <property name="sizeAdjustPolicy">
+                          <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                         </property>
+                         <item>
+                          <property name="text">
+                           <string>Origin</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>Base Obj.</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>Center Obj.(s)</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>To select</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>To define</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>Relative</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QPushButton" name="ObjTrans_button_select_end">
+                         <property name="enabled">
+                          <bool>true</bool>
+                         </property>
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>100</width>
+                           <height>29</height>
+                          </size>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Once Point(s) selected;&lt;/p&gt;&lt;p&gt;Click this button to activate the selection !&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>Select</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="0">
+                        <layout class="QGridLayout" name="gridLayout_120">
+                         <item row="2" column="0">
+                          <layout class="QGridLayout" name="gridLayout_121">
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_14">
+                             <property name="text">
+                              <string>Z :</string>
+                             </property>
+                            </widget>
                            </item>
-                           <item>
-                            <property name="text">
-                             <string>Base Obj.</string>
-                            </property>
+                           <item row="0" column="1">
+                            <widget class="QLineEdit" name="ObjTrans_end_z">
+                             <property name="enabled">
+                              <bool>false</bool>
+                             </property>
+                             <property name="minimumSize">
+                              <size>
+                               <width>90</width>
+                               <height>0</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>200</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Please Enter a new coordinate and type RETURN to validate!</string>
+                             </property>
+                             <property name="text">
+                              <string>0.0</string>
+                             </property>
+                            </widget>
                            </item>
-                           <item>
-                            <property name="text">
-                             <string>Center Obj.(s)</string>
-                            </property>
-                           </item>
-                           <item>
-                            <property name="text">
-                             <string>To select</string>
-                            </property>
-                           </item>
-                           <item>
-                            <property name="text">
-                             <string>To define</string>
-                            </property>
-                           </item>
-                           <item>
-                            <property name="text">
-                             <string>Relative</string>
-                            </property>
-                           </item>
-                          </widget>
+                          </layout>
                          </item>
                          <item row="1" column="0">
-                          <widget class="QPushButton" name="ObjTrans_button_select_end">
-                           <property name="enabled">
-                            <bool>true</bool>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>100</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="maximumSize">
-                            <size>
-                             <width>120</width>
-                             <height>16777215</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>Select</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="2" column="0">
-                          <layout class="QGridLayout" name="gridLayout_120">
-                           <item row="2" column="0">
-                            <layout class="QGridLayout" name="gridLayout_121">
-                             <item row="0" column="0">
-                              <widget class="QLabel" name="label_14">
-                               <property name="text">
-                                <string>Z :</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="0" column="1">
-                              <widget class="QLineEdit" name="ObjTrans_end_z">
-                               <property name="enabled">
-                                <bool>false</bool>
-                               </property>
-                               <property name="minimumSize">
-                                <size>
-                                 <width>90</width>
-                                 <height>0</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>200</width>
-                                 <height>16777215</height>
-                                </size>
-                               </property>
-                               <property name="toolTip">
-                                <string>Please Enter a new coordinate and type RETURN to validate!</string>
-                               </property>
-                               <property name="text">
-                                <string>0.0</string>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </item>
-                           <item row="1" column="0">
-                            <layout class="QGridLayout" name="gridLayout_122">
-                             <item row="0" column="0">
-                              <widget class="QLabel" name="label_15">
-                               <property name="text">
-                                <string>Y :</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="0" column="1">
-                              <widget class="QLineEdit" name="ObjTrans_end_y">
-                               <property name="enabled">
-                                <bool>false</bool>
-                               </property>
-                               <property name="minimumSize">
-                                <size>
-                                 <width>90</width>
-                                 <height>0</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>200</width>
-                                 <height>16777215</height>
-                                </size>
-                               </property>
-                               <property name="toolTip">
-                                <string>Please Enter a new coordinate and type RETURN to validate!</string>
-                               </property>
-                               <property name="text">
-                                <string>0.0</string>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </item>
+                          <layout class="QGridLayout" name="gridLayout_122">
                            <item row="0" column="0">
-                            <layout class="QGridLayout" name="gridLayout_123">
-                             <item row="0" column="0">
-                              <widget class="QLabel" name="label_16">
-                               <property name="text">
-                                <string>X :</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item row="0" column="1">
-                              <widget class="QLineEdit" name="ObjTrans_end_x">
-                               <property name="enabled">
-                                <bool>false</bool>
-                               </property>
-                               <property name="minimumSize">
-                                <size>
-                                 <width>90</width>
-                                 <height>0</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>200</width>
-                                 <height>16777215</height>
-                                </size>
-                               </property>
-                               <property name="toolTip">
-                                <string>Please Enter a new coordinate and type RETURN to validate!</string>
-                               </property>
-                               <property name="text">
-                                <string>0.0</string>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
+                            <widget class="QLabel" name="label_15">
+                             <property name="text">
+                              <string>Y :</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QLineEdit" name="ObjTrans_end_y">
+                             <property name="enabled">
+                              <bool>false</bool>
+                             </property>
+                             <property name="minimumSize">
+                              <size>
+                               <width>90</width>
+                               <height>0</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>200</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Please Enter a new coordinate and type RETURN to validate!</string>
+                             </property>
+                             <property name="text">
+                              <string>0.0</string>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                         <item row="0" column="0">
+                          <layout class="QGridLayout" name="gridLayout_123">
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_16">
+                             <property name="text">
+                              <string>X :</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QLineEdit" name="ObjTrans_end_x">
+                             <property name="enabled">
+                              <bool>false</bool>
+                             </property>
+                             <property name="minimumSize">
+                              <size>
+                               <width>90</width>
+                               <height>0</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>200</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Please Enter a new coordinate and type RETURN to validate!</string>
+                             </property>
+                             <property name="text">
+                              <string>0.0</string>
+                             </property>
+                            </widget>
                            </item>
                           </layout>
                          </item>
                         </layout>
-                       </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </widget>
+                    <widget class="QWidget" name="tab">
+                     <attribute name="title">
+                      <string>Seg.</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_21">
+                      <item row="0" column="0">
+                       <layout class="QVBoxLayout" name="verticalLayout">
+                        <item>
+                         <widget class="QSlider" name="ObjTrans_horizontalSlider">
+                          <property name="enabled">
+                           <bool>false</bool>
+                          </property>
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>39</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>16777215</width>
+                            <height>16777215</height>
+                           </size>
+                          </property>
+                          <property name="toolTip">
+                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Once a Segment(s) is selected as starting Point(s),&lt;/p&gt;&lt;p&gt;This slider define the ending Point(s) by defining the relative distance from the starting Point(s).&lt;/p&gt;&lt;p&gt;Slider values are : -1000% to 1000%&lt;/p&gt;&lt;p&gt;100% mean full length of the Segment(s) with one ends as starting point(s)&lt;/p&gt;&lt;p&gt;-100% mean full length of the Segment(s) by reversing the starting Point(s)&lt;/p&gt;&lt;p&gt;0% means you do not Translate your selected Object(s)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          </property>
+                          <property name="minimum">
+                           <number>-1000</number>
+                          </property>
+                          <property name="maximum">
+                           <number>1000</number>
+                          </property>
+                          <property name="value">
+                           <number>100</number>
+                          </property>
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="tickPosition">
+                           <enum>QSlider::TicksBothSides</enum>
+                          </property>
+                          <property name="tickInterval">
+                           <number>20</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_85">
+                          <item>
+                           <widget class="QLineEdit" name="ObjTrans_lineEdit_length_seg">
+                            <property name="enabled">
+                             <bool>false</bool>
+                            </property>
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                             <size>
+                              <width>40</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>60</width>
+                              <height>16777215</height>
+                             </size>
+                            </property>
+                            <property name="toolTip">
+                             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter here a more precise value :&lt;/p&gt;&lt;p&gt;100% mean full length of the Segment(s) with one ends as starting point(s)&lt;/p&gt;&lt;p&gt;-100% mean full length of the Segment(s) by reversing the starting Point(s)&lt;/p&gt;&lt;p&gt;Maximum values allowed [-1000, 1000]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                            </property>
+                            <property name="text">
+                             <string>100.0</string>
+                            </property>
+                            <property name="maxLength">
+                             <number>32769</number>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLabel" name="label_length_segment">
+                            <property name="maximumSize">
+                             <size>
+                              <width>60</width>
+                              <height>16777215</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string> (%)</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                       </layout>
+                      </item>
+                      <item row="1" column="0">
+                       <spacer name="verticalSpacer">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>138</height>
+                         </size>
+                        </property>
+                       </spacer>
                       </item>
                      </layout>
                     </widget>
                    </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_84">
-                    <item>
-                     <widget class="QPushButton" name="ObjTrans_button_reset">
-                      <property name="minimumSize">
-                       <size>
-                        <width>40</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>60</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>Reset</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_12">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>20</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="ObjTrans_button_apply">
-                      <property name="minimumSize">
-                       <size>
-                        <width>40</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>60</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>Apply</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
                   </item>
                  </layout>
                 </widget>

@@ -15,7 +15,7 @@
    id="svg2918"
    sodipodi:version="0.32"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="WF_makePolygon.svg"
+   sodipodi:docname="WF_convexPolygon.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.1">
   <defs
@@ -270,6 +270,39 @@
        id="radialGradient3264-9-6-1-1"
        xlink:href="#linearGradient3144"
        inkscape:collect="always" />
+    <radialGradient
+       r="34.345188"
+       fy="672.79736"
+       fx="225.26402"
+       cy="672.79736"
+       cx="225.26402"
+       gradientTransform="matrix(1,0,0,0.6985294,0,202.82863)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3264-9-6-1-1-9"
+       xlink:href="#linearGradient3144"
+       inkscape:collect="always" />
+    <radialGradient
+       r="34.345188"
+       fy="672.79736"
+       fx="225.26402"
+       cy="672.79736"
+       cx="225.26402"
+       gradientTransform="matrix(1,0,0,0.6985294,0,202.82863)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3264-9-6-1-1-9-8"
+       xlink:href="#linearGradient3144"
+       inkscape:collect="always" />
+    <radialGradient
+       r="34.345188"
+       fy="672.79736"
+       fx="225.26402"
+       cy="672.79736"
+       cx="225.26402"
+       gradientTransform="matrix(1,0,0,0.6985294,0,202.82863)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3264-9-6-1-1-9-8-6"
+       xlink:href="#linearGradient3144"
+       inkscape:collect="always" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -479,6 +512,102 @@
         <ellipse
            style="fill:url(#radialGradient3264-9-6-1-1);fill-opacity:1;stroke:none"
            id="path3134-2-9-0-4-8-5"
+           transform="matrix(0.8513023,-0.5246754,0.5246754,0.8513023,-338.69692,214.19328)"
+           cx="225.26402"
+           cy="672.79736"
+           rx="34.345188"
+           ry="23.991123" />
+      </g>
+    </g>
+    <g
+       id="g5734-5-3-5-2-8"
+       transform="translate(-13.416262,11.494864)">
+      <circle
+         transform="matrix(-0.9992315,0.03919708,-0.03919708,-0.9992315,0,0)"
+         id="path3187-6-5-7-2-9-9-7-8-5-8"
+         style="display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:0.58431373;fill-rule:nonzero;stroke:none;stroke-width:5.79999971;marker:none;enable-background:accumulate"
+         cx="-54.289261"
+         cy="-16.205133"
+         r="7.0931091" />
+      <g
+         inkscape:export-ydpi="7.0721951"
+         inkscape:export-xdpi="7.0721951"
+         inkscape:export-filename="/home/yorik/Documents/Lab/Draft/icons/line.png"
+         transform="matrix(-0.14037891,0.00375861,-0.00375861,-0.14037891,83.443368,103.46311)"
+         id="g3154-5-3-9-9-6-0-4">
+        <circle
+           style="fill:#0079ff;fill-opacity:1;stroke:#001833;stroke-width:5.80000019;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path2162-1-0-7-4-7-5-2"
+           cx="197.14285"
+           cy="655.2193"
+           r="48.57143" />
+        <ellipse
+           style="fill:url(#radialGradient3264-9-6-1-1-9);fill-opacity:1;stroke:none"
+           id="path3134-2-9-0-4-8-5-8"
+           transform="matrix(0.8513023,-0.5246754,0.5246754,0.8513023,-338.69692,214.19328)"
+           cx="225.26402"
+           cy="672.79736"
+           rx="34.345188"
+           ry="23.991123" />
+      </g>
+    </g>
+    <g
+       id="g5734-5-3-5-2-8-4"
+       transform="translate(-26.558841,19.643263)">
+      <circle
+         transform="matrix(-0.9992315,0.03919708,-0.03919708,-0.9992315,0,0)"
+         id="path3187-6-5-7-2-9-9-7-8-5-8-4"
+         style="display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:0.58431373;fill-rule:nonzero;stroke:none;stroke-width:5.79999971;marker:none;enable-background:accumulate"
+         cx="-54.289261"
+         cy="-16.205133"
+         r="7.0931091" />
+      <g
+         inkscape:export-ydpi="7.0721951"
+         inkscape:export-xdpi="7.0721951"
+         inkscape:export-filename="/home/yorik/Documents/Lab/Draft/icons/line.png"
+         transform="matrix(-0.14037891,0.00375861,-0.00375861,-0.14037891,83.443368,103.46311)"
+         id="g3154-5-3-9-9-6-0-4-1">
+        <circle
+           style="fill:#0079ff;fill-opacity:1;stroke:#001833;stroke-width:5.80000019;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path2162-1-0-7-4-7-5-2-2"
+           cx="197.14285"
+           cy="655.2193"
+           r="48.57143" />
+        <ellipse
+           style="fill:url(#radialGradient3264-9-6-1-1-9-8);fill-opacity:1;stroke:none"
+           id="path3134-2-9-0-4-8-5-8-0"
+           transform="matrix(0.8513023,-0.5246754,0.5246754,0.8513023,-338.69692,214.19328)"
+           cx="225.26402"
+           cy="672.79736"
+           rx="34.345188"
+           ry="23.991123" />
+      </g>
+    </g>
+    <g
+       id="g5734-5-3-5-2-8-4-4"
+       transform="translate(-12.102003,28.974495)">
+      <circle
+         transform="matrix(-0.9992315,0.03919708,-0.03919708,-0.9992315,0,0)"
+         id="path3187-6-5-7-2-9-9-7-8-5-8-4-8"
+         style="display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:0.58431373;fill-rule:nonzero;stroke:none;stroke-width:5.79999971;marker:none;enable-background:accumulate"
+         cx="-54.289261"
+         cy="-16.205133"
+         r="7.0931091" />
+      <g
+         inkscape:export-ydpi="7.0721951"
+         inkscape:export-xdpi="7.0721951"
+         inkscape:export-filename="/home/yorik/Documents/Lab/Draft/icons/line.png"
+         transform="matrix(-0.14037891,0.00375861,-0.00375861,-0.14037891,83.443368,103.46311)"
+         id="g3154-5-3-9-9-6-0-4-1-9">
+        <circle
+           style="fill:#0079ff;fill-opacity:1;stroke:#001833;stroke-width:5.80000019;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path2162-1-0-7-4-7-5-2-2-5"
+           cx="197.14285"
+           cy="655.2193"
+           r="48.57143" />
+        <ellipse
+           style="fill:url(#radialGradient3264-9-6-1-1-9-8-6);fill-opacity:1;stroke:none"
+           id="path3134-2-9-0-4-8-5-8-0-5"
            transform="matrix(0.8513023,-0.5246754,0.5246754,0.8513023,-338.69692,214.19328)"
            cx="225.26402"
            cy="672.79736"

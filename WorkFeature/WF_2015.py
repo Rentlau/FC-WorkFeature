@@ -68,7 +68,7 @@ from   WF_ObjRot_2015 import *
 from   WF_Utils_2015 import *
 
 global myRelease
-myRelease = "2016_12_30"
+myRelease = "2017_02_05"
 
 
 import time
@@ -169,6 +169,8 @@ m_widthPlane = 10.0
 m_extensionPlane = 50.0
 m_extensionAxis = 50.0
 m_attach_point = "Mid"
+m_projection_plane = "All"
+m_projection_plane2 = "All"
 m_letter = "A"
 
 m_cut_selectObjects = []
@@ -4489,7 +4491,6 @@ def plot_points_random():
     - Then push the button.
     """
     msg=verbose
-    msg = 1
     import numpy as np
     
     error_msg = """Unable to create random Point(s) :
@@ -4527,22 +4528,182 @@ def plot_points_random():
         Number_of_Points, Point_List = m_sel.get_points(getfrom=["Points"])
         if msg != 0:
             print_msg("Number_of_Points=" + str(Number_of_Points))
-    
+        Number_of_Edges, Edge_List = m_sel.get_segments(getfrom=["Segments","Curves"])
+        if msg != 0:        
+            print_msg("Number_of_Edges=" + str(Number_of_Edges))
+     
     m_limit = m_distanceRandomPoints/2
     if (Number_of_Points >= 1):
-        m_Point = Point_List[-1]
-        for m_point_id in range(m_numberRandomPoint):
-            x, y, z = m_distanceRandomPoints* np.random.random_sample((3,)) - m_limit
-            x -= m_Point.Point.x
-            y -= m_Point.Point.y
-            z -= m_Point.Point.z
-            plot_point(Base.Vector(x, y, z), part, name, str(m_dir))
+        for m_Point in Point_List:
+        #m_Point = Point_List[-1]
+            try :
+                for m_point_id in range(m_numberRandomPoint):
+                    x, y, z = m_distanceRandomPoints* np.random.random_sample((3,)) - m_limit
+                    x += m_Point.Point.x
+                    y += m_Point.Point.y
+                    z += m_Point.Point.z
+                    Point_User_Name = plot_point(Base.Vector(x, y, z), part, name, str(m_dir))
+                    print_point(Base.Vector(x, y, z),str(Point_User_Name) + result_msg + " at :")
+            except:
+                printError_msg(error_msg)
+    elif (Number_of_Edges >= 1):
+        for m_line in Edge_List:
+            try:
+                if not hasattr(m_line,'discretize'):
+                    break
+                m_points = m_line.discretize(m_numberRandomPoint)
+                for m_point in m_points:
+                    x, y, z = m_distanceRandomPoints* np.random.random_sample((3,)) - m_limit
+                    x += m_point.x
+                    y += m_point.y
+                    z += m_point.z
+                    Point_User_Name = plot_point(Base.Vector(x, y, z), part, name, str(m_dir))
+                    print_point(Base.Vector(x, y, z),str(Point_User_Name) + result_msg + " at :")
+            except:
+                printError_msg(error_msg)
     else:
-        for m_point_id in range(m_numberRandomPoint):
-            x, y, z = m_distanceRandomPoints* np.random.random_sample((3,)) - m_limit
-            plot_point(Base.Vector(x, y, z), part, name, str(m_dir))
-       
-              
+        try:
+            for m_point_id in range(m_numberRandomPoint):
+                x, y, z = m_distanceRandomPoints* np.random.random_sample((3,)) - m_limit
+                Point_User_Name = plot_point(Base.Vector(x, y, z), part, name, str(m_dir))
+                print_point(Base.Vector(x, y, z),str(Point_User_Name) + result_msg + " at :")
+        except:
+            printError_msg(error_msg)
+
+
+def sel_projection(*argc):
+    """ Projection plane by combo box.
+    Options :
+    All
+    XY plane
+    YZ plane
+    XZ plane
+    """
+    global m_projection_plane
+    global verbose
+    msg=verbose
+    if msg != 0:
+        print_msg("Projection plane location by combo box !")
+    m_projection_plane = "All"    
+    if str(*argc) == "XY plane":
+        m_projection_plane = "XY"
+    if str(*argc) == "YZ plane":
+        m_projection_plane = "YZ"
+    if str(*argc) == "XZ plane":
+        m_projection_plane = "XZ"
+        
+    if msg != 0:
+        print_msg("argc is " + str(*argc) + " and Projection plane " + str(m_attach_point) + " selected !")    
+
+
+def plot_projected_points():
+    """Create projected point(s) on the choosen main planes.
+    - Select one (or several) Point(s) and/or one (or several) Axis.
+    Define the projection plane if needed.
+    It can be either
+    XY plane,
+    YZ plane,
+    XZ plane or
+    All 3 planes
+    """
+    msg=verbose
+    
+    error_msg = """Unable to create projected Point(s) :
+    - Select one (or several) Point(s) and/or one (or several) Axis.
+    Define the projection plane if needed.
+    It can be either
+    XY plane,
+    YZ plane,
+    XZ plane or
+    All 3 planes
+    - Then push the button.
+    """
+    result_msg = " : projected Point(s) created !"
+    
+    createFolders('WorkPoints')   
+    m_dir = 'Set' 
+    name = "ProjectedPoint"
+    part = "Part::Feature"
+        
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None 
+    
+    try:
+        m_r = App.ActiveDocument.getObject("WorkPoints").newObject("App::DocumentObjectGroup", str(m_dir))
+    except:
+        printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")
+        return None
+    m_dir = m_r.Name
+    
+    m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    if msg != 0:
+        print_msg(str(m_selEx))
+    m_sel = Selection(m_selEx)
+    if not m_sel :
+        print_msg("Unable to create a Selection Object !") 
+        return  None      
+    if msg != 0:
+        print_msg(str(m_sel))
+
+    try:        
+        Number_of_Points, Point_List = m_sel.get_points(getfrom=["Points"])
+        if msg != 0:
+            print_msg("Number_of_Points=" + str(Number_of_Points)) 
+        Number_of_Edges, Edge_List = m_sel.get_segments(getfrom=["Segments","Curves","Planes","Objects"])
+        if msg != 0:        
+            print_msg("Number_of_Edges=" + str(Number_of_Edges))           
+          
+        my_point_list = []
+        if (Number_of_Edges >= 1):
+            for Selected_Edge in Edge_List:
+                Vector_A = Selected_Edge.valueAt( 0.0 )
+                Vector_B = Selected_Edge.valueAt( Edge_List[0].Length )
+                my_point_list.append(Vector_A)
+                my_point_list.append(Vector_B)
+                    
+        if (Number_of_Points >= 1):
+            for Selected_Point in Point_List:
+                my_point_list.append(Selected_Point.Point)
+                
+        for m_point in my_point_list:        
+            x = m_point.x
+            y = m_point.y
+            z = m_point.z
+            if m_projection_plane == "All" or  m_projection_plane == "XY":
+                Vector_A = Base.Vector(x, y, 0.0)
+                Vector_B = Base.Vector(x, y, z)
+                Point_User_Name = plot_point(Vector_A, part, name, str(m_dir))
+                print_point(Vector_A,str(Point_User_Name) + result_msg + " at :")            
+                Axis_User_Name, axis = plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis_ProjectionToXY", grp=str(m_dir))
+                try:
+                    Gui.ActiveDocument.getObject(Axis_User_Name).DrawStyle = "Dotted"
+                except:
+                    print_msg("Not able to set DrawStyle !")
+            if m_projection_plane == "All" or  m_projection_plane == "YZ":
+                Vector_A = Base.Vector(0.0, y, z)
+                Vector_B = Base.Vector(x, y, z)      
+                Point_User_Name = plot_point(Vector_A, part, name, str(m_dir))
+                print_point(Vector_A,str(Point_User_Name) + result_msg + " at :")
+                Axis_User_Name, axis = plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis_ProjectionToYZ", grp=str(m_dir))
+                try:
+                    Gui.ActiveDocument.getObject(Axis_User_Name).DrawStyle = "Dotted"
+                except:
+                    print_msg("Not able to set DrawStyle !")
+            if m_projection_plane == "All" or  m_projection_plane == "XZ":
+                Vector_A = Base.Vector(x, 0.0, z)
+                Vector_B = Base.Vector(x, y, z)       
+                Point_User_Name = plot_point(Vector_A, part, name, str(m_dir))
+                print_point(Vector_A,str(Point_User_Name) + result_msg + " at :")
+                Axis_User_Name, axis = plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis_ProjectionToXZ", grp=str(m_dir))
+                try:
+                    Gui.ActiveDocument.getObject(Axis_User_Name).DrawStyle = "Dotted"
+                except:
+                    print_msg("Not able to set DrawStyle !")  
+    except:
+        printError_msg(error_msg)          
+
+
 def plot_centerObjectAxes():
     """ Create 3 Axes XY, and Z at center point of all selected objects.
     """
@@ -6225,7 +6386,7 @@ def numberLine2(value):
             return
         m_numberLine2  = int(value)
         if m_numberLine2 == 0:
-           m_numberLine2 = 1 
+            m_numberLine2 = 1 
         if msg != 0:
             print_msg("New number is :" + str(m_numberLine2))
     except ValueError:
@@ -6478,7 +6639,7 @@ def vertexToSketch(points,sketch):
         m_p2 = App.Base.Vector(m_point.Point)
         # App.Base.Placement.multVec
         # multVector(Vector) -> Vector
-	  # Compute the transformed vector using the placement
+	    # Compute the transformed vector using the placement
         Projection1 = m_rec1.Placement.multVec(m_p1)
         Projection2 = m_p2.projectToPlane(m_sketch.Placement.Base, m_rec2N)
         # Append the Projection
@@ -6608,7 +6769,7 @@ def circleToSketch(circles, sketch):
         m_p3 = App.Base.Vector(m_Vertex2.Point)
         m_p4 = App.Base.Vector(m_Vertex2.Point)    
     
-    	  # Compute the transformed vector using the placement
+    	# Compute the transformed vector using the placement
         Projection1 = m_rec1.Placement.multVec(m_p1)
         Projection2 = m_p2.projectToPlane(m_sketch.Placement.Base, m_rec2N)
         Projection3 = m_rec1.Placement.multVec(m_p3)
@@ -6648,7 +6809,6 @@ options = {'Edge' : edgeToSketch, 'Vertex' : vertexToSketch, 'Face' : faceToSket
 def toSketch():
 
     msg=verbose
-    msg =1
     
     m_actDoc=get_ActiveDocument(info=msg)
     m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
@@ -6667,7 +6827,6 @@ def circle_toSketch():
     Then click on this button.
     """
     msg=verbose
-    msg=1
     m_tolerance=1e-12
 
     m_actDoc = get_ActiveDocument(info=msg)
@@ -6838,7 +6997,7 @@ def circle_toSketch():
         else:
             printError_msg(error_msg)
     else:
-       printError_msg(error_msg)
+        printError_msg(error_msg)
     return
 
 
@@ -6919,7 +7078,7 @@ def line_toSketch():
         else:
             printError_msg(error_msg)
     else:
-       printError_msg(error_msg)
+        printError_msg(error_msg)
     return
 
 
@@ -7006,7 +7165,7 @@ def line_toSketch_old():
         else:
             printError_msg(error_msg)
     else:
-       printError_msg(error_msg)
+        printError_msg(error_msg)
     return
     
     
@@ -7029,7 +7188,8 @@ def plot_linecenterCircle():
     centered on the Point, perpendicular to the Axis 
     with the given radius.
     """
-    msg=0
+    msg=verbose
+    
     global m_radiusCircle
     createFolders('WorkCircles')
     error_msg = "Unable to create a Circle : \nSelect one Edge and one Point only!"
@@ -7069,7 +7229,8 @@ def plot_linepointCircle():
     """Select an Axis and a Point to create a Circle
     centered on the Axis and tangenting the Point.
     """
-    msg=0
+    msg=verbose
+        
     createFolders('WorkCircles')
     error_msg = "Unable to create a Circle : \nSelect one Edge and one Point only!"
     result_msg = " : Circle tangented to a Point created !"
@@ -7109,7 +7270,8 @@ def plot_linepointCircle():
 def plot_3pointsArc():
     """Select 3 Points to create an Arc.
     """
-    msg=0
+    msg=verbose
+    
     createFolders('WorkArcs')
     error_msg = "Unable to create an Arc: \nSelect 3 Points only!"
     result_msg = " : Arc from 3 points created !"
@@ -7151,7 +7313,8 @@ def plot_3pointsArc():
 def plot_3pointsCircle():
     """Select 3 Points to create a Circle.
     """
-    msg=0
+    msg=verbose
+    
     createFolders('WorkCircles')
     error_msg = "Unable to create a Circle : \nSelect 3 Points only!"
     result_msg = " : Circle from 3 points created !"
@@ -7298,8 +7461,8 @@ def plot_cutCircle():
                 for i in range(m_numberCircleCut):
                     pivot2 = pivot1 + pivot0
                     if msg != 0:
-                       print_msg("Start at =" +str(pivot1))
-                       print_msg("End   at =" +str(pivot2))     
+                        print_msg("Start at =" +str(pivot1))
+                        print_msg("End   at =" +str(pivot2))     
                     Arc_User_Name, arc = plot_arc(center, normal, radius, pivot1, pivot2, part, name)
                     if biColor != 0:
                         if red == 0:
@@ -7360,8 +7523,8 @@ def plot_cutCircle():
                 for i in range(m_numberCircleCut):
                     pivot2 = pivot1 + pivot0
                     if msg != 0:
-                       print_msg("Start at =" +str(pivot1))
-                       print_msg("End   at =" +str(pivot2))     
+                        print_msg("Start at =" +str(pivot1))
+                        print_msg("End   at =" +str(pivot2))     
                     Arc_User_Name, arc = plot_arc(center, normal, radius, pivot1, pivot2, part, name)
                     if biColor != 0:
                         if red == 0:
@@ -7382,7 +7545,8 @@ def plot_cutCircle():
 def plot_3pointsEllipse():
     """Select a center and 2 Points to create an Ellipse.
     """
-    msg=0
+    msg=verbose
+    
     createFolders('WorkCircles')
     error_msg = "Unable to create a Ellipse : \nSelect one Center and 2 Points only!"
     result_msg = " : Ellipse from 3 points created !"
@@ -7413,11 +7577,102 @@ def plot_3pointsEllipse():
     except:
         printError_msg(error_msg)
 
-    
+ 
 def plot_3PointsPlane():
+    """ Plane=(3 Points):
+    Create a Plane crossing 3 Points.
+     - Select at least 3 Points and/or
+    Select at least 2 Line/Edge(s)
+    """    
+    msg=verbose
+    
+    error_msg = """Unable to create Plane(s) :
+    Select at least 3 Points and/or
+    Select at least 2 Line/Edge(s) !"""
+    result_msg = " : Plane(s) created !"
+    
+    createFolders('WorkPlanes')
+    m_dir = 'Set'
+    name = "WorkPlane"
+    part = "Part::Feature"
+    
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None
+    
+    try:
+        m_r = App.ActiveDocument.getObject("WorkPoints").newObject("App::DocumentObjectGroup", str(m_dir))
+    except:
+        printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")
+        return None
+    m_dir = m_r.Name
+        
+    m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    if msg != 0:
+        print_msg(str(m_selEx))
+    m_sel = Selection(m_selEx)
+    if not m_sel :
+        print_msg("Unable to create a Selection Object !") 
+        return  None      
+    if msg != 0:
+        print_msg(str(m_sel))
+    
+    
+
+    try:
+        Number_of_Points, Point_List = m_sel.get_points(getfrom=["Points","Segments","Curves"])
+        if msg != 0:
+            print_msg("Number_of_Points=" + str(Number_of_Points))
+
+        points = []
+        m_i=0
+        if Number_of_Points < 3 :
+            printError_msg(error_msg)
+            
+        for m_i in xrange(0,Number_of_Points,3):
+            if m_i+1 > Number_of_Points or  m_i+2 > Number_of_Points:
+                break    
+            Point_A = Point_List[m_i+0].Point
+            points.append(Point_A)
+            Point_B = Point_List[m_i+1].Point
+            points.append(Point_B)
+            Point_C = Point_List[m_i+2].Point
+            points.append(Point_C)
+            if msg != 0:
+                print_point(Point_A, msg="Point_A : ")
+                print_point(Point_B, msg="Point_B : ")
+                print_point(Point_C, msg="Point_C : ")
+            
+            Vector_Center = meanVectorsPoint(points,info=msg)
+            #Vector_Center = centerBBVectorsPoint(points, info=0)
+            xmax, xmin, ymax, ymin, zmax, zmin = minMaxVectorsLimits(points,info=0)
+            #print_point(Vector_Center, msg="Center of A, B and C : ")
+  
+            length = xmax - xmin
+            if (ymax - ymin) > length:
+                length = ymax - ymin
+            if (zmax - zmin) > length:
+                length = zmax - zmin
+            print_msg("length = " +str(length))
+            
+            Edge_Vector = Point_B - Point_A
+            #Edge_Length = Edge_Vector.Length
+            Edge_Length = length * 1.5
+            AC_Vector = Point_C - Point_A
+            Plane_Point = Vector_Center
+            Plane_Normal = Edge_Vector.cross( AC_Vector )
+            
+            Plane_User_Name, plane = plot_plane(Edge_Length, Edge_Length, Plane_Point, Plane_Normal, part, name, str(m_dir))
+            print_msg(str(Plane_User_Name) + result_msg )
+    except:
+        printError_msg(error_msg)
+
+    
+def plot_3PointsPlane_old():
     """ Create a Plane from 3 Points.
     """
-    msg=0
+    msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Plane : \nSelect three points only !"
     result_msg = " : Plane created !"
@@ -7474,7 +7729,8 @@ def plot_3PointsPlane():
 def plot_2PointsPlane():
     """ Create a Plane from 2 Points.
     """
-    msg=0
+    msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Plane : \nSelect two points only !"
     result_msg = " : Plane created !"
@@ -7529,7 +7785,6 @@ def plot_NPointsPlane():
     - First select several Points (at least 3).
     """
     msg=verbose
-    msg=1
     
     try:
         import numpy as np
@@ -7618,6 +7873,7 @@ def plot_axisPointPlane():
     """
     global verbose
     msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Plane : \nSelect one Line and one Point only, \nwith the Point NOT on the Line !"
     result_msg = " : Plane created !"
@@ -7679,7 +7935,8 @@ def plot_axisPointPlane():
 def plot_perpendicularAxisPointPlane():
     """ Create a Plane perpendicular to a Line a crossing a Point.
     """    
-    msg=0
+    msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Plane : \nSelect one Line and one point only !"
     result_msg = " : Plane created !"
@@ -7734,7 +7991,8 @@ def extensionPlanePointPlane(value):
 def plot_planePointPlane():
     """ Create a plane passing through a Point and parallel to a given Plane.
     """    
-    msg=0
+    msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Plane : \nSelect one Plane and one Point only !"
     result_msg = " : Plane created !"
@@ -7784,7 +8042,8 @@ def plot_planeAxisPlane():
     """ Use a plane and a line to create Plane perpedicular 
     to the first Plane and crossing the Line
     """
-    msg=0
+    msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Planes : \nSelect one Line and one Plane only !"
     result_msg = " : Plane created !"
@@ -7866,7 +8125,7 @@ def numberPlane(value):
             return
         m_numberPlane  = int(value)
         if m_numberPlane == 0:
-           m_numberPlane = 1 
+            m_numberPlane = 1 
         if msg != 0:
             print_msg("New number is :" + str(m_numberPlane))
     except ValueError:
@@ -7877,7 +8136,8 @@ def distPlane(value):
     """ Respond to the change in Distance between plane value from the text box.
     """
     global verbose
-    msg=verbose        
+    msg=verbose
+            
     try:
         # First we check if a valid number have been entered
         global m_distPlane
@@ -7907,6 +8167,7 @@ def plot_distPlane():
     global m_numberPlane
     global m_distPlane
     msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Plane(s) : \nSelect at least one Plane !"
     result_msg = " : Plane(s) created !"
@@ -8070,6 +8331,7 @@ def plot_extensionPlane():
     """
     global verbose
     msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Plane : \nSelect Plane(s) only !"
     result_msg = " : Plane created !"
@@ -8117,6 +8379,7 @@ def plot_clickForPlane2():
     a radius of 20 mm
     """
     msg=verbose
+    
     createFolders('WorkPlanes')
 
     m_actDoc = get_ActiveDocument(info=msg)
@@ -8192,7 +8455,8 @@ def plot_clickForPlane2():
 def plot_centerObjectPlanes():
     """ Create 3 Planes XY, YZ and XZ at center point of all selected objects.
     """
-    msg=0
+    msg=verbose
+    
     createFolders('WorkPlanes')
     error_msg = "Unable to create Planes : \nSelect at least one object !"
     result_msg = " : Planes created !"
@@ -8364,15 +8628,15 @@ def plot_bezier():
 
 def points_toPolygon():
     """ Create a polygon from a set of points.
-    - First select several Points
+    - First select several Points (at least 2).
     
     """
-    msg=verbose
+    msg = verbose
     m_close = False
     m_face = False
 
     error_msg = """Unable to create Polygon :
-    Select at least two points !"""
+    Select at least 2 points !"""
     result_msg = " : Polygon created !"
     
     createFolders('WorkWires')
@@ -8421,10 +8685,176 @@ def points_toPolygon():
             printError_msg(error_msg)
     except:
         printError_msg(error_msg) 
-           
+
+def sel_projection2(*argc):
+    """ Projection plane by combo box.
+    Options :
+    All
+    XY plane
+    YZ plane
+    XZ plane
+    """
+    global m_projection_plane2
+    global verbose
+    msg=verbose
     
+    if msg != 0:
+        print_msg("Projection plane location by combo box !")
+    m_projection_plane2 = "All"    
+    if str(*argc) == "XY plane":
+        m_projection_plane2 = "XY"
+    if str(*argc) == "YZ plane":
+        m_projection_plane2 = "YZ"
+    if str(*argc) == "XZ plane":
+        m_projection_plane2 = "XZ"
+        
+    if msg != 0:
+        print_msg("argc is " + str(*argc) + " and Projection plane " + str(m_attach_point) + " selected !")    
+
+
+
+def Plot_convex2Dpolygon():
+    """Create a Convex 2D Polygon (wire) from a set of points.
+    The Convex Polygon is the outer limit of all selected Points.
+    - First select several Points (at least 3);
+    Define the projection plane if needed.
+    It can be either
+    XY plane,
+    YZ plane,
+    XZ plane or
+    All 3 planes
+    - Then push the button.
+    """
+    def isLeftTurn(p1, p2, p3):
+        """ Return True if 3 2D points can be reached with a left turn. 
+        """
+        return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p1[1] - p3[1]) * (p2[0] - p3[0]) > tolerance
+    
+    def convex2Dpolygon (m_array): 
+        # Sort on x
+        m_array.sort(key=lambda tup: tup[0])
+        m_top = []
+        m_bottom = []
+        for m_p in m_array :
+            while len(m_top) >= 2 and not isLeftTurn(m_p, m_top[-1], m_top[-2]) :
+                m_top.pop()
+            m_top.append(m_p)
+            while len(m_bottom) >=2 and not isLeftTurn(m_bottom[-2], m_bottom[-1], m_p):
+                m_bottom.pop()
+            m_bottom.append(m_p)
+        return m_bottom[:-1] + m_top[:0:-1]
+    
+    msg = verbose
+    msg = 1
+    m_close = True
+    m_face = False
+
+    error_msg = """Unable to create Polygon :
+    Select at least 3 points !
+    Define the projection plane if needed.
+    It can be either
+    XY plane,
+    YZ plane,
+    XZ plane or
+    All 3 planes
+    - Then push the button."""
+    result_msg = " : Convex Polygon(s) created !"
+    
+    createFolders('WorkWires')
+    m_dir = 'Set'
+    name = "Convex_2DPolygon_from_N_Points"
+    part = "Part::Feature"
+    
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None
+        
+    try:
+        m_r = App.ActiveDocument.getObject("WorkWires").newObject("App::DocumentObjectGroup", str(m_dir))
+    except:
+        printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")
+        return None
+    m_dir = m_r.Name
+    
+    Selection = get_SelectedObjects(info=msg, printError=False)
+    try:
+        SelectedObjects = Selection        
+        Number_of_Points = SelectedObjects[0]
+        if msg != 0:
+            print_msg("Number_of_Points=" + str(Number_of_Points))
+        if Number_of_Points > 2:
+            m_x = 0.0
+            m_y = 0.0
+            m_z = 0.0
+            m_array = []
+            m_polygon = []
+            matriz = []
+            Point_List = SelectedObjects[3]
+            if msg != 0:
+                print_msg("Point_List=" + str(Point_List))     
+            if m_projection_plane2 == "All" or  m_projection_plane2 == "XY":
+                for m_point in Point_List:
+                    x = m_point.Point.x
+                    y = m_point.Point.y
+                    z = m_point.Point.z
+                    m_array.append((x,y))
+                if msg != 0:
+                    print_msg("m_array=" + str(m_array))
+                m_polygon = convex2Dpolygon (m_array)
+                for m_2Dpoint in m_polygon:
+                    m_x = m_2Dpoint[0]
+                    m_y = m_2Dpoint[1]
+                    m_z = 0.0
+                    matriz.append(FreeCAD.Vector(m_x,m_y,m_z))       
+                curve_User_Name, curve = plot_curve(matriz, m_close, m_face, part, name, str(m_dir))
+                print_msg(str(curve_User_Name) + result_msg + " into : " + str(m_dir))
+            m_array = []
+            m_polygon = []
+            matriz = []
+            if m_projection_plane2 == "All" or  m_projection_plane2 == "YZ":
+                for m_point in Point_List:
+                    x = m_point.Point.x
+                    y = m_point.Point.y
+                    z = m_point.Point.z
+                    m_array.append((y,z))
+                if msg != 0:
+                    print_msg("m_array=" + str(m_array))
+                m_polygon = convex2Dpolygon (m_array)
+                for m_2Dpoint in m_polygon:
+                    m_x = 0.0
+                    m_y = m_2Dpoint[0]
+                    m_z = m_2Dpoint[1]
+                    matriz.append(FreeCAD.Vector(m_x,m_y,m_z))       
+                curve_User_Name, curve = plot_curve(matriz, m_close, m_face, part, name, str(m_dir))
+                print_msg(str(curve_User_Name) + result_msg + " into : " + str(m_dir))
+            m_array = []
+            m_polygon = []
+            matriz = []
+            if m_projection_plane2 == "All" or  m_projection_plane2 == "XZ":
+                for m_point in Point_List:
+                    x = m_point.Point.x
+                    y = m_point.Point.y
+                    z = m_point.Point.z
+                    m_array.append((x,z))
+                if msg != 0:
+                    print_msg("m_array=" + str(m_array))
+                m_polygon = convex2Dpolygon (m_array)
+                for m_2Dpoint in m_polygon:
+                    m_x = m_2Dpoint[0]
+                    m_y = 0.0
+                    m_z = m_2Dpoint[1]
+                    matriz.append(FreeCAD.Vector(m_x,m_y,m_z))       
+                curve_User_Name, curve = plot_curve(matriz, m_close, m_face, part, name, str(m_dir))
+                print_msg(str(curve_User_Name) + result_msg + " into : " + str(m_dir))
+                 
+        else:
+            printError_msg(error_msg)
+    except:
+        printError_msg(error_msg)
+        
+                    
 def plot_4points_bezier():
-    msg=1
+    msg=verbose
     
     def Bezier_Cubic_curve(poles): 
         #draws a degree 3 rational bspline from first to last point,
@@ -8562,7 +8992,8 @@ def volumBBox_toggled(flag):
 def plot_boundingBoxes():
     """Create bounding boxes around each of selected object(s).
     """
-    msg=verbose    
+    msg=verbose
+        
     createVol=BBox_volum
     
     createFolders('WorkBoxes')
@@ -8624,7 +9055,8 @@ def plot_boundingBoxes():
 def plot_boundingBox():
     """ Create one bounding box around all of selected object(s).
     """
-    msg=verbose  
+    msg=verbose
+      
     createVol=BBox_volum
     
     createFolders('WorkBoxes')
@@ -8695,7 +9127,7 @@ def plot_axisPointCylinder():
     selected point.
     """
     msg=verbose
-    msg=1
+
     createFolders('WorkObjects')
     error_msg = "Unable to create a Cylinder : \n"\
                 "Select one or several couple of one Axis and one point!"  
@@ -8783,7 +9215,7 @@ def plot_axisPointCube():
     selected point.
     """
     msg=verbose
-    msg=1
+ 
     createFolders('WorkObjects')
     error_msg = "Unable to create a Cube : \n"\
                 "Select or several couple of one Axis and one point!"  
@@ -8859,6 +9291,7 @@ def plot_centerSphere():
         at the selected point(s).
     """
     msg=verbose
+    
     createFolders('WorkObjects')
 
     error_msg =\
@@ -9113,12 +9546,12 @@ def makeDome(point, radius, frequency):
     m_new_icoPts = []
     m_icoPts.append(Base.Vector(0.0, 0.0, m_radius))
     for i in range(10):
-      m_icoCos = m_latRad * math.cos(i*m_ang36)
-      m_icoSin = m_latRad * math.sin(i*m_ang36)
-      if i%2 == 0:
-        m_icoPts.append(Base.Vector(m_icoSin, m_icoCos, m_icoLat))
-      else:
-        m_icoPts.append(Base.Vector(m_icoSin, m_icoCos, -1 * m_icoLat))
+        m_icoCos = m_latRad * math.cos(i*m_ang36)
+        m_icoSin = m_latRad * math.sin(i*m_ang36)
+        if i%2 == 0:
+            m_icoPts.append(Base.Vector(m_icoSin, m_icoCos, m_icoLat))
+        else:
+            m_icoPts.append(Base.Vector(m_icoSin, m_icoCos, -1 * m_icoLat))
 
     m_icoPts.append(Base.Vector(0.0, 0.0, -1 * m_radius))
     if msg != 0:
@@ -9237,6 +9670,7 @@ def plot_centerDome():
     Original code from : Ulrich Brammer
     """
     msg=verbose
+    
     createFolders('WorkObjects')
 
     error_msg =\
@@ -9315,7 +9749,8 @@ def letter(value):
     """ Respond to the change in letter from the text box.
     """
     global verbose
-    msg=verbose        
+    msg=verbose
+            
     try:
         # First we check if a valid number have been entered
         global m_letter
@@ -9336,9 +9771,12 @@ def plot_letter():
     NB:
         Change the text and his size if needed
     """
+    msg=verbose
+    
     import Draft
                     
-    def text_at(Plane_Point,Plane_Normal):                            
+    def text_at(Plane_Point,Plane_Normal):
+        msg=verbose                            
         text_User_Name, text = plot_text(m_letter, m_sizeLetter, part, name, grp="WorkObjects")
         text_Point = text.Shape.BoundBox.Center
         text_Normal = text.Shape.Faces[0].normalAt(0,0)
@@ -9366,8 +9804,6 @@ def plot_letter():
         m_newplace = App.Placement(m_base.add(m_move), m_rot )
         text.Placement = m_newplace
     
-    msg=verbose
-    msg=1
 
     createFolders('WorkObjects')
     error_msg = "Unable to create Text : \nSelect one Plane and one Point !"
@@ -9469,10 +9905,10 @@ def plot_revolution():
     if m_actDoc.Name:     
         m_sel = Gui.Selection.getSelection(m_actDoc.Name)
         if msg != 0:
-             print_msg("m_sel=" + str(m_sel))
+            print_msg("m_sel=" + str(m_sel))
         m_num_objs = len(m_sel)
         if msg != 0:
-             print_msg("m_num_objs=" + str(m_num_objs))
+            print_msg("m_num_objs=" + str(m_num_objs))
 
     Selection = get_SelectedObjects(info=msg, printError=False)
     try:
@@ -9556,6 +9992,7 @@ def sel_transition(*argc):
     """
     global sweep_transition
     msg=verbose
+    
     if msg != 0:
         print_msg("Transition between profiles choice by combo box !")
     sweep_transition = 2    
@@ -9800,7 +10237,6 @@ def plot_sectionBeam():
     """
     import WorkFeature.Beam.beam as BM
     msg=verbose
-    msg=1
     
     createFolders('WorkObjects')
     error_msg =\
@@ -9857,10 +10293,9 @@ def plot_sectionSweep2():
       Or if the Section wire is not closed, only a shell will be created.
     """
     msg=verbose
-    msg=1
 
     # variable makeSolid = 1 to create solid, 0 to create surfaces
-    makeSolid=ssweep_solid
+    makeSolid=sweep_solid
     isFrenet=sweep_frenet
     transition=sweep_transition
     
@@ -10031,6 +10466,7 @@ def sel_imageAxisScale(*argc):
     """
     global imageAxisScale
     msg=verbose
+    
     if msg != 0:
         print_msg("Axis or Plane of Scaling for image choice by combo box !")
     #imageAxisScale = "XY"
@@ -10056,7 +10492,6 @@ def lengthImage(value):
 
 def scale_image():
     msg=verbose
-    msg=1
         
     error_msg = "Unable to scale Image : \n"\
                 "Select at least \n"\
@@ -10316,7 +10751,7 @@ def view_trackCamera():
     try:
         SelectedObjects = m_sel
         if msg != 0:
-             print_msg("SelectedObjects=" + str(SelectedObjects))
+            print_msg("SelectedObjects=" + str(SelectedObjects))
              
         m_edges_num = 0
         for m_obj in SelectedObjects :
@@ -10428,7 +10863,8 @@ def cut_selectObject():
     """
     global myDialog
     global m_cut_selectObjects
-    msg=0
+    msg=verbose
+    
     error_msg = "Select in order:\n"+ \
                 "First, one Object to cut and click 'Select Object' button,\n"+ \
                 "Second, one cutting Line and click 'Select Cut Line' button,\n"+ \
@@ -10452,7 +10888,8 @@ def cut_selectLine():
     """
     global myDialog
     global m_cut_selectObjects
-    msg=0
+    msg=verbose
+    
     error_msg = "Select in order:\n"+ \
                 "First, one Object to cut and click 'Select Object' button,\n"+ \
                 "Second, one cutting Line and click 'Select Cut Line' button,\n"+ \
@@ -10477,7 +10914,8 @@ def cut_selectPlane():
     """  
     global myDialog
     global m_cut_selectObjects
-    msg=0
+    msg=verbose
+    
     error_msg = "Select in order:\n"+ \
                 "First, one Object to cut and click 'Select Object' button,\n"+ \
                 "Second, one cutting Line and click 'Select Cut Line' button,\n"+ \
@@ -10525,6 +10963,7 @@ def plot_cutObject():
     global m_thicknessCutObject
     global verbose
     msg=verbose
+    
     createFolders('WorkObjects')
     error_msg = "Select in order:\n"+ \
                 "First, one Object to cut and click 'Select Object' button,\n"+ \
@@ -11535,8 +11974,8 @@ def object_highlightCommon():
     Original code from : 'JMG, galou and other contributors' 10/2015
     Adapted to WF by   : Rentlau_64 10/2015
     """
-
     msg=verbose
+    
     pass
 #==============================================================================
 # # -*- coding: utf-8 -*-
@@ -11636,10 +12075,10 @@ def object_clearance():
         mindist  = App.ActiveDocument.getObject(OBJ1).Shape.distToShape(App.ActiveDocument.getObject(OBJ2).Shape)[0]
         print_msg("Distance to Second Object is " + str(mindist) + "\n" )        
         if mindist == 0.0:
-            msg = 'POSSIBLE COLLISION DETECTED \n\nCLEARANCE(S) <= 0 \n\nCheck Clearances and Settings !'
+            result = 'POSSIBLE COLLISION DETECTED \n\nCLEARANCE(S) <= 0 \n\nCheck Clearances and Settings !'
         else:
-            msg = 'Object CLEARANCE is '+ str(mindist) +' units !'
-        print_gui_msg(msg)
+            result = 'Object CLEARANCE is '+ str(mindist) +' units !'
+        print_gui_msg(result)
     except:
         printError_msg(error_msg)    
 
@@ -11756,7 +12195,7 @@ def points_distance():
         if msg!=0:
             print_msg("Distance is : " + str(m_dist))
             
-        msg=\
+        result=\
         "Begin : X1 "+str(pos_X1)+" Y1: "+str(pos_Y1)+" Z1: "+str(pos_Z1)+"\n\n" +\
         "End : X2 "+str(pos_X2)+" Y2: "+str(pos_Y2)+" Z2: "+str(pos_Z2)+"\n\n" +\
         "Delta X : "+str(abs(pos_X1-pos_X2))+"\n" +\
@@ -11764,7 +12203,7 @@ def points_distance():
         "Delta Z : "+str(abs(pos_Z1-pos_Z2))+"\n\n" +\
         "Distance : " + str(m_dist)        
 
-        print_gui_msg(msg)
+        print_gui_msg(result)
     except:
         printError_msg(error_msg)        
 
@@ -11814,7 +12253,7 @@ def line_length():
         if hasattr(edge, 'Length'):
             m_length = edge.Length
             
-        msg=\
+        result=\
         "Begin : X1 "+str(pos_X1)+" Y1: "+str(pos_Y1)+" Z1: "+str(pos_Z1)+"\n\n" +\
         "End : X2 "+str(pos_X2)+" Y2: "+str(pos_Y2)+" Z2: "+str(pos_Z2)+"\n\n" +\
         "Delta X : "+str(abs(pos_X1-pos_X2))+"\n" +\
@@ -11823,10 +12262,10 @@ def line_length():
         "Distance : " + str(m_dist)+"\n\n"
         
         if m_length:
-            msg+="Length along edge/arc : " + str(m_length)
+            result+="Length along edge/arc : " + str(m_length)
                   
 
-        print_gui_msg(msg)
+        print_gui_msg(result)
     except:
         printError_msg(error_msg)
 
@@ -11836,7 +12275,6 @@ def object_radius():
     Check for Radius:
 
     """
-    msg=verbose
     error_msg = "INCORRECT Object(s) Selection :\n\nYou Must Select One Arc!"
     
     Selection = Gui.Selection.getSelectionEx()
@@ -11920,6 +12358,7 @@ def camera_orientation():
     by the function getCameraOrientation().
     """
     msg=verbose
+    
     pl = App.Placement()
     pl.Rotation = Gui.ActiveDocument.ActiveView.getCameraOrientation()
     
@@ -11931,7 +12370,7 @@ def camera_orientation():
     cam=Gui.ActiveDocument.ActiveView.getCameraNode()
     direction = cam.orientation.getValue().multVec(coin.SbVec3f(0,0,1)).getValue()
 
-    msg=\
+    result=\
     "___Camera_Orientation____________________"+"\n" +\
     "Radians XYZ Q  : " + str(pl.Rotation.Q)+"\n" +\
     "Degrees XYZ    : " + str(math.degrees(xP)) + " , " +str(math.degrees(yP)) + " , " + str(math.degrees(zP)) +"\n" +\
@@ -11943,7 +12382,7 @@ def camera_orientation():
     "Degrees Angle  : " + str(math.degrees(pl.Rotation.Angle)) +"\n"+\
     "Direction Vector : " + str (direction)
     
-    print_gui_msg(msg)
+    print_gui_msg(result)
 
 
 def object_common():
@@ -12026,7 +12465,6 @@ def object_difference():
     """
     global verbose
     msg=verbose
-    msg=1
     
     m_actDoc = get_ActiveDocument(info=msg)
     if m_actDoc == None:
@@ -12167,6 +12605,7 @@ def object_align2view_old():
     """
     # revoir le point de rotation
     msg=verbose
+    
     error_msg = "INCORRECT Object(s) Selection :\n\nYou Must at least one object !"
     
     try:
@@ -12284,7 +12723,6 @@ def object_copy():
     Authors = 2015 Mario52
     """
     msg=verbose
-    msg=1
             
     error_msg = "INCORRECT Object(s) Selection :\n\nYou Must Select at least one Object !"
     
@@ -12625,7 +13063,6 @@ def object_alignMainAxis():
      -  Third and following clicks will rotate by 180 deg the moving objects on first main axes. 
     """
     msg=verbose
-    msg=1
     
     try:
         import numpy as np
@@ -13176,8 +13613,9 @@ class WorkFeatureTab():
                              "button_point_on_line"        : "plot_alongLinePoint",                             
                              "button_face_center"          : "plot_centerFacePoint",
                              "button_line_face_point"      : "plot_lineFacePoint",
-                             "button_point_face_point"     : "plot_pointFacePoint",
+                             "button_points_projection"    : "plot_projected_points",
                              
+                             "button_point_face_point"     : "plot_pointFacePoint",
                              "button_twolines_point"       : "plot_2LinesPoint",
                              "button_point_line_point"     : "plot_pointLinePoint",
                              "button_distPoint"            : "plot_distPoint",                             
@@ -13186,10 +13624,11 @@ class WorkFeatureTab():
                              "button_object_base_point"    : "plot_baseObjectPoint",
                              "button_object_center_mass_point": "plot_centerMassObjectPoint",
                              "button_object_Npoint"        : "plot_objectNPoints",
-                             "button_point_to_sketch"      : "point_toSketch",
+                             
                              "button_points_load"          : "point_toLoad",
                              "button_points_save"          : "point_toSave",
                              "button_points_random"        : "plot_points_random",
+                             "button_point_to_sketch"      : "point_toSketch",
                              
                              "button_object_axis"          : "plot_centerObjectAxes",
                              "button_twopoints_axis"       : "plot_2PointsAxis",
@@ -13217,6 +13656,7 @@ class WorkFeatureTab():
                              
                              "button_points_to_polygon"    : "points_toPolygon",                        
                              #"button_wire_on_plane"        : "plot_wire_on_plane",
+                             "button_points_to_convex_2Dpolygon" : "Plot_convex2Dpolygon",
                              "button_4points_bezier"       : "plot_4points_bezier",
                                         
                              "button_linecenter_circle"    : "plot_linecenterCircle",
@@ -13292,7 +13732,6 @@ class WorkFeatureTab():
                              "distance_point_on_line"    : "distanceLinePoint",
                              "distance_random_points"    : "distanceRandomPoints",
                              
-                             
                              "extension_twopoints_axis"  : "extensionTwoPointsAxis",
                              "extension_face_normal"     : "extensionFaceNormal",
                              "extension_line_point_axis" : "extensionLinePointAxis",
@@ -13356,6 +13795,8 @@ class WorkFeatureTab():
                              "point_loc_comboBox"        : "sel_attachPoint",
                              "transition_comboBox"       : "sel_transition",
                              "Image_comboBox_axis_scale" : "sel_imageAxisScale",
+                             "point_proj_comboBox"       : "sel_projection",
+                             "point_proj_comboBox_2"     : "sel_projection2",
                             }
                             
                 
@@ -13424,6 +13865,7 @@ class WorkFeatureTab():
     def quit_clicked(self): # quit       
         if self.movable:
             self.dw.close()
+            self.close()
             print_msg( "Close done !")
             return
         else:
@@ -13444,7 +13886,9 @@ class WorkFeatureTab():
         # Create a Parametric 3D Curve object and connect
         self.events3D = ParametricCurve3DEvents(myObject.ui)
         # Create a Surface object and connect
-        self.surface = SurfaceEvents(myObject.ui) 
+        self.surface = SurfaceEvents(myObject.ui)
+        
+        #QtCore.QObject.connect(myObject.ui.button_quit, QtCore.SIGNAL ('clicked()'), myObject.quit_clicked)
                    
     def getMainWindow(self):
         """ Returns the main window
