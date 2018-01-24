@@ -22,8 +22,8 @@
 *   Thanks also to those I forget.                                        *
 ***************************************************************************
 ***************************************************************************
-*   FreeCAD Work Features / version 2016-07                               *
-*   Copyright (c) 2014, 2015, 2016 <rentlau_64>                           *
+*   FreeCAD Work Features / version 2018-01                               *
+*   Copyright (c) 2014, 2015, 2016, 2017, 2018 <rentlau_64>                           *
 *   Code rewrite by <rentlau_64>                                          *
 *   Copyright (c) 2014, 2015 Javier Martinez Garcia                       *
 *   Copyright (c) 2013, 2014 Jonathan Wiedemann                           *
@@ -68,7 +68,7 @@ from   WF_ObjRot_2015 import *
 from   WF_Utils_2015 import *
 
 global myRelease
-myRelease = "2017_02_05"
+myRelease = "2018_01_24"
 
 
 import time
@@ -130,6 +130,8 @@ global sweep_all
 sweep_all = True
 global BBox_volum
 BBox_volum = False
+global BBox_info
+BBox_info = False
 
 m_numberLinePart = 2
 m_numberLineCut = 2
@@ -1194,6 +1196,17 @@ def centerLinePoint(edge,info=0):
         print_point(center,"Center of line selected is : ") 
     return center
 
+def digitsNumber(v):
+    """ Return the number of digit for a given Float or Integer.
+    
+    Negative Sign is removed.
+    Digits after the decimal sign are removed too.
+    """
+    try:
+        return len(str(abs(int(v))))
+    except:
+        return 0
+
 
 def centerCirclePoint(edge,info=0):
     """ Return the center point of the circle.
@@ -1209,13 +1222,31 @@ def distanceBetween(A, B):
     """ Return the distance between 2 points.
     """
     # if isinstance(A,App.Vector) and isinstance(B,App.Vector):
-    try:
-        line = Part.Line(A,B)
-        edge = line.toShape()
-        return edge.Length
-    except Part.OCCError:
-        return 0.0
+#     try:
+#         line = Part.Line(A,B)
+#         edge = line.toShape()
+#         return edge.Length
+#     except Part.OCCError:
+#         return 0.0
+    
+    X1 = A.x
+    Y1 = A.y
+    Z1 = A.z
 
+    X2 = B.x
+    Y2 = B.y
+    Z2 = B.z
+
+    d_X = abs(X1-X2)
+    d_Y = abs(Y1-Y2)
+    d_Z = abs(Z1-Z2)
+    
+    try:
+        d = sqrt(pow(d_X,2)+pow(d_Y, 2)+pow(d_Z, 2))
+        return d
+    except:
+        return 0.0
+    
    
 def angleBetween(e1, e2):
     """ Return the angle (in degrees) between 2 edges.
@@ -1336,6 +1367,23 @@ def intersecPoints(shape1, shape2, info=0):
         return None
     return 
 
+
+def wireDiscretie(wire, numberOfParts=10):
+    """ Return a set of points after discretization of the wire.
+    """
+    wire_points = []
+    
+    if hasattr(wire,'discretize') != True:
+        printError_msg("No discretize function for the wire!")
+        return None
+    
+    wire_points = wire.discretize(numberOfParts)
+    if len(wire_points) <= 2:
+        printError_msg("Unable to discretize the wire!")
+        return None
+
+    return wire_points
+    
 
 def findNormal(wire, forceDiscretize=False, msg=1):
     """Look for the Normal for wire.
@@ -1977,8 +2025,17 @@ def properties_plane(Plane_User_Name):
 def plot_text(letter, size, part, name, grp="WorkObjects"):
     if not(App.ActiveDocument.getObject( grp )):
         App.ActiveDocument.addObject("App::DocumentObjectGroup", grp)
-    m_s = letter 
-    m_ff = "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+    m_s = letter
+    # get the path of the current python script    
+    m_current_path = os.path.realpath(__file__) 
+    m_current_path = os.path.dirname(m_current_path)
+    m_ff = str(m_current_path) + "/FreeFonts/FreeSans.ttf"
+    #m_ff = "/usr/share/fonts/truetype/freefont/FreeSans.ttf"  # for Linux
+    #m_ff = "C:/Windows/Fonts/ARIAL.TTF"                       # for Windows
+####search the path in FreeCAD parameter#####################################
+    #p = App.ParamGet("User parameter:BaseApp/Preferences/Mod/Draft")
+    #m_ff = p.GetString("FontFile")
+####search the path in FreeCAD parameter 11/11/2017##########################
     ss = Draft.makeShapeString(String=m_s,FontFile=m_ff,Size=size,Tracking=0)
     App.ActiveDocument.getObject( grp ).addObject(ss)   
     text_User_Name = ss.Label   
@@ -1992,9 +2049,16 @@ def plot_point(Vector_point, part="Part::Feature", name="Point", grp="WorkPoints
     point.Shape = Part.Vertex( Vector_point )
     App.ActiveDocument.getObject( grp ).addObject(point)
     point_User_Name = point.Label
-    properties_point(point_User_Name)                
+    properties_point(point_User_Name)
     return point_User_Name
 
+#object2 = FreeCAD.ActiveDocument.addObject("App::FeaturePython", "Icon_XPM_In_Macro")                                    #
+#object2.addProperty("App::PropertyString","Identity","ExampleTitle","Identity of object").Identity = "FCSpring"
+##...other Property Data
+##...other Property Data
+##
+#object2.ViewObject.Proxy = IconViewProviderToFile( object2, setIconInMacro(""))              # icon in macro (.XPM)
+#App.ActiveDocument.recompute()
 
 def plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis", grp="WorkAxis", color=(1.00,0.67,0.00)):
     m_diff = Vector_B.sub(Vector_A)
@@ -2281,17 +2345,17 @@ def plot_sweep(traj, section, makeSolid=True, isFrenet=True, transition=2 , part
     sweep.Shape = Sweep
     App.ActiveDocument.getObject( grp ).addObject( sweep )
     obj_User_Name = sweep.Label
-    Gui.ActiveDocument.getObject( obj_User_Name ).PointColor = (1.00,0.67,0.00)
-    Gui.ActiveDocument.getObject( obj_User_Name ).LineColor = (1.00,0.67,0.00)
-    Gui.ActiveDocument.getObject( obj_User_Name ).ShapeColor = (0.00,0.33,1.00)
+    Gui.ActiveDocument.getObject( obj_User_Name ).PointColor   = (1.00,0.67,0.00)
+    Gui.ActiveDocument.getObject( obj_User_Name ).LineColor    = (1.00,0.67,0.00)
+    Gui.ActiveDocument.getObject( obj_User_Name ).ShapeColor   = (0.00,0.33,1.00)
     Gui.ActiveDocument.getObject( obj_User_Name ).Transparency = 75   
     return obj_User_Name, sweep
 
     
-def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=False,info=0):
+def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,
+                 m_grp_info=None,m_grp_vol=None):
     """ Create a bounding box.
     """
-    global verbose
     msg=verbose
     
     m_grp = grp
@@ -2302,14 +2366,43 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=Fals
     m_o_Y = ori_Y
     m_o_Z = ori_Z
     global flag_for_face
-    flag_for_face = True
-    flag_for_volume = createVol
-
-    if info != 0:
+    flag_for_face      = True
+    flag_for_dimension = False
+    flag_for_volume    = False
+    
+    if m_grp_info !=None:
+        flag_for_dimension = True
+    if m_grp_vol != None:
+        flag_for_volume    = True  
+    
+    nameLabel=m_grp.Label
+    
+    if msg != 0:
+        print_msg("Group            : "   + str(m_grp.Label))
+        if m_grp_info !=None:
+            print_msg("Group Info       : "   + str(m_grp_info.Label))
+        if m_grp_vol !=None:
+            print_msg("Group Volume       : "   + str(m_grp_vol.Label))
         print_msg("Xmin, Ymin, Zmin : \n" +
         str(m_o_X) + " , " + str(m_o_Y) + " , " + str(m_o_Z))
         print_msg("Lengths m_l_X , m_l_Y , m_l_Z : \n" +
         str(m_l_X) + " , " + str(m_l_Y) + " , " + str(m_l_Z))
+        print_msg("Flag for face      : " + str(flag_for_face))        
+        print_msg("Flag for dimension : " + str(flag_for_dimension))
+        print_msg("Flag for volume    : " + str(flag_for_volume))
+        
+    if flag_for_dimension :
+        #createDim         = 1          # 1 = create dimension info : 0 = not create dimension info
+        DisplayModeText   = "Screen"    # available : "Screen" or "World"
+        JustificationText = "Center"    # available : "Center" or "Left" or "Right"
+        FontSizeText      = 10.0        # text info dimension
+        TextColorText_R       = 0.0         # text color info red      1 = 255
+        TextColorText_G       = 0.0         # text color info green    1 = 255
+        TextColorText_B       = 0.0         # text color info blue     1 = 255
+        rounded           = 3           # round the info ex: 3 = 3 decimals
+        
+        if flag_for_volume :
+            pass
     
     if (m_l_X != 0.0) and (m_l_Y != 0.0):
         try:
@@ -2322,20 +2415,62 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=Fals
             addObjectToGrp(m_rect,m_grp,info=1)
             definePropOfActiveObj() 
             if flag_for_volume:
-                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False    
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False
+                         
+            if flag_for_dimension :    # section create dimension info
+                pl_0C1 = Draft.makeText([str(round(m_l_X,rounded))],point=App.Vector(m_pl_0.Base.x + (m_l_X/2), m_pl_0.Base.y, m_pl_0.Base.z))
+                pl_0C1.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C1.ViewObject.Justification = JustificationText
+                pl_0C1.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C1.ViewObject.FontSize      = FontSizeText
+                pl_0C1.Label      = "Rectangle_Bo_0X_" + str(round(m_l_X,rounded))
+
+                addObjectToGrp(pl_0C1,m_grp_info,info=1)
+        
+                pl_0C2 = Draft.makeText([str(round(m_l_Y,rounded))],point=App.Vector(m_pl_0.Base.x, m_pl_0.Base.y + (m_l_Y/2), m_pl_0.Base.z))
+                pl_0C2.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C2.ViewObject.Justification = JustificationText
+                pl_0C2.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C2.ViewObject.FontSize      = FontSizeText
+                pl_0C2.Label      = "Rectangle_Bo_0Y_" + str(round(m_l_Y,rounded))
+
+                addObjectToGrp(pl_0C2,m_grp_info,info=1)
+            
         except:
             printError_msg("Rectangle 0 not done !")
+            return
         try:
             m_pl_1 = App.Placement(App.Vector(m_o_X,m_o_Y,m_o_Z+m_l_Z),
                                 App.Rotation(0.0,0.0,0.0))
             m_rect = Draft.makeRectangle(length=m_l_X,height=m_l_Y,
                                 placement=m_pl_1,face=flag_for_face,support=None)                
-            addObjectToGrp(m_rect,m_grp,info=info)
+            addObjectToGrp(m_rect,m_grp,info=1)
             definePropOfActiveObj()
             if flag_for_volume:
-                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False         
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False
+                        
+            if flag_for_dimension :    # section create dimension info
+                pl_0C1 = Draft.makeText([str(round(m_l_X,rounded))],point=App.Vector(m_pl_1.Base.x + (m_l_X/2), m_pl_1.Base.y, m_pl_1.Base.z))
+                pl_0C1.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C1.ViewObject.Justification = JustificationText
+                pl_0C1.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C1.ViewObject.FontSize      = FontSizeText
+                pl_0C1.Label      = "Rectangle_To_1X_" + str(round(m_l_X,rounded))
+
+                addObjectToGrp(pl_0C1,m_grp_info,info=1)
+        
+                pl_0C2 = Draft.makeText([str(round(m_l_Y,rounded))],point=App.Vector(m_pl_1.Base.x, m_pl_1.Base.y + (m_l_Y/2), m_pl_1.Base.z))
+                pl_0C2.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C2.ViewObject.Justification = JustificationText
+                pl_0C2.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C2.ViewObject.FontSize      = FontSizeText
+                pl_0C2.Label      = "Rectangle_To_1Y_" + str(round(m_l_Y,rounded))
+ 
+                addObjectToGrp(pl_0C2,m_grp_info,info=1)
+            
         except:
             printError_msg("Rectangle 1 not done !")
+            return
             
     if (m_l_X != 0.0) and (m_l_Z != 0.0):
         try:
@@ -2343,10 +2478,29 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=Fals
                                 App.Rotation(0.0,0.0,90))
             m_rect = Draft.makeRectangle(length=m_l_X,height=m_l_Z,
                                 placement=m_pl_2,face=flag_for_face,support=None)
-            addObjectToGrp(m_rect,m_grp,info=info)
+            addObjectToGrp(m_rect,m_grp,info=1)
             definePropOfActiveObj()
             if flag_for_volume:
-                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False           
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False
+                
+            if flag_for_dimension :    # section create dimension info
+                pl_0C1 = Draft.makeText([str(round(m_l_X,rounded))],point=App.Vector(m_pl_2.Base.x + (m_l_X/2), m_pl_2.Base.y, m_pl_2.Base.z))
+                pl_0C1.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C1.ViewObject.Justification = JustificationText
+                pl_0C1.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C1.ViewObject.FontSize      = FontSizeText
+                pl_0C1.Label      = "Rectangle_Fr_2X_" + str(round(m_l_X,rounded))
+
+                addObjectToGrp(pl_0C1,m_grp_info,info=1)
+       
+                pl_0C2 = Draft.makeText([str(round(m_l_Z,rounded))],point=App.Vector(m_pl_2.Base.x, m_pl_2.Base.y, m_pl_2.Base.z + (m_l_Z/2)))
+                pl_0C2.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C2.ViewObject.Justification = JustificationText
+                pl_0C2.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C2.ViewObject.FontSize      = FontSizeText
+                pl_0C2.Label      = "Rectangle_Fr_2Z_" + str(round(m_l_Z,rounded))
+
+                addObjectToGrp(pl_0C2,m_grp_info,info=1)
         except:
             printError_msg("Rectangle 2 not done !")
         try:
@@ -2354,10 +2508,29 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=Fals
                                 App.Rotation(0.0,0.0,90))
             m_rect = Draft.makeRectangle(length=m_l_X,height=m_l_Z,
                                 placement=m_pl_3,face=flag_for_face,support=None)
-            addObjectToGrp(m_rect,m_grp,info=info)
+            addObjectToGrp(m_rect,m_grp,info=1)
             definePropOfActiveObj()
             if flag_for_volume:
-                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False        
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False
+                
+            if flag_for_dimension :    # section create dimension info
+                pl_0C1 = Draft.makeText([str(round(m_l_X,rounded))],point=App.Vector(m_pl_3.Base.x + (m_l_X/2), m_pl_3.Base.y, m_pl_3.Base.z))
+                pl_0C1.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C1.ViewObject.Justification = JustificationText
+                pl_0C1.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C1.ViewObject.FontSize      = FontSizeText
+                pl_0C1.Label      = "Rectangle_Re_3X_" + str(round(m_l_X,rounded))
+
+                addObjectToGrp(pl_0C1,m_grp_info,info=1)
+        
+                pl_0C2 = Draft.makeText([str(round(m_l_Z,rounded))],point=App.Vector(m_pl_3.Base.x, m_pl_3.Base.y, m_pl_3.Base.z + (m_l_Z/2)))
+                pl_0C2.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C2.ViewObject.Justification = JustificationText
+                pl_0C2.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C2.ViewObject.FontSize      = FontSizeText
+                pl_0C2.Label      = "Rectangle_Re_3Z_" + str(round(m_l_Z,rounded))
+
+                addObjectToGrp(pl_0C2,m_grp_info,info=1)
         except:
             printError_msg("Rectangle 3 not done !")
             
@@ -2367,10 +2540,29 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=Fals
                                 App.Rotation(90,0.0,90))
             m_rect = Draft.makeRectangle(length=m_l_Y,height=m_l_Z,
                                 placement=m_pl_4,face=flag_for_face,support=None)
-            addObjectToGrp(m_rect,m_grp,info=info)
+            addObjectToGrp(m_rect,m_grp,info=1)
             definePropOfActiveObj()
             if flag_for_volume:
-                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False          
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False
+                
+            if flag_for_dimension :    # section create dimension info
+                pl_0C1 = Draft.makeText([str(round(m_l_Y,rounded))],point=App.Vector(m_pl_4.Base.x, m_pl_4.Base.y + (m_l_Y/2), m_pl_4.Base.z))
+                pl_0C1.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C1.ViewObject.Justification = JustificationText
+                pl_0C1.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C1.ViewObject.FontSize      = FontSizeText
+                pl_0C1.Label      = "Rectangle_Le_4Y_" + str(round(m_l_Y,rounded))
+
+                addObjectToGrp(pl_0C1,m_grp_info,info=1)
+        
+                pl_0C2 = Draft.makeText([str(round(m_l_Z,rounded))],point=App.Vector(m_pl_4.Base.x, m_pl_4.Base.y, m_pl_4.Base.z + (m_l_Z/2)))
+                pl_0C2.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C2.ViewObject.Justification = JustificationText
+                pl_0C2.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C2.ViewObject.FontSize      = FontSizeText
+                pl_0C2.Label      = "Rectangle_Le_4Z_" + str(round(m_l_Z,rounded))
+
+                addObjectToGrp(pl_0C2,m_grp_info,info=1)
         except:
             printError_msg("Rectangle 4 not done !")
         try:
@@ -2378,10 +2570,29 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=Fals
                                 App.Rotation(90,0.0,90))
             m_rect = Draft.makeRectangle(length=m_l_Y,height=m_l_Z,
                                 placement=m_pl_5,face=flag_for_face,support=None)
-            addObjectToGrp(m_rect,m_grp,info=info)
+            addObjectToGrp(m_rect,m_grp,info=1)
             definePropOfActiveObj()
             if flag_for_volume:
-                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False        
+                Gui.ActiveDocument.getObject(m_rect.Label).Visibility=False
+                
+            if flag_for_dimension :    # section create dimension info
+                pl_0C1 = Draft.makeText([str(round(m_l_Y,rounded))],point=App.Vector(m_pl_5.Base.x, m_pl_5.Base.y + (m_l_Y/2), m_pl_5.Base.z))
+                pl_0C1.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C1.ViewObject.Justification = JustificationText
+                pl_0C1.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C1.ViewObject.FontSize      = FontSizeText
+                pl_0C1.Label      = "Rectangle_Ri_5Y_" + str(round(m_l_Y,rounded))
+
+                addObjectToGrp(pl_0C1,m_grp_info,info=1)
+        
+                pl_0C2 = Draft.makeText([str(round(m_l_Z,rounded))],point=App.Vector(m_pl_5.Base.x, m_pl_5.Base.y, m_pl_5.Base.z + (m_l_Z/2)))
+                pl_0C2.ViewObject.DisplayMode   = DisplayModeText
+                pl_0C2.ViewObject.Justification = JustificationText
+                pl_0C2.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+                pl_0C2.ViewObject.FontSize      = FontSizeText
+                pl_0C2.Label      = "Rectangle_Ri_5Z_" + str(round(m_l_Z,rounded))
+
+                addObjectToGrp(pl_0C2,m_grp_info,info=1)
         except:
             printError_msg("Rectangle 5 not done !")
     
@@ -2402,6 +2613,10 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=Fals
             m_l_Z = 0.5
             m_o_Z = m_o_Z - 0.25
         m_pnt = App.Vector(m_o_X ,m_o_Y,m_o_Z)
+                
+        oripl_X = m_o_X
+        oripl_Y = m_o_Y
+        oripl_Z = m_o_Z
         print_point(m_pnt, msg="m_pnt")
         # adds object to the document group
         box = App.ActiveDocument.addObject("Part::Feature", "BBoxVolume")
@@ -2409,8 +2624,39 @@ def bounding_box(grp,ori_X,ori_Y,ori_Z,length_X,length_Y,length_Z,createVol=Fals
         Box_face = Part.makeBox(m_l_X,m_l_Y,m_l_Z,m_pnt)
         #print_msg("Box_face :" + str(Box_face) )            
         box.Shape = Box_face
-        m_grp.addObject( box )
-        Gui.activeDocument().activeObject().Transparency = (50)           
+        #m_grp.addObject( box )
+        addObjectToGrp(box,m_grp_vol,info=1)
+        
+        Gui.activeDocument().activeObject().Transparency = (50)
+
+        if flag_for_dimension:    # section create dimension info for volume
+            pl_0C1 = Draft.makeText([str(round(m_l_X,rounded))],point=App.Vector(oripl_X + (m_l_X/2), oripl_Y, oripl_Z))
+            pl_0C1.ViewObject.DisplayMode   = DisplayModeText
+            pl_0C1.ViewObject.Justification = JustificationText
+            pl_0C1.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+            pl_0C1.ViewObject.FontSize      = FontSizeText
+            pl_0C1.Label      = "Length_X_" + str(round(m_l_X,rounded))
+            #conteneurVol.addObject(pl_0C1)
+            addObjectToGrp(pl_0C1,m_grp_vol,info=1)
+
+            pl_0C2 = Draft.makeText([str(round(m_l_Y,rounded))],point=App.Vector(oripl_X, oripl_Y + (m_l_Y/2), oripl_Z))
+            pl_0C2.ViewObject.DisplayMode   = DisplayModeText
+            pl_0C2.ViewObject.Justification = JustificationText
+            pl_0C2.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+            pl_0C2.ViewObject.FontSize      = FontSizeText
+            pl_0C2.Label      = "Length_Y_" + str(round(m_l_Y,rounded))
+            #conteneurVol.addObject(pl_0C2)
+            addObjectToGrp(pl_0C2,m_grp_vol,info=1)
+    
+            pl_0C3 = Draft.makeText([str(round(m_l_Z,rounded))],point=App.Vector(oripl_X, oripl_Y, oripl_Z + (m_l_Z/2)))
+            pl_0C3.ViewObject.DisplayMode   = DisplayModeText
+            pl_0C3.ViewObject.Justification = JustificationText
+            pl_0C3.ViewObject.TextColor     = (TextColorText_R, TextColorText_G, TextColorText_B)
+            pl_0C3.ViewObject.FontSize      = FontSizeText
+            pl_0C3.Label      = "Length_Z_" + str(round(m_l_Z,rounded))
+            #conteneurVol.addObject(pl_0C3)
+            addObjectToGrp(pl_0C3,m_grp_vol,info=1)
+                
         print_msg("Bounding Box Volume created !")
     except:
         printError_msg("Bounding Box Volume not created !")
@@ -4519,6 +4765,7 @@ def plot_points_random():
     m_dir = m_r.Name
     
     Number_of_Points = 0
+    Number_of_Edges  = 0
     
     m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
     if m_selEx:
@@ -4533,6 +4780,7 @@ def plot_points_random():
             print_msg("Number_of_Edges=" + str(Number_of_Edges))
      
     m_limit = m_distanceRandomPoints/2
+    np.random.random_sample()
     if (Number_of_Points >= 1):
         for m_Point in Point_List:
         #m_Point = Point_List[-1]
@@ -8987,14 +9235,24 @@ def volumBBox_toggled(flag):
     """
     global BBox_volum
     BBox_volum = flag
-
+    
+def infoBBox_toggled(flag):
+    """ Respond to the change of info flag.
+    """
+    global BBox_info
+    BBox_info = flag
   
 def plot_boundingBoxes():
     """Create bounding boxes around each of selected object(s).
     """
     msg=verbose
         
+    # Flag for creating a Volume 
     createVol=BBox_volum
+    m_grp_vol=None
+    # Flag for creating dimension info
+    createDim=BBox_info
+    m_grp_info=None
     
     createFolders('WorkBoxes')
     error_msg  = "Select at least one object !"
@@ -9009,24 +9267,53 @@ def plot_boundingBoxes():
     m_objs = [selobj.Object for selobj in m_selEx]
     m_objNames = [selobj.ObjectName for selobj in m_selEx]
     m_num = len(m_objs)
+    
     if m_num >= 1:
         if msg != 0:            
             print_msg( str(m_num) + " object(s) selected :\n" + str(m_objNames) )
         m_i = 0
         for m_obj in m_objs:
-            m_dir=str(m_objNames[m_i])+"_BBox"
             if msg != 0:
                 print_msg( "Processing : " + str(m_objNames[m_i]) )
+            
+            m_dir=str(m_objNames[m_i])+"_BBox"   
+            if createDim:
+                m_dir_info="Info"
+            if createVol:
+                m_dir_vol="Vol"
+                
             # Create a group
             try:
-                App.ActiveDocument.getObject("WorkBoxes").newObject("App::DocumentObjectGroup", str(m_dir))
+                m_ob = App.ActiveDocument.getObject("WorkBoxes").newObject("App::DocumentObjectGroup", str(m_dir))
             except:
                 printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")
                 return None
-            m_grp=m_actDoc.getObject( str(m_dir) )
+            m_grp=m_actDoc.getObject( str(m_ob.Label) )
+            
+            # Create sub groups       
+            if m_grp != None :
+                if createDim:
+                    try:
+                        m_ob2 = App.ActiveDocument.getObject(str(m_ob.Label)).newObject("App::DocumentObjectGroup", str(m_dir_info)) 
+                    except:
+                        printError_msg("Could not Create '"+ str(m_dir_info) +"' Objects Group!")                
+                    m_grp_info=m_actDoc.getObject( str(m_ob2.Label) )
+                if createVol:
+                    try:
+                        m_ob3 = App.ActiveDocument.getObject(str(m_ob.Label)).newObject("App::DocumentObjectGroup", str(m_dir_vol))
+                    except:
+                        printError_msg("Could not Create '"+ str(m_dir_vol) +"' Objects Group!")                  
+                    m_grp_vol=m_actDoc.getObject( str(m_ob3.Label) )
+                
             # Create a solid out of the shells of a shape
-            try:
-                m_s = m_obj.Shape
+            try:    
+                if hasattr(m_obj, "Shape"):
+                    m_s = m_obj.Shape
+                elif hasattr(m_obj, "Mesh"):      # upgrade with wmayer thanks #http://forum.freecadweb.org/viewtopic.php?f=13&t=22331
+                    m_s = m_obj.Mesh
+                elif hasattr(m_obj, "Points"):
+                    m_s = m_obj.Points
+                #m_s = m_obj.Shape
             except:
                 printError_msg( "This object has no attribute 'Shape' !\nSelect another one !\n")
                 break
@@ -9042,7 +9329,10 @@ def plot_boundingBoxes():
             m_ori_Y = m_boundBox.YMin
             m_ori_Z = m_boundBox.ZMin
 
-            bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,m_length_Z,createVol,info=msg)
+            #bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,
+            #             m_length_Z,createVol,createDim,m_grp_info,info=msg)
+            bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,
+                         m_length_Z,m_grp_info,m_grp_vol)
 
             m_actDoc.recompute()
             m_i = m_i +1
@@ -9057,7 +9347,12 @@ def plot_boundingBox():
     """
     msg=verbose
       
+    # Flag for creating a Volume 
     createVol=BBox_volum
+    m_grp_vol=None
+    # Flag for creating dimension info
+    createDim=BBox_info
+    m_grp_info=None
     
     createFolders('WorkBoxes')
     error_msg  = "Select at least one object !"
@@ -9068,15 +9363,40 @@ def plot_boundingBox():
         return
         
     m_num, m_selEx, m_objs, m_objNames = get_InfoObjects(info=msg)
+
+    if m_num == 0 :
+        return
     Center = centerObjectsPoint(m_objs)
     if Center != None:
         m_dir=str("BoundingBox")
+        if createDim:
+            m_dir_info="Info"
+        if createVol:
+            m_dir_vol="Vol"
+            
         # Create a group
         try:
-            m_obj = App.ActiveDocument.getObject("WorkBoxes").newObject("App::DocumentObjectGroup", str(m_dir))
+            m_ob = App.ActiveDocument.getObject("WorkBoxes").newObject("App::DocumentObjectGroup", str(m_dir))
         except:
-            printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")
-        m_grp = m_actDoc.getObject( m_obj.Name )
+            printError_msg("Could not Create '"+ str(m_dir) +"' Objects Group!")           
+        m_grp=m_actDoc.getObject( str(m_ob.Label) )
+        
+        # Create sub groups       
+        if m_grp != None :
+            if createDim:
+                try:
+                    m_ob2 = App.ActiveDocument.getObject(str(m_ob.Label)).newObject("App::DocumentObjectGroup", str(m_dir_info)) 
+                except:
+                    printError_msg("Could not Create '"+ str(m_dir_info) +"' Objects Group!")                
+                m_grp_info=m_actDoc.getObject( str(m_ob2.Label) )
+            if createVol:
+                try:
+                    m_ob3 = App.ActiveDocument.getObject(str(m_ob.Label)).newObject("App::DocumentObjectGroup", str(m_dir_vol))
+                except:
+                    printError_msg("Could not Create '"+ str(m_dir_vol) +"' Objects Group!")                  
+                m_grp_vol=m_actDoc.getObject( str(m_ob3.Label) )
+                   
+        
         #print_msg("m_grp = " + str(m_grp)) 
         m_xmax, m_xmin, m_ymax, m_ymin, m_zmax, m_zmin = minMaxObjectsLimits(m_objs,info=0) 
         # Length of BoundBox in X, Y and Z dimensions
@@ -9086,7 +9406,10 @@ def plot_boundingBox():
         m_ori_X = m_xmin
         m_ori_Y = m_ymin
         m_ori_Z = m_zmin
-        bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,m_length_Z,createVol,info=msg)
+        #bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,
+        #             m_length_Z,createVol,info=msg)
+        bounding_box(m_grp,m_ori_X,m_ori_Y,m_ori_Z,m_length_X,m_length_Y,
+                     m_length_Z,m_grp_info,m_grp_vol)
         m_actDoc.recompute()
         print_msg(result_msg)
         
@@ -9766,7 +10089,7 @@ def plot_letter():
     - First select a  Plane
     in this case the center of the text is attached to center of the Plane;
     or
-    - First select a  Plane and a Point on the Plane
+    - First select a Plane and a Point on the Plane
 
     NB:
         Change the text and his size if needed
@@ -9778,7 +10101,7 @@ def plot_letter():
     def text_at(Plane_Point,Plane_Normal):
         msg=verbose                            
         text_User_Name, text = plot_text(m_letter, m_sizeLetter, part, name, grp="WorkObjects")
-        text_Point = text.Shape.BoundBox.Center
+        text_Point  = text.Shape.BoundBox.Center
         text_Normal = text.Shape.Faces[0].normalAt(0,0)
         if msg != 0:
             print_point(text_Point, msg="text_Point = ")
@@ -9793,7 +10116,14 @@ def plot_letter():
             rot_axis = text_Normal.cross(Plane_Normal)
             rot_center = text_Point 
             rot_angle = m_angle
-        Draft.rotate(text,rot_angle,rot_center,rot_axis)
+##################### replace Draft.rotate by ################
+            pl=App.Placement()
+            pl.Rotation=App.Rotation(rot_axis,rot_angle)
+            pl.Base=App.Vector(rot_center)
+            text.Placement = pl
+###################### 11/11/17 ###############################
+#        Draft.rotate(text,rot_angle,rot_center,rot_axis)
+###############################################################
         # translation
         New_Point = Plane_Point + Plane_Normal.normalize().multiply(2)                
         m_move = New_Point.sub(rot_center)
@@ -10694,21 +11024,44 @@ def view_align():
                             alignCamera(m_Vertex1.Point,m_Vertex2.Point,False)
                         else:
                             alignCamera(m_Vertex1.Point,m_Vertex2.Point,True)
-
                             
-                elif SubObject.ShapeType == "Edge":
-                    m_Vertex1 = SubObject.Vertexes[0]
-                    m_dist1 = m_pos.sub(SubObject.valueAt( 0.0 )) 
-                    m_Vertex2 = SubObject.Vertexes[1]                    
-                    m_dist2 = m_pos.sub(SubObject.valueAt( SubObject.Length ))
-                    
-                    #print_msg("dist1=" + str(m_dist1.Length) + "\ndist2=" + str(m_dist2.Length))
-                    if m_dist1.Length < m_dist2.Length:
-                        alignCamera(m_Vertex1.Point,m_Vertex2.Point,False)
-                    else:
-                        alignCamera(m_Vertex1.Point,m_Vertex2.Point,True)
+                        return
+                            
+                if SubObject.ShapeType == "Edge":
+                    if len(SubObject.Vertexes) >= 2:
+                        m_Vertex1 = SubObject.Vertexes[0]
+                        m_dist1 = m_pos.sub(SubObject.valueAt( 0.0 )) 
+                        m_Vertex2 = SubObject.Vertexes[1]                    
+                        m_dist2 = m_pos.sub(SubObject.valueAt( SubObject.Length ))
                         
-                elif SubObject.ShapeType == "Face":
+                        #print_msg("dist1=" + str(m_dist1.Length) + "\ndist2=" + str(m_dist2.Length))
+                        if m_dist1.Length < m_dist2.Length:
+                            alignCamera(m_Vertex1.Point,m_Vertex2.Point,False)
+                        else:
+                            alignCamera(m_Vertex1.Point,m_Vertex2.Point,True)
+                        return
+                    else:
+                        m_obj=SubObject
+
+                        if hasattr(m_obj, 'Curve'):
+                            m_dir = m_obj.Curve.Axis
+                            m_c = m_obj.Curve.Center
+
+                            m_edge = Part.makeLine(m_c, m_c.add(m_dir))
+                                                
+                            m_Vertex1 = m_edge.Vertexes[0]
+                            m_dist1 = m_pos.sub(m_c)                    
+                            m_Vertex2 = m_edge.Vertexes[1]
+                            m_dist2 = m_pos.sub(m_c.add(m_dir))
+                            
+                            #print_msg("dist1=" + str(m_dist1.Length) + "\ndist2=" + str(m_dist2.Length))
+                            if m_dist1.Length < m_dist2.Length:
+                                alignCamera(m_Vertex1.Point,m_Vertex2.Point,False)
+                            else:
+                                alignCamera(m_Vertex1.Point,m_Vertex2.Point,True)
+                        return
+                        
+                if SubObject.ShapeType == "Face":
                     m_faceSel = Sel_i_Object.SubObjects[0]
                     m_dir = m_faceSel.normalAt(0,0)
                     m_dir = m_faceSel.Surface.Axis
@@ -10731,6 +11084,138 @@ def view_align():
 
 
 def view_trackCamera():
+    """
+    Originalcode : Tour camera by Javier Martinez Garcia November 2014
+    """
+    msg=verbose
+
+
+    m_sleep = 0.0004 
+    m_camHeight = 10   # Height of the camera above the track
+    m_lookVectorLength = 80   # Distance from next line start where the camera 
+    # starts to align with new direction
+    
+    def edgeDir(edge):
+        #m_edgeDir = edge.Vertexes[-1].Point.sub(edge.Vertexes[0].Point).normalize()
+        return edge.Vertexes[-1].Point.sub(edge.Vertexes[0].Point).normalize()
+    
+    def moveCameraAlong(camera, currPos, currEdge, currEdgeDir):
+        
+        while currPos.sub(currEdge.valueAt( 0.0 )).Length < currEdge.Length:
+            currPos = currPos + currEdgeDir                
+            camera.position.setValue( currPos  + Base.Vector( 0, 0, m_camHeight ) )
+            cameraLookVector = currEdgeDir*m_lookVectorLength
+            
+            if (cameraLookVector + currPos - currEdge.valueAt(0.0) ).Length > currEdge.Length:
+                L = ( cameraLookVector + ( currPos - currEdge.valueAt( 0.0 ) ) ).Length - currEdge.Length
+                m_lookVector = nextEdgeDir*L + nextEdge.valueAt( 0.0 )   
+            else:
+                m_lookVector = currEdge.valueAt( currEdge.Length )
+                
+            camera.pointAt( coin.SbVec3f( m_lookVector[0], m_lookVector[1], m_lookVector[2] + m_camHeight ), coin.SbVec3f( 0, 0, 1 ) )
+            Gui.updateGui()
+            cam=Gui.ActiveDocument.ActiveView.getCameraNode()
+            direction = cam.orientation.getValue().multVec(coin.SbVec3f(0,0,1)).getValue()
+            print_msg("Camera Orientattion is :" + str(direction))
+            time.sleep( m_sleep )    
+        
+        
+                
+    error_msg =\
+    "INCORRECT Object(s) Selection :\n" +\
+    "You Must Select Edge(s) or Wire(s) !"
+       
+    m_actDoc = get_ActiveDocument(info=msg)
+    if m_actDoc == None:
+        return None
+   
+    m_selEx = Gui.Selection.getSelectionEx(m_actDoc.Name)
+    if msg != 0:
+        print_msg(str(m_selEx))
+    m_sel = Selection(m_selEx)
+    if not m_sel :
+        print_msg("Unable to create a Selection Object !") 
+        return  None      
+    if msg != 0:
+        print_msg(str(m_sel))
+        
+    try:
+        Number_of_Edges, Edge_List = m_sel.get_segments(getfrom=["Points","Segments","Curves","Planes","Objects"])
+        if msg != 0:        
+            print_msg("Number_of_Edges=" + str(Number_of_Edges))
+        
+#         m_edges_num = 0
+        if Number_of_Edges >= 1: 
+#             ## Edge rearrangement inside trajectory list
+#             trajectory = []
+#             trajectory.append( Edge_List[0] )
+#             currentEdge = Edge_List[0]
+#             for n in range( len( Edge_List ) ):
+#                 for edge in Edge_List:
+#                     if edge.valueAt(0.0) == currentEdge.valueAt( currentEdge.Length ):
+#                         trajectory.append( edge )
+#                         currentEdge = edge
+#                         break
+#             Edge_List = trajectory
+#             m_edges_num = m_edges_num + len(Edge_List)
+
+            m_camera = Gui.ActiveDocument.ActiveView.getCameraNode()
+
+            for i in range( Number_of_Edges -1 ):
+                m_currEdge = Edge_List[i]                                   
+                m_currEdgeDir = edgeDir(m_currEdge)
+                m_currPos = m_currEdge.valueAt( 0.0 ) 
+                
+                m_nextEdge = Edge_List[i+1] 
+                m_nextEdgeDir = edgeDir(m_nextEdge)
+                          
+                if msg != 0:
+                    print_msg("m_currEdge=" + str(m_currEdge))
+                    print_msg("m_currEdgeDir=" + str(m_currEdgeDir))
+                    print_point(m_currPos, "m_currPos ")
+                    print_msg("m_nextEdge=" + str(m_nextEdge))
+                    print_msg("m_nextEdgeDir=" + str(m_nextEdgeDir))
+                
+                moveCameraAlong(m_camera, m_currPos, m_currEdge, m_currEdgeDir)    
+                   
+                while m_currPos.sub(m_currEdge.valueAt( 0.0 )).Length < m_currEdge.Length:
+                    currPos = currPos + currEdgeDir                
+                    m_camera.position.setValue( currPos  + Base.Vector( 0, 0, m_camHeight ) )
+                    
+                    m_cameraLookVector = currEdgeDir*m_lookVectorLength
+                    
+                    if (m_cameraLookVector + currPos - currEdge.valueAt(0.0) ).Length > currEdge.Length:
+                        L = ( m_cameraLookVector + ( currPos - currEdge.valueAt( 0.0 ) ) ).Length - currEdge.Length
+                        m_lookVector = nextEdgeDir*L + nextEdge.valueAt( 0.0 )   
+                    else:
+                        m_lookVector = currEdge.valueAt( currEdge.Length )
+                    
+                    m_camera.pointAt( coin.SbVec3f( m_lookVector[0], m_lookVector[1], m_lookVector[2] + m_camHeight ), coin.SbVec3f( 0, 0, 1 ) )
+                    Gui.updateGui()
+                    cam=Gui.ActiveDocument.ActiveView.getCameraNode()
+                    direction = cam.orientation.getValue().multVec(coin.SbVec3f(0,0,1)).getValue()
+                    print_msg("Camera Orientattion is :" + str(direction))
+                    time.sleep( m_sleep )
+                    
+            while currPos.sub(currEdge.valueAt( 0.0 )).Length < currEdge.Length:
+                currPos = currPos + currEdgeDir
+                m_camera.position.setValue( currPos  + Base.Vector( 0, 0, m_camHeight ) )
+                
+                m_lookVector = currEdge.valueAt( currEdge.Length )
+                
+                m_camera.pointAt( coin.SbVec3f( m_lookVector[0], m_lookVector[1], m_lookVector[2] + m_camHeight ), coin.SbVec3f( 0, 0, 1 ) )
+                Gui.updateGui()
+                cam=Gui.ActiveDocument.ActiveView.getCameraNode()
+                direction = cam.orientation.getValue().multVec(coin.SbVec3f(0,0,1)).getValue()
+                print_msg("Camera Orientattion is :" + str(direction))
+                time.sleep( m_sleep )
+        else:
+            printError_msg("No Edge was selected !")           
+    except:
+        printError_msg(error_msg)
+        
+
+def view_trackCamera_old():
     """
     Originalcode : Tour camera by Javier Martinez Garcia November 2014
     """
@@ -10784,7 +11269,7 @@ def view_trackCamera():
             for i in range( len( m_obj.Shape.Edges ) - 1):
                 currEdge = Edge_List[i]
                 #if msg != 0:
-                   # print_msg("currEdge=" + str(currEdge))                
+                # print_msg("currEdge=" + str(currEdge))                
                 currEdgeDir = currEdge.Vertexes[-1].Point.sub(currEdge.Vertexes[0].Point).normalize()
                 #if msg != 0:
                     #print_msg("currEdgeDir=" + str(currEdgeDir))
@@ -10828,8 +11313,7 @@ def view_trackCamera():
             printError_msg("No Edge was selected !")           
     except:
         printError_msg(error_msg)
-
-
+        
 def angleCutObject(value):
     """ Respond to the change in angle value from the text box.
     """        
@@ -12196,8 +12680,8 @@ def points_distance():
             print_msg("Distance is : " + str(m_dist))
             
         result=\
-        "Begin : X1 "+str(pos_X1)+" Y1: "+str(pos_Y1)+" Z1: "+str(pos_Z1)+"\n\n" +\
-        "End : X2 "+str(pos_X2)+" Y2: "+str(pos_Y2)+" Z2: "+str(pos_Z2)+"\n\n" +\
+        "Begin : \n X1 "+str(pos_X1)+" \n Y1: "+str(pos_Y1)+" \n Z1: "+str(pos_Z1)+"\n" +\
+        "End : \n X2 "+str(pos_X2)+" \n Y2: "+str(pos_Y2)+" \n Z2: "+str(pos_Z2)+"\n" +\
         "Delta X : "+str(abs(pos_X1-pos_X2))+"\n" +\
         "Delta Y : "+str(abs(pos_Y1-pos_Y2))+"\n" +\
         "Delta Z : "+str(abs(pos_Z1-pos_Z2))+"\n\n" +\
@@ -12254,12 +12738,12 @@ def line_length():
             m_length = edge.Length
             
         result=\
-        "Begin : X1 "+str(pos_X1)+" Y1: "+str(pos_Y1)+" Z1: "+str(pos_Z1)+"\n\n" +\
-        "End : X2 "+str(pos_X2)+" Y2: "+str(pos_Y2)+" Z2: "+str(pos_Z2)+"\n\n" +\
+        "Begin : \n X1 "+str(pos_X1)+" \n Y1: "+str(pos_Y1)+" \n Z1: "+str(pos_Z1)+"\n" +\
+        "End : \n X2 "+str(pos_X2)+" \n Y2: "+str(pos_Y2)+" \n Z2: "+str(pos_Z2)+"\n" +\
         "Delta X : "+str(abs(pos_X1-pos_X2))+"\n" +\
         "Delta Y : "+str(abs(pos_Y1-pos_Y2))+"\n" +\
         "Delta Z : "+str(abs(pos_Z1-pos_Z2))+"\n\n" +\
-        "Distance : " + str(m_dist)+"\n\n"
+        "Distance : " + str(m_dist)+"\n"
         
         if m_length:
             result+="Length along edge/arc : " + str(m_length)
@@ -12319,6 +12803,23 @@ def plane_area():
 
     """
     msg=verbose
+    
+    # Lets define 2 lists; one for units and the second for corresponding 
+    # magnitude of the unit:
+    unit_list = ["mm2", "cm2", "dm2", "m2"   , "are"    , "hectare"  , "km2"]
+    unit_mag  = [1    , 100  , 10000, 1000000, 100000000, 10000000000, 1000000000000]
+    # Lets make a dictionary of these 2 lists: unit_div 
+    # (for dividing/rounding the value)
+    unit_div =  dict(zip(unit_list, unit_mag))
+    # And a second dictionary to define ranges of the number of digits 
+    # regarding the corresponding unit:   
+    unit_dict = dict.fromkeys(range(0,3),"mm2") 
+    unit_dict.update(dict.fromkeys(range(3,5),"cm2"))
+    unit_dict.update(dict.fromkeys(range(5,7),"dm2"))
+    unit_dict.update(dict.fromkeys(range(7,9),"m2"))
+    unit_dict.update(dict.fromkeys(range(9,11),"are"))
+    unit_dict.update(dict.fromkeys(range(11,13),"hectare"))
+    unit_dict.update(dict.fromkeys(range(13,15),"km2"))
 
     error_msg =\
     "INCORRECT Object(s) Selection :\n" +\
@@ -12335,16 +12836,27 @@ def plane_area():
             if msg != 0:
                 print_msg(" Plane_List=" + str(Plane_List))
             m_areas = []
+            result = ""
             for m_plane in Plane_List:
                 m_areas.append(m_plane.Area)
-            result = "Area(s) :\n"
-            a=0
+            result = "Area(s) :"
+            a=0.0
             for m_a in m_areas:
                 a+=m_a
+                m_value = math.ceil(m_a*1000)/1000
+                #result += str(m_value) + " mm2"
+                if digitsNumber(m_value) > 15:
+                    result += "\n" + str(format(float(m_value)/1000000000000, '.2f')) + " " + "km2"
+                else:
+                    result += "\n" + str(format(float(m_value)/unit_div[unit_dict[digitsNumber(m_value)]], '.2f')) + " " + str(unit_dict[digitsNumber(m_value)])           
+            
+            m_value = math.ceil(a*1000)/1000
+            #result += "Total of areas is " + str(m_value) + " mm2"
+            if digitsNumber(m_value) > 15:
+                result += "\n" + "Total of areas is \n" + str(format(float(m_value)/1000000000000, '.2f')) + " " + "km2"
+            else:
+                result += "\n" + "Total of areas is \n" + str(format(float(m_value)/unit_div[unit_dict[digitsNumber(m_value)]], '.2f')) + " " + str(unit_dict[digitsNumber(m_value)])
                 
-                result += str(math.ceil(m_a*1000)/1000) + " mm2\n"
-                
-            result += "Total of areas is " + str(math.ceil(a*1000)/1000) + " mm2"
             print_gui_msg(result)               
         else:
             printError_msg(error_msg)
@@ -13595,6 +14107,7 @@ class WorkFeatureTab():
                              "checkBox_solid"               : "solid_toggled",
                              "checkBox_allsubselect"        : "subselect_toggled",
                              "checkBox_volumBB"             : "volumBBox_toggled", 
+                             "checkBox_infoBB"              : "infoBBox_toggled"
                             }
         self.connections_for_button_clicked = {
                              "button_WF_quit"               : "quit_clicked",
@@ -13862,12 +14375,17 @@ class WorkFeatureTab():
                 
         print_msg( "icons path = " + str(WF_ICONS_PATH))    
             
-    def quit_clicked(self): # quit       
+    def quit_clicked(self): # quit
+        print_msg( "Quit requested !")      
         if self.movable:
             self.dw.close()
-            self.close()
-            print_msg( "Close done !")
-            return
+            #self.close()
+            #self.m_dialog.close()
+            if self.m_tab.count() >= 2:
+                for i in range(2,self.m_tab.count()):
+                    if "Work Features" == str(_fromUtf8(self.m_tab.tabText(i))):
+                        self.m_tab.removeTab(int(i))
+                        break
         else:
             self.m_dialog.close()
             if self.m_tab.count() >= 2:
@@ -13875,7 +14393,9 @@ class WorkFeatureTab():
                     if "Work Features" == str(_fromUtf8(self.m_tab.tabText(i))):
                         self.m_tab.removeTab(int(i))
                         break
-                       
+        print_msg( "Close done !")
+        return
+              
     def launch_curvesAndSurfaces(self):
         myObject = ParametricTab(ParCurveGui)
         
