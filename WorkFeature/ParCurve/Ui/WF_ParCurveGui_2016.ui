@@ -1162,7 +1162,7 @@ safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
                                  </size>
                                 </property>
                                 <property name="toolTip">
-                                 <string>Minimun value of the t parameter</string>
+                                 <string>Minimum value of the t parameter</string>
                                 </property>
                                 <property name="text">
                                  <string>0</string>
@@ -1216,7 +1216,7 @@ safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
                                  </size>
                                 </property>
                                 <property name="toolTip">
-                                 <string>Maximun value of the t parameter</string>
+                                 <string>Maximum value of the t parameter</string>
                                 </property>
                                 <property name="text">
                                  <string>2*pi</string>

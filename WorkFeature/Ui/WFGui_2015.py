@@ -2272,7 +2272,7 @@ class Ui_Form(object):
 "    \n"
 "if BBox check box is toggled :\n"
 "  This point is the center of the Global X,Y,Z bounding box of all objects.\n"
-"  This global bounding box alway exists (especially for draft objects).\n"
+"  This global bounding box always exists (especially for draft objects).\n"
 "  Be aware this point is not necessary the center of Mass of all Objects!\n"
 "\n"
 "- First select one or several Object(s)\n"
@@ -2280,7 +2280,7 @@ class Ui_Form(object):
         self.button_object_center.setText(_translate("Form", "Object(s) Center", None))
         self.checkBox_object_center.setToolTip(_translate("Form", "if BBox check box is toggled\n"
 "        This point is the center of the Global X,Y,Z bounding box of all objects.\n"
-"        This bounding box alway exists (especially for draft objects).\n"
+"        This bounding box always exists (especially for draft objects).\n"
 "        Be aware this point is not necessary the center of Mass of all Objects!", None))
         self.checkBox_object_center.setText(_translate("Form", "BBox", None))
         self.button_Npoints_center.setToolTip(_translate("Form", "Point=(N Points):\n"
@@ -2347,7 +2347,7 @@ class Ui_Form(object):
 "\n"
 "Be aware that if the plane is not extended enough the intersection Point is still created (as if). ", None))
         self.button_point_face_point.setText(_translate("Form", "Point(s)=(Pt(s),Face(s))", None))
-        self.button_points_projection.setToolTip(_translate("Form", "<html><head/><body><p>Create projected point(s) on the choosen main planes.</p><p>- Select one (or several) Point(s) and/or one (or several) Axis.</p><p>Define the projection plane if needed.</p><p>It can be either</p><p>XY plane,</p><p>YZ plane,</p><p>XZ plane or</p><p>All 3 planes</p></body></html>", None))
+        self.button_points_projection.setToolTip(_translate("Form", "<html><head/><body><p>Create projected point(s) on the chosen main planes.</p><p>- Select one (or several) Point(s) and/or one (or several) Axis.</p><p>Define the projection plane if needed.</p><p>It can be either</p><p>XY plane,</p><p>YZ plane,</p><p>XZ plane or</p><p>All 3 planes</p></body></html>", None))
         self.button_points_projection.setText(_translate("Form", "Projected Points", None))
         self.point_proj_comboBox.setToolTip(_translate("Form", "<html><head/><body><p>The projection plane(s)</p></body></html>", None))
         self.point_proj_comboBox.setItemText(0, _translate("Form", "All", None))
@@ -2369,7 +2369,7 @@ class Ui_Form(object):
 "    \n"
 "    Plot the intersection point T on a Line given one Linee and One Point C.\n"
 "    The Vector TC is perpendicular to the Line.\n"
-"    The symetric point Cprime is also created as TC=TCprime.\n"
+"    The symmetric point Cprime is also created as TC=TCprime.\n"
 "    \n"
 "    Be aware that if the line is not extended enough the intersection Point is still created (as if).", None))
         self.button_point_line_point.setText(_translate("Form", "Point(s)=(Pt(s),Line(s)) ", None))
@@ -2386,7 +2386,7 @@ class Ui_Form(object):
 "    ", None))
         self.button_twolines_point.setText(_translate("Form", "Point=(Line,Line) ", None))
         self.button_point_on_line.setToolTip(_translate("Form", "Create a Point at a certain distance along the line \n"
-"respecting to the choosen reference starting point.", None))
+"respecting to the chosen reference starting point.", None))
         self.button_point_on_line.setText(_translate("Form", "Point along Line", None))
         self.distance_point_on_line.setToolTip(_translate("Form", "Distance from the extremity", None))
         self.distance_point_on_line.setText(_translate("Form", "0.0", None))
@@ -2415,7 +2415,7 @@ class Ui_Form(object):
 "    Circle\n"
 "    Arc\n"
 "    Ellipse\n"
-"An object must also be seleted but before any Wire to cut all his edges!    ", None))
+"An object must also be selected but before any Wire to cut all his edges!    ", None))
         self.button_cut_wire_point.setText(_translate("Form", "Points=Cut(Wire)", None))
         self.spin_wire_cut_point.setToolTip(_translate("Form", "The number indicates in how many parts the selected Line will be cut  (Max 100).", None))
         self.button_click_for_point.setToolTip(_translate("Form", "Create a set of Points on a Plane perpendicular to the view at location of mouse clicks.\n"
@@ -2430,7 +2430,7 @@ class Ui_Form(object):
         self.button_object_base_point.setText(_translate("Form", "Object(s) Base Point", None))
         self.button_object_center_mass_point.setToolTip(_translate("Form", "Create Center of Mass Point of all selected Object(s).", None))
         self.button_object_center_mass_point.setText(_translate("Form", "Object(s) Mass Center Point", None))
-        self.button_object_Npoint.setToolTip(_translate("Form", "Create a set of points from selected Objetcs:\n"
+        self.button_object_Npoint.setToolTip(_translate("Form", "Create a set of points from selected Objects:\n"
 "- Select object(s)\n"
 "    to create points from these object(s) !\n"
 "    If you select an Edge : 2 points will be created;\n"
@@ -2441,7 +2441,7 @@ class Ui_Form(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Point_Tab2_3), _translate("Form", "Point 2/3", None))
         self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.Point_Tab2_3), _translate("Form", "Create Point(s)", None))
         self.button_points_load.setToolTip(_translate("Form", "Load a set of points from an ASCII file:\n"
-"  ASCII format is 3 values by line seperated by blank as :  \n"
+"  ASCII format is 3 values by line separated by blank as :  \n"
 "        15.3f  15.3f  15.3f\n"
 "  Values are read as float.\n"
 "        \n"
@@ -2449,7 +2449,7 @@ class Ui_Form(object):
 "     ", None))
         self.button_points_load.setText(_translate("Form", "Load Points", None))
         self.button_points_save.setToolTip(_translate("Form", "Save a point or a set of points into an ASCII file:\n"
-"One (x, y, z) triplet per line seperated by blank.\n"
+"One (x, y, z) triplet per line separated by blank.\n"
 "\n"
 "- Select as much as Points as needed and/or select object(s)\n"
 "    to save points from these object(s) !\n"
@@ -2524,7 +2524,7 @@ class Ui_Form(object):
 " - Press the button\n"
 "\n"
 "NB: Axes are created on both sides of the Plane\n"
-"The extension is 10 units by defaut but must be changed if needed.", None))
+"The extension is 10 units by default but must be changed if needed.", None))
         self.button_plane_axis.setText(_translate("Form", "Plane(s) Axes", None))
         self.button_face_normal.setToolTip(_translate("Form", "Create a normal Axis of a Face.\n"
 "To create a Normal at click location on a Face:\n"
@@ -2552,7 +2552,7 @@ class Ui_Form(object):
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.Axis_Tab1_3), _translate("Form", "Axis 1/3", None))
         self.button_object_base_axes.setToolTip(_translate("Form", "Create 3 Axes at Base location of all selected Object(s).", None))
         self.button_object_base_axes.setText(_translate("Form", "Object(s) Base Axes", None))
-        self.button_object_Naxes.setToolTip(_translate("Form", "Create a set of axes from selected Objetcs:\n"
+        self.button_object_Naxes.setToolTip(_translate("Form", "Create a set of axes from selected Objects:\n"
 "- Select object(s)\n"
 "    to create axes from these object(s) !\n"
 "    if you select a Plane : 4 axes will be created;\n"
@@ -2564,7 +2564,7 @@ class Ui_Form(object):
 "- Select as much as Lines needed;\n"
 "Then click on this button.", None))
         self.button_line_to_sketch.setText(_translate("Form", "Axis(es) to Sketch", None))
-        self.button_object_3axes.setToolTip(_translate("Form", "Create a set of 2 or 3 main axes from selected Objetcs:\n"
+        self.button_object_3axes.setToolTip(_translate("Form", "Create a set of 2 or 3 main axes from selected Objects:\n"
 "The most representative axes will be selected from all axis.\n"
 "The length of main axes will be the cumulative length of all axes with the same direction.\n"
 "- Select object(s)\n"
@@ -2641,7 +2641,7 @@ class Ui_Form(object):
 "    Circle\n"
 "    Arc\n"
 "    Ellipse\n"
-"An object must also be seleted but before any Wire to cut all his Edges!\n"
+"An object must also be selected but before any Wire to cut all his Edges!\n"
 "NB: You can change the successive lines to be bicolor (red and white)  \n"
 "in \"Ori. Pref.\"  TAB    \n"
 "", None))
@@ -2795,7 +2795,7 @@ class Ui_Form(object):
         self.dist_plane.setText(_translate("Form", "10.0", None))
         self.spin_dist_plane.setToolTip(_translate("Form", "The number of copies  (Max 100).", None))
         self.button_face_tangent.setToolTip(_translate("Form", "Face Tangent:\n"
-"Create a tanget Plane at click location of a Face.\n"
+"Create a tangent Plane at click location of a Face.\n"
 "- First click in the view to select and object,\n"
 "- Second push this button\n"
 "-Third click on a location on the selected object.\n"
@@ -2925,7 +2925,7 @@ class Ui_Form(object):
         self.button_cube_create.setText(_translate("Form", "Cube", None))
         self.section_cube.setToolTip(_translate("Form", "Section (Length, Width) of the Cube.", None))
         self.section_cube.setText(_translate("Form", "2.0,2.0", None))
-        self.height_cube.setToolTip(_translate("Form", "Heigth of the Cube.\n"
+        self.height_cube.setToolTip(_translate("Form", "Height of the Cube.\n"
 "Negative value will reverse the direction from Ref. Point", None))
         self.height_cube.setText(_translate("Form", "20.0", None))
         self.button_sphere_create.setToolTip(_translate("Form", "Create a Sphere shell:\n"
