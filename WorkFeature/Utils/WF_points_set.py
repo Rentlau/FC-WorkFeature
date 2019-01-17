@@ -73,7 +73,7 @@ class points_set():
     def load(self, filename=None):
         """Load a set of points from an ASCII file.
         
-        ASCII format is 3 values by line seperated by blank as :  
+        ASCII format is 3 values by line separated by blank as :  
         <15.3f  <15.3f  <15.3f
         Values are read as float
         
@@ -134,7 +134,7 @@ class points_set():
     def save(self, filename=None, fmt='<15.3f'):
         """Save a points set into an ASCII file.
         
-        One (x, y, z) triplet per line seperated by blank.
+        One (x, y, z) triplet per line separated by blank.
         
         *filename* : (string) full path name.        
 

@@ -247,7 +247,7 @@ if BBox is not toggled :
     
 if BBox check box is toggled :
   This point is the center of the Global X,Y,Z bounding box of all objects.
-  This global bounding box alway exists (especially for draft objects).
+  This global bounding box always exists (especially for draft objects).
   Be aware this point is not necessary the center of Mass of all Objects!
 
 - First select one or several Object(s)
@@ -273,7 +273,7 @@ if BBox check box is toggled :
                    <property name="toolTip">
                     <string>if BBox check box is toggled
         This point is the center of the Global X,Y,Z bounding box of all objects.
-        This bounding box alway exists (especially for draft objects).
+        This bounding box always exists (especially for draft objects).
         Be aware this point is not necessary the center of Mass of all Objects!</string>
                    </property>
                    <property name="text">
@@ -521,7 +521,7 @@ Be aware that if the plane is not extended enough the intersection Point is stil
                     </size>
                    </property>
                    <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create projected point(s) on the choosen main planes.&lt;/p&gt;&lt;p&gt;- Select one (or several) Point(s) and/or one (or several) Axis.&lt;/p&gt;&lt;p&gt;Define the projection plane if needed.&lt;/p&gt;&lt;p&gt;It can be either&lt;/p&gt;&lt;p&gt;XY plane,&lt;/p&gt;&lt;p&gt;YZ plane,&lt;/p&gt;&lt;p&gt;XZ plane or&lt;/p&gt;&lt;p&gt;All 3 planes&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create projected point(s) on the chosen main planes.&lt;/p&gt;&lt;p&gt;- Select one (or several) Point(s) and/or one (or several) Axis.&lt;/p&gt;&lt;p&gt;Define the projection plane if needed.&lt;/p&gt;&lt;p&gt;It can be either&lt;/p&gt;&lt;p&gt;XY plane,&lt;/p&gt;&lt;p&gt;YZ plane,&lt;/p&gt;&lt;p&gt;XZ plane or&lt;/p&gt;&lt;p&gt;All 3 planes&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                    <property name="text">
                     <string>Projected Points</string>
@@ -615,7 +615,7 @@ Be aware that if the plane is not extended enough the intersection Point is stil
     
     Plot the intersection point T on a Line given one Linee and One Point C.
     The Vector TC is perpendicular to the Line.
-    The symetric point Cprime is also created as TC=TCprime.
+    The symmetric point Cprime is also created as TC=TCprime.
     
     Be aware that if the line is not extended enough the intersection Point is still created (as if).</string>
                  </property>
@@ -685,7 +685,7 @@ The Vector AB perpendicular to the first and second Line.
                    </property>
                    <property name="toolTip">
                     <string>Create a Point at a certain distance along the line 
-respecting to the choosen reference starting point.</string>
+respecting to the chosen reference starting point.</string>
                    </property>
                    <property name="text">
                     <string>Point along Line</string>
@@ -852,7 +852,7 @@ Wires can be:
 	Circle
 	Arc
 	Ellipse
-An object must also be seleted but before any Wire to cut all his edges!	</string>
+An object must also be selected but before any Wire to cut all his edges!	</string>
                    </property>
                    <property name="text">
                     <string>Points=Cut(Wire)</string>
@@ -971,7 +971,7 @@ MB2 and MB3 can still be used for view zoom and view rotation.
                <item row="8" column="0">
                 <widget class="QPushButton" name="button_object_Npoint">
                  <property name="toolTip">
-                  <string>Create a set of points from selected Objetcs:
+                  <string>Create a set of points from selected Objects:
 - Select object(s)
     to create points from these object(s) !
     If you select an Edge : 2 points will be created;
@@ -1018,7 +1018,7 @@ MB2 and MB3 can still be used for view zoom and view rotation.
                 <widget class="QPushButton" name="button_points_load">
                  <property name="toolTip">
                   <string>Load a set of points from an ASCII file:
-  ASCII format is 3 values by line seperated by blank as :  
+  ASCII format is 3 values by line separated by blank as :  
         15.3f  15.3f  15.3f
   Values are read as float.
         
@@ -1044,7 +1044,7 @@ MB2 and MB3 can still be used for view zoom and view rotation.
                 <widget class="QPushButton" name="button_points_save">
                  <property name="toolTip">
                   <string>Save a point or a set of points into an ASCII file:
-One (x, y, z) triplet per line seperated by blank.
+One (x, y, z) triplet per line separated by blank.
 
 - Select as much as Points as needed and/or select object(s)
     to save points from these object(s) !
@@ -1534,7 +1534,7 @@ Create Perpendicular Axes of a Plane at selected locations.
  - Press the button
 
 NB: Axes are created on both sides of the Plane
-The extension is 10 units by defaut but must be changed if needed.</string>
+The extension is 10 units by default but must be changed if needed.</string>
                      </property>
                      <property name="text">
                       <string>Plane(s) Axes</string>
@@ -1700,7 +1700,7 @@ For &quot;Cylinder Axis&quot;, &quot;Planes Axes&quot; and &quot;Face Normal&quo
                <item row="1" column="0">
                 <widget class="QPushButton" name="button_object_Naxes">
                  <property name="toolTip">
-                  <string>Create a set of axes from selected Objetcs:
+                  <string>Create a set of axes from selected Objects:
 - Select object(s)
     to create axes from these object(s) !
     if you select a Plane : 4 axes will be created;
@@ -1761,7 +1761,7 @@ Then click on this button.</string>
                <item row="2" column="0">
                 <widget class="QPushButton" name="button_object_3axes">
                  <property name="toolTip">
-                  <string>Create a set of 2 or 3 main axes from selected Objetcs:
+                  <string>Create a set of 2 or 3 main axes from selected Objects:
 The most representative axes will be selected from all axis.
 The length of main axes will be the cumulative length of all axes with the same direction.
 - Select object(s)
@@ -2092,7 +2092,7 @@ Wires can be:
 	Circle
 	Arc
 	Ellipse
-An object must also be seleted but before any Wire to cut all his Edges!
+An object must also be selected but before any Wire to cut all his Edges!
 NB: You can change the successive lines to be bicolor (red and white)  
 in &quot;Ori. Pref.&quot;  TAB	
 </string>
@@ -3113,7 +3113,7 @@ Can be negative for the reverse direction!</string>
                    </property>
                    <property name="toolTip">
                     <string>Face Tangent:
-Create a tanget Plane at click location of a Face.
+Create a tangent Plane at click location of a Face.
 - First click in the view to select and object,
 - Second push this button
 -Third click on a location on the selected object.
@@ -3908,7 +3908,7 @@ for all couple selected.</string>
                 </size>
                </property>
                <property name="toolTip">
-                <string>Heigth of the Cube.
+                <string>Height of the Cube.
 Negative value will reverse the direction from Ref. Point</string>
                </property>
                <property name="text">

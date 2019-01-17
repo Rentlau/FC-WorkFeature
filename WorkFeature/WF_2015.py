@@ -4,7 +4,7 @@
 ***************************************************************************
 *   Thanks to original ideas, codes, and support from :                   *
 *   - Javier Martinez Garcia 2014, 2015 for ideas and first WF codes      * 
-*     for tje code on parallelism of two faces, forTour camera code...    *
+*     for the code on parallelism of two faces, forTour camera code...    *
 *   - Jonathan Wiedemann for Gui ideas and for view codes 2014            * 
 *     and support                                                         *
 *   - NormandC for his support                                            *
@@ -189,7 +189,7 @@ m_clickForAxis = True
 m_stack = []
 m_set = 'Set'
 
-error_msg_not_yet = "Not yet Developped !"
+error_msg_not_yet = "Not yet Developed !"
            
 ####################################################################################
            
@@ -1822,10 +1822,10 @@ def intersecLinePlane(A, B, Plane_Normal, Plane_Point, info=0):
             if info == 1:
                 print_msg("The full Line is included in the Plane !")
             return A
-        # if not the Plane and line are paralell without intersection
+        # if not the Plane and line are parallel without intersection
         else:
             if info == 1:
-                print_msg("The Plane and the line are paralell without intersection !")
+                print_msg("The Plane and the line are parallel without intersection !")
             return None
     # 2> U.N != 0
     else:
@@ -1837,7 +1837,7 @@ def intersecLinePlane(A, B, Plane_Normal, Plane_Point, info=0):
         # and T(tx, ty, tz) on the plane too so eq(1) is
         # a * tx + b * ty + c * tz + d = 0
         # by pasting the tx, ty and tz expressions into eq(1) we have a first 
-        # deg equation with one unknow 'k':
+        # deg equation with one unknown 'k':
         # a * (ax + k * ux) + b * (ay + k * uy) + c * (az + k * uz) + d = 0
         # so 
         # a * ax + a * k * ux + b * ay + b * k * uy + c * az + c * k * uz + d = 0
@@ -2823,7 +2823,7 @@ def plot_centerObjectPoint():
         
     if BBox check box is toggled :
       This point is the center of the Global X,Y,Z bounding box of all objects.
-      This global bounding box alway exists (especially for draft objects).
+      This global bounding box always exists (especially for draft objects).
       Be aware this point is not necessary the center of Mass of all Objects!
       
     - First select one or several Object(s)
@@ -3421,7 +3421,7 @@ def plot_pointLinePoint():
     
     Plot the intersection point T on a Line given one Linee and One Point C.
     The Vector TC is perpendicular to the Line.
-    The symetric point Cprime is also created as TC=TCprime.
+    The symmetric point Cprime is also created as TC=TCprime.
     
     Be aware that if the line is not extended enough the intersection Point is still created (as if).
     """
@@ -3436,7 +3436,7 @@ def plot_pointLinePoint():
     - Select one or several Object(s) to process all Faces at once
     - Then Click on the button
     but at least select one Line and one Point not on the Line !"""
-    result_msg = " : (Point,Line) Intersection(s) and symetric(s) are created !"
+    result_msg = " : (Point,Line) Intersection(s) and symmetric(s) are created !"
     
     createFolders('WorkPoints')
     m_dir = 'Set'
@@ -3499,7 +3499,7 @@ def plot_pointLinePoint2():
         Create projection(s) of Point(s) onto Line(s).
         Plot the intersection point T on a Line given one Linee and One Point C.
         The Vector TC is perpendicular to the Line.
-        The symetric point Cprime is also created as TC=TCprime.
+        The symmetric point Cprime is also created as TC=TCprime.
         - First select one (or several) Point(s)
         - Second select one or several) Line(s)
     """
@@ -3507,7 +3507,7 @@ def plot_pointLinePoint2():
     createFolders('WorkPoints')
     error_msg = "Unable to create (Point,Line) Intersection : \n"+\
                 "Select at least one Line and one Point not on the Line !"
-    result_msg = " : (Point,Line) Intersection and symetric are created !"
+    result_msg = " : (Point,Line) Intersection and symmetric are created !"
     name = "PointLinePoint"
     part = "Part::Feature"
     Selection = get_SelectedObjects(info=msg, printError=False)
@@ -3559,7 +3559,7 @@ def distanceLinePoint(value):
         
 
 def plot_alongLinePoint():
-    """ Plot a point at a certain distance along the line respecting to the choosen 
+    """ Plot a point at a certain distance along the line respecting to the chosen 
     reference starting point.
     """
     msg=verbose
@@ -4249,7 +4249,7 @@ def plot_centerMassObjectPoint():
 
 
 def plot_objectNPoints():
-    """Create a set of points from selected Objetcs:
+    """Create a set of points from selected Objects:
     - Select object(s)
     to create points from these object(s) !
     If you select an Edge : 2 points will be created;
@@ -4258,7 +4258,7 @@ def plot_objectNPoints():
     """
     msg=verbose
         
-    error_msg = "Create a set of points from selected Objetcs : \n" +\
+    error_msg = "Create a set of points from selected Objects : \n" +\
                 "Select object(s) \n" +\
                 "to create points from these object(s) !\n" +\
                 "If you select an Edge : 2 points will be created;\n" +\
@@ -4507,7 +4507,7 @@ def point_toSketch_old():
 
 def point_toLoad():
     """Load a set of points from an ASCII file:
-    ASCII format is 3 values by line seperated by blank as :  
+    ASCII format is 3 values by line separated by blank as :  
         <15.3f  <15.3f  <15.3f
     Values are read as float.
         
@@ -4562,7 +4562,7 @@ def point_toLoad():
         
 def point_toSave():
     """Save a point or a set of points into an ASCII file.
-    One (x, y, z) triplet per line seperated by blank.
+    One (x, y, z) triplet per line separated by blank.
     - Select as much as Points as needed and/or select object(s)
     to save points from these object(s) !
     If you select an Edge : 2 points will be saved;
@@ -4633,7 +4633,7 @@ def point_toSave():
 
 def point_toSave2():
     """Save a point or a set of points into an ASCII file.
-    One (x, y, z) triplet per line seperated by blank.
+    One (x, y, z) triplet per line separated by blank.
     - Select as much as Points as needed and/or select object(s)
     to save points from these object(s) !
     If you select an Edge : 2 points will be saved;
@@ -4845,7 +4845,7 @@ def sel_projection(*argc):
 
 
 def plot_projected_points():
-    """Create projected point(s) on the choosen main planes.
+    """Create projected point(s) on the chosen main planes.
     - Select one (or several) Point(s) and/or one (or several) Axis.
     Define the projection plane if needed.
     It can be either
@@ -6126,7 +6126,7 @@ def plot_clickForAxis():
 
 
 def plot_objectNAxes():
-    """Create a set of axes from selected Objetcs:
+    """Create a set of axes from selected Objects:
     - Select object(s)
     to create axes from these object(s) !
     if you select a Plane : 4 axes will be created;
@@ -6134,7 +6134,7 @@ def plot_objectNAxes():
     """
     msg=verbose
     
-    error_msg = "Create a set of axes from selected Objetcs : \n" +\
+    error_msg = "Create a set of axes from selected Objects : \n" +\
                 "Select object(s) \n" +\
                 "to create axes from these object(s) !\n" +\
                 "if you select a Plane : 4 axes will be created;\n" +\
@@ -6201,7 +6201,7 @@ def plot_objectNAxes():
         
 
 def plot_object3Axes():
-    """Create a set of 2 or 3 axes from selected Objetcs:
+    """Create a set of 2 or 3 axes from selected Objects:
     The most representative axes will be selected from all axis.
     The length of main axes will be the cumulative length of all axes with the same direction.
     - Select object(s)
@@ -6211,7 +6211,7 @@ def plot_object3Axes():
     """
     msg=verbose
     
-    error_msg = "Create a set of 2 or 3 axes from selected Objetcs : \n" +\
+    error_msg = "Create a set of 2 or 3 axes from selected Objects : \n" +\
                 "The most representative axes will be selected from all axis.\n" +\
                 "The length of main axes will be the cumulative length of all axes with the same direction.\n" +\
                 "Select object(s) \n" +\
@@ -6863,7 +6863,7 @@ def vertexToSketch(points,sketch):
     Project the selected points onto Sketch plane and add
     them to Sketch domain.
     (return num_point, return_points)
-    Return the number of points transfered in Sketch domain
+    Return the number of points transferred in Sketch domain
     and their corresponding projections. 
     """
     if (None in [points,sketch]):
@@ -6912,9 +6912,9 @@ def edgeToSketch(edges, sketch):
     Project the selected edges onto Sketch plane and add
     them to Sketch domain.
     (return num_edge, return_edges, num_point, return_points)
-    Return the number of edges transfered in Sketch domain
+    Return the number of edges transferred in Sketch domain
     and the corresponding projections and if any
-    the number of points transfered in Sketch domain
+    the number of points transferred in Sketch domain
     and their corresponding projections. 
     """
     if (None in [edges,sketch]):
@@ -6971,9 +6971,9 @@ def circleToSketch(circles, sketch):
     Project the selected circles onto Sketch plane and add
     them to Sketch domain.
     (return num_edge, return_circles, num_point, return_points)
-    Return the number of circles transfered in Sketch domain
+    Return the number of circles transferred in Sketch domain
     and the corresponding projections and if any
-    the number of points transfered in Sketch domain
+    the number of points transferred in Sketch domain
     and their corresponding projections. 
     """
     if (None in [circles,sketch]):
@@ -7169,7 +7169,7 @@ def circle_toSketch():
                                 # creates an ellipse
                                 print_msg("Sketch and Circle are NOT on Parallel Planes !")
                                 # Projection of a Circle(R)from a Plane towaerd another
-                                # not paralell Plane gives an Ellipse(R,Rcos(teta)) 
+                                # not parallel Plane gives an Ellipse(R,Rcos(teta)) 
                                 # with teta is angle betwwen the 2 Planes and center on 
                                 # projected center Point
 
@@ -7231,7 +7231,7 @@ def circle_toSketch():
                             else:
                                 # creates an ellipse
                                 print_msg("Sketch and Ellipse are NOT on Parallel Planes !")
-                                printError_msg("Sketch and Ellipse are NOT on Parallel Planes ! \nNot yet supported developped !")
+                                printError_msg("Sketch and Ellipse are NOT on Parallel Planes ! \nNot yet supported developed !")
                             m_sketch.addGeometry(geoList)
                             m_num_arc = m_num_arc + 1  
                         else:
@@ -8510,7 +8510,7 @@ def widthPlane(value):
 
 
 def plot_faceTangentPlane():
-    """Create a tanget Plane at click location of a Face.
+    """Create a tangent Plane at click location of a Face.
     """
     global m_callback
     view = Gui.ActiveDocument.ActiveView
@@ -8673,12 +8673,12 @@ def plot_clickForPlane2():
     points=[App.Vector(-(radiusP*1.5),0,0),App.Vector((radiusP*1.5),0,0)]
     mire01 = Draft.makeWire(points,closed=False,placement=pl,face=False,support=None)
     FreeCADGui.ActiveDocument.getObject(App.ActiveDocument.ActiveObject.Name).LineColor = (1.0,0.0,0.0)
-    FcPlane.addObject(mire01)  # contener character
+    FcPlane.addObject(mire01)  # container character
    
     points=[App.Vector(0,-(radiusP*1.5),0),App.Vector(0,(radiusP*1.5),0)]
     mire02 = Draft.makeWire(points,closed=False,placement=pl,face=False,support=None)
     FreeCADGui.ActiveDocument.getObject(App.ActiveDocument.ActiveObject.Name).LineColor = (1.0,0.0,0.0)
-    FcPlane.addObject(mire02)  # contener character
+    FcPlane.addObject(mire02)  # container character
 
     cercle = Draft.makeCircle(radius=radiusP,placement=pl,face=False,support=None)
     Rnameplane = App.ActiveDocument.ActiveObject.Name
@@ -8692,7 +8692,7 @@ def plot_clickForPlane2():
 #        FreeCADGui.ActiveDocument.getObject(Rnameplane).GridSnap = True
     FreeCADGui.ActiveDocument.getObject(Rnameplane).ShowGrid = True
 
-    FcPlane.addObject(cercle)  # contener character
+    FcPlane.addObject(cercle)  # container character
     App.ActiveDocument.recompute()
 
     positionX = 0.0
@@ -9504,7 +9504,7 @@ def plot_axisPointCylinder():
 
   
 def sectionCube(value):
-    """ Respond to the change in lenght,width value from the text box.
+    """ Respond to the change in length,width value from the text box.
     """        
     try:
         # First we check if a valid number have been entered
@@ -9514,13 +9514,13 @@ def sectionCube(value):
         values = value.split(',')
         m_lengthCube  = abs(float(values[0]))
         m_widthCube  = abs(float(values[1]))
-        print_msg("New lenght,width are :" + str(m_lengthCube) + ", "  + str(m_widthCube))
+        print_msg("New length,width are :" + str(m_lengthCube) + ", "  + str(m_widthCube))
     except ValueError:
-        printError_msg("Lenght,width must be valid number !")
+        printError_msg("Length,width must be valid number !")
 
 
 def heightCube(value):
-    """ Respond to the change in heigth value from the text box.
+    """ Respond to the change in height value from the text box.
     """        
     try:
         # First we check if a valid number have been entered
@@ -9985,7 +9985,7 @@ def plot_centerDome():
     for even frequencies
     Select first a point for the center of the dome.
     
-    You migth defined first the 2 parameters of the dome:
+    You might defined first the 2 parameters of the dome:
         Dome Diameter
         Frequency Parameter (Integer between 1 to 10)
     If Frequency Parameter = 1, the code create an icosahedron. 
@@ -10992,7 +10992,7 @@ def view_align():
     or 2 points selected
     """
     # TODO
-    # se mettre tangent a un objet...
+    # se mettre tangent a un object...
     error_msg = "Unable to align camera : \nSelect one Face, one Edge or 2 points !"
     m_actDoc=App.activeDocument()
     if m_actDoc.Name:
@@ -11658,7 +11658,7 @@ def plot_cutObject():
         # Mid point
         Point_MidPoint = Point_B1 + Point_A1
         Point_MidPoint = Point_MidPoint.multiply(0.5)
-        # Attachement Point
+        # Attachment Point
         Attach_Point = Point_MidPoint        
         # Normal
         Vector_Normal = Edge_Vector.cross(Plane_Normal)
@@ -11677,7 +11677,7 @@ def plot_cutObject():
         C2 = Plane_Point2
         B2 = C2 + Plane_Normal
         T2 = intersecLinePlane(C2, B2, Plane_Normal, Plane_Point, info=0)
-        # New Attachement Point        
+        # New Attachment Point        
         Attach_Point = T2 - T1
         Attach_Point = Attach_Point.multiply(0.5)
         Attach_Point = Point_MidPoint + Attach_Point
@@ -12066,7 +12066,7 @@ def plot_cutObject2():
     msg=verbose
     
     createFolders('WorkObjects')
-    error_msg = "Select in order one Line first, and finaly one Object to cut !"
+    error_msg = "Select in order one Line first, and finally one Object to cut !"
     result_msg = "Cut object done !"
     name = "Cut"
     part = "Part::Feature"
@@ -12200,7 +12200,7 @@ def plot_cutObject2():
                 Gui.ActiveDocument.getObject(Plane_User_Name).Visibility=False
             # Get the 2 of them closest to center of the Face
             if Number_of_Intersec > 2:
-                printError_msg("Number_of_Intersec > 2:Not yet developped !")
+                printError_msg("Number_of_Intersec > 2:Not yet developed !")
                 return
             
             # Adapt the angle of cutting
@@ -12328,7 +12328,7 @@ def two_objects_are(case):
     global tolerance
     
     if case == "parallel":
-        error_msg = "Unable to check paralelism : \nSelect 2 objects \n(either 2 Planes or 2 Edges) !"
+        error_msg = "Unable to check parallelism : \nSelect 2 objects \n(either 2 Planes or 2 Edges) !"
     elif case == "perpendicular":
         error_msg = "Unable to check perpendicularity : \nSelect 2 objects \n(either 2 Planes or 2 Edges) !"
     elif case == "coplanar":
@@ -14018,7 +14018,7 @@ class ViewObserver:
         if (down):
             # 2D position X,Y 
             # 0,0 = bottom left of the FreeCAD work window
-            # Xmax,Ymax = top rigth of the FreeCAD work window
+            # Xmax,Ymax = top right of the FreeCAD work window
             pos = info["Position"]
             print_msg("Clicked on position: ("+str(pos[0])+", "+str(pos[1])+")\n") 
             # 3D position X,Y,Z anywhere in the work window and on top of an object

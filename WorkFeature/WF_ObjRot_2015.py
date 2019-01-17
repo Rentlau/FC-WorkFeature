@@ -1478,7 +1478,7 @@ class Rotation():
             if self.rot_axis != None:                                  
                 for m_i in range(self.m_num):
                     
-                    # Resest to original placement
+                    # Reset to original placement
                     self.m_objs[m_i].Placement = self.placement0[m_i]
                                         
                     Draft.rotate(self.m_objs[m_i],self.rot_angle,self.rot_center,self.rot_axis)
