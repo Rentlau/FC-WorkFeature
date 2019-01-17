@@ -2,16 +2,16 @@
 
 # Work features addon-on (macro) for FreeCAD
 ----------
+<img src="./WorkFeature/Doc/Images/Documentation/Title/WF_icon3.png"> <img src="./WorkFeature/Doc/Images/Documentation/Title/WF_icon1.png"> 
+
+<img src="./WorkFeature/Doc/Images/Documentation/Title/Title.png">
+
 Tool utility that creates:
 - Origin (X, Y Z axes, Origin (0,0,0) point and XZ, XY, YZ planes)
 - Points (Center of Mass of object(s), mid points, center of circle, ...), 
 - Axes (from 2 points, Normal of a plane...), 
 - Planes (from 3 points, from one axis and a point...)  
 and many other useful features to facilitate the creation of your project. 
-
-<img src="./WorkFeature/Doc/Images/Documentation/Title/WF_icon3.png"> <img src="./WorkFeature/Doc/Images/Documentation/Title/WF_icon1.png"> 
-
-<img src="./WorkFeature/Doc/Images/Documentation/Title/Title.png">
 
 **Version 2018-01** by @Rentlau_64  
 This project is a fork of @wood-galaxy's [FC-WorkFeature macro](https://github.com/wood-galaxy/FC-WorkFeature)
