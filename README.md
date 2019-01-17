@@ -1,11 +1,8 @@
 
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
-# <center>Macro Work features for FreeCAD<br> </center>
+# Macro Work features for FreeCAD
 ----------
-
-Updated in January 2018
-
 Tool utility to create:
 - Origin (X, Y Z axes, Origin (0,0,0) point and XZ, XY, YZ planes)
 - Points (Center of Mass of object(s), mid points, center of circle, ...), 
@@ -13,41 +10,30 @@ Tool utility to create:
 - Planes (from 3 points, from one axis and a point...) 
 and many other useful features to facilitate the creation of your project. 
 
+<img src="./WorkFeature/Doc/Images/Documentation/Title/WF_icon1.png"> <img src="./WorkFeature/Doc/Images/Documentation/Title/WF_icon3.png">
+
 <img src="./WorkFeature/Doc/Images/Documentation/Title/Title.png">
 
- 
-
-<center><img src="./WorkFeature/Doc/Images/Documentation/Title/WF_icon1.png"></center>
-
-
-
-
-
- 
-
-<center><img src="./WorkFeature/Doc/Images/Documentation/Title/WF_icon3.png"></center>
-
-<b>Version 2018-01</b> <center>by Rentlau_64</center>
+**Version 2018-01** by @Rentlau_64
 
 ###  Installing
 ----------
-
-Download and install FreeCAD from [wiki Download page](http://www.freecadweb.org/wiki/Download) and either install this macro by : 
-- using the [FreeCAD macro addons_installer](https://github.com/FreeCAD/FreeCAD-addons/blob/master/addons_installer.FCMacro) to install easily WorkFeatures and other interesting macros or,
+Download and install FreeCAD from [wiki Download page](http://www.freecadweb.org/wiki/Download) and either install this macro by: 
+- using the [FreeCAD Addon Manager](https://freecadweb.org/wiki/Addon_Manager) to easily install WorkFeatures and other interesting macros or,
 - manually by copying the WorkFeature folder into the Macro sub-directory of the FreeCAD application (most of the time ~/.FreeCAD/Macro).
 
-see [Here](https://www.freecadweb.org/wiki/How_to_install_macros) for "How to install macros" detailed.
+Tip: Learn more about Macros at "[How to install FreeCAD macros](https://www.freecadweb.org/wiki/How_to_install_macros)" for more details.
 
 ### Requirements
 ----------
-Numpy is required
-The development of the macro is done with Python2.7
+Freecad >= v0.15  
+Numpy is a required dependency (numpy >= vx.y.z).   
+The development of the macro is still currently done with Python2.7 (so this addon is not py3 compatible (yet) and may not work well in FreeCAD >= v0.18)
 
 ### Abstract
 ----------
-
-This utility is up next in the combo view with "Work Features" label.<br>
-Several Tab panels will be added into this widget:
+This utility is up next in the combo view with "Work Features" label.  
+Several Tab panels will be added into this widget:  
   - Origin (for Origin tools)
   - Point  (for Point creation)
   - Axis   (for Axis creation)
@@ -58,8 +44,8 @@ Several Tab panels will be added into this widget:
   - Modif. (for Object cutting)
   
 
-The MACRO will create into your FreeCAD document a new Group named `WorkFeatures`.
-Depending of the tool you will use it can be created the following sub Groups:
+The MACRO will create into your FreeCAD document a new Group named **WorkFeatures**.  
+Depending of the tool you will use it can create the following sub Groups:  
 - WorkFeatures/
   - Origin
   - WorkPoints
