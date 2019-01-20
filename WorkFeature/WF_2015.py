@@ -17,13 +17,13 @@
 *   - lorenz_l for Beam tool Macro                                        *
 *   Special thanks to Mario52 for diverse MACRO codes as FCCamera,        *
 *   cutCircle, cutWire, Delta xyz, bounding box ...                       *
-*   and other diverse pieces of codes                                     * 
+*   and other diverse pieces of codes                                     *
 *   and all discussions, support, advices, help...merci Mario             *
 *   Thanks also to those I forget.                                        *
 ***************************************************************************
 ***************************************************************************
-*   FreeCAD Work Features / version 2018-01                               *
-*   Copyright (c) 2014, 2015, 2016, 2017, 2018 <rentlau_64>                           *
+*   FreeCAD Work Features / version 2019-01                               *
+*   Copyright (c) 2014-2019 <rentlau_64>                                  *
 *   Code rewrite by <rentlau_64>                                          *
 *   Copyright (c) 2014, 2015 Javier Martinez Garcia                       *
 *   Copyright (c) 2013, 2014 Jonathan Wiedemann                           *
@@ -68,7 +68,7 @@ from   WF_ObjRot_2015 import *
 from   WF_Utils_2015 import *
 
 global myRelease
-myRelease = "2018_01_24"
+myRelease = "2019_01_20"
 
 
 import time
@@ -14355,8 +14355,9 @@ class WorkFeatureTab():
                                    QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")),globals()[str(m_val)])                      
                                                
         self.m_dialog.show()
-        m_text=str(myRelease)
-        self.ui.label_release.setText(QtGui.QApplication.translate("Form", m_text, None, QtGui.QApplication.UnicodeUTF8))
+        m_text = str(myRelease)
+        # self.ui.label_release.setText(QtGui.QApplication.translate("Form", m_text, None, QtGui.QApplication.UnicodeUTF8))
+        self.ui.label_release.setText(m_text)
 
 #----------------------------------------------------------------
         if self.movable:
@@ -14416,23 +14417,23 @@ class WorkFeatureTab():
         # using QtGui.qApp.activeWindow() isn't very reliable because if another
         # widget than the mainwindow is active (e.g. a dialog) the wrong widget
         # is returned
-        toplevel = QtGui.qApp.topLevelWidgets()
+        # toplevel = QtGui.qApp.topLevelWidgets()
+        toplevel = QtGui.QApplication.topLevelWidgets()
         for i in toplevel:
             if i.metaObject().className() == "Gui::MainWindow":
                 return i
         raise Exception("No main window found")
 
-       
-    def getComboView(self,window):
+    def getComboView(self, window):
         """ Returns the main Tab.
         """
-        dw=window.findChildren(QtGui.QDockWidget)
+        dw = window.findChildren(QtGui.QDockWidget)
         for i in dw:
             if str(i.objectName()) == "Combo View":
                 return i.findChild(QtGui.QTabWidget)
         raise Exception("No tab widget found")
- 
-    def getComboViewMv(self,window):
+
+    def getComboViewMv(self, window):
         """ Returns the main Tab.
         """
         import FreeCAD
