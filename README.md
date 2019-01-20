@@ -12,7 +12,7 @@ Tool utility that creates:
 - Planes (from 3 points, from one axis and a point...)  
 and many other useful features to facilitate the creation of your project. 
 
-**Version 2018-01** by @Rentlau_64  
+**Version 2019-01** by @Rentlau_64  
 This project is a fork of @wood-galaxy's [FC-WorkFeature macro](https://github.com/wood-galaxy/FC-WorkFeature)
 
 ### Installing
@@ -24,8 +24,9 @@ Tip: Learn more about Macros at "[How to install FreeCAD macros](https://www.fre
 
 ### Requirements
 Freecad >= v0.15  
-Numpy is a required dependency (numpy >= vx.y.z).   
-The development of the macro is still currently done with Python2.7 (so this addon is not py3 compatible (yet) and may not work well in FreeCAD >= v0.18)
+Numpy is a required dependency (numpy >= v1.14.3).   
+The development of the macro is still currently done with Python2.7 (so this addon is not py3 compatible (yet) and may not work well in FreeCAD >= v0.18).   
+Please "[Open an issue](https://github.com/Rentlau/WorkFeature/issues)", if you detect any problem.
 
 ### Abstract
 This utility is in the combo view labeled "Work Features".  
