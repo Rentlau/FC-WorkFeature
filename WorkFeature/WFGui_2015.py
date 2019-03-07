@@ -2232,7 +2232,7 @@ class Ui_Form(object):
         self.gridLayout_13.addLayout(self.horizontalLayout_43, 1, 0, 1, 1)
 
         self.retranslateUi(Form)
-        self.tabWidget_7.setCurrentIndex(7)
+        self.tabWidget_7.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         self.point_proj_comboBox.setCurrentIndex(0)
         self.tabWidget_2.setCurrentIndex(0)
