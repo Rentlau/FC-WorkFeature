@@ -5,13 +5,6 @@ import os.path
 # Change this by your own FreeCAD lib path to import FreeCAD
 if not sys.path.__contains__("/usr/lib/freecad/lib"):
     sys.path.append("/usr/lib/freecad/lib")
-m_current_path = os.path.realpath(__file__)
-m_current_path = os.path.dirname(m_current_path)
-if not sys.path.__contains__(str(m_current_path) + "/WorkFeature"):
-    sys.path.append(str(m_current_path) + "/WorkFeature")
-    sys.path.append(str(m_current_path) + "/WorkFeature/ParCurve")
-    # sys.path.append(str(m_current_path) + "/WorkFeature/Utils")
-import WorkFeature.WF as WF
 
 try:
     # try import
@@ -19,8 +12,6 @@ try:
     m_current_path = os.path.dirname(m_current_path)
     if not sys.path.__contains__(str(m_current_path) + "/WorkFeature"):
         sys.path.append(str(m_current_path) + "/WorkFeature")
-        sys.path.append(str(m_current_path) + "/WorkFeature/ParCurve")
-        # sys.path.append(str(m_current_path) + "/WorkFeature/Utils")
     import WorkFeature.WF as WF
 except ImportError as error:
     print(sys.path)

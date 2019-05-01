@@ -76,6 +76,7 @@ from WorkFeature.ParCurve.WF_ObjParCurve_2016 import *
 from WorkFeature.WF_ObjRot import *
 
 from WorkFeature.Utils.WF_Utils import *
+from WorkFeature.Utils.WF_Utils import print_msg
 from WorkFeature.Utils.WF_geometry import *
 from WorkFeature.Utils.WF_selection import *
 from WorkFeature.Utils.WF_print import print_point
@@ -83,7 +84,7 @@ from WorkFeature.Utils.WF_translate import _translate
 
 
 global myRelease
-myRelease = "2019_04_29"
+myRelease = "2019_05_01"
 
 ####################################################################################
 # assume the Icons directory in the same directory as this MACRO file
@@ -188,8 +189,6 @@ m_clickForPoint = True
 m_clickForAxis = True
 m_stack = []
 m_set = 'Set'
-
-
 
 
 def verbose_toggled(flag):
