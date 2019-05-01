@@ -17,11 +17,14 @@ except AttributeError:
 
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
+
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
+
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -267,4 +270,3 @@ class Ui_Form(object):
         self.button_removeRow.setToolTip(_translate("Form", "Remove a row from the table.", None))
         self.button_removeRow.setText(_translate("Form", "remove", None))
         self.button_quit.setText(_translate("Form", "Quit", None))
-

@@ -8,7 +8,7 @@ if not sys.path.__contains__("/usr/lib/freecad/lib"):
     
 try:
     # try import
-    import WorkFeature.WF_2015 as WF
+    import WorkFeature.WF as WF
 except:
     # first check if the path to WorkFeature was set in the preferences
     param = FreeCAD.ParamGet('User parameter:Plugins/workfeature')
@@ -22,7 +22,7 @@ except:
         sys.path.append(str(m_current_path))
     # retry import now
     try:
-        import WorkFeature.WF_2015 as WF
+        import WorkFeature.WF as WF
     except:
         # we still cannot find WorkFeature. Ask the user
         from PySide import QtGui
@@ -31,6 +31,6 @@ except:
         m_current_path = param.GetString('destination')
         sys.path.append(str(m_current_path))
         # retry import
-        import WorkFeature.WF_2015 as WF
+        import WorkFeature.WF as WF
   
 WF.myDialog = WF.WorkFeatureTab()

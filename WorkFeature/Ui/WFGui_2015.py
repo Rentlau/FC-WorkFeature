@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'WFGui_2015.ui'
+# Form implementation generated from reading ui file 'WFGui.ui'
 #
 # Created: Thu Feb  2 19:33:38 2017
 #      by: PySide UI code generator 4.11.3
