@@ -1,3 +1,4 @@
+
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
 # Work features addon-on (macro) for FreeCAD
@@ -12,8 +13,10 @@ Tool utility that creates:
 - Planes (from 3 points, from one axis and a point...)  
 and many other useful features to facilitate the creation of your project. 
 
-**Version 2019-01** by @Rentlau_64  
+**Version 2019-05** by @Rentlau_64  
 This project is a fork of @wood-galaxy's [FC-WorkFeature macro](https://github.com/wood-galaxy/FC-WorkFeature)
+
+ 
 
 ### Installing
 Download and install FreeCAD from [wiki Download page](http://www.freecadweb.org/wiki/Download) and either install this macro by: 
@@ -25,7 +28,9 @@ Tip: Learn more about Macros at "[How to install FreeCAD macros](https://www.fre
 ### Requirements
 Freecad >= v0.15  
 Numpy is a required dependency (numpy >= v1.14.3).   
-The development of the macro is still currently done with Python2.7 (so this addon is not py3 compatible (yet) and may not work well in FreeCAD >= v0.18).   
+The development of the macro is still currently done with Python2.7 but now compatible with Python3
+(so this addon is py3 compatible (yet) and was tested on FreeCAD >= v0.18 :FreeCAD_0.18.15671_Conda_Py3Qt5_glibc2.12-x86_64.AppImage).   
+
 Please "[Open an issue](https://github.com/Rentlau/WorkFeature/issues)", if you detect any problem.
 
 ### Abstract
@@ -50,3 +55,21 @@ Depending of the tool you will use, it can create the following sub-Groups:
   - WorkPlanes
   - WorkBoxes
   - WorkObjects
+
+### Tutorials
+Find some more detailed documentations in *./WorkFeature/Doc* directory:
+  - [WF_documentation](./WorkFeature/Doc/WF_documentation.pdf) <br>
+  - [WF_releasesDocumentation](./WorkFeature/Doc/WF_releasesDocumentation.pdf) <br>
+  
+Find some tutorials in *./WorkFeature/Doc/Tutorials* directory:
+  - [TranslationBySegment](./WorkFeature/Doc/Tutorials/WF_Tuto_MODIF_TranslationBySegment.mp4) <br>
+  - [ProjectedPoints](./WorkFeature/Doc/Tutorials/WF_Tuto_POINTS_ProjectedPoints.mp4) <br>
+  - [RandomPoints](./WorkFeature/Doc/Tutorials/WF_Tuto_POINTS_RandomPoints.mp4) <br>
+  - [2DConvexPolygon](./WorkFeature/Doc/Tutorials/WF_Tuto_WIRE_2DConvexPolygon.mp4) <br>
+  - [CreatePolygon](./WorkFeature/Doc/Tutorials/WF_Tuto_WIRE_CreatePolygon.mp4) <br>
+  - [Regression2D](./WorkFeature/Doc/Tutorials/WF_Tuto_WIRE_Regression2D.mp4) <br>
+
+
+```python
+
+```
