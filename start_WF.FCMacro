@@ -10,8 +10,8 @@ try:
     # try import
     m_current_path = os.path.realpath(__file__)
     m_current_path = os.path.dirname(m_current_path)
-    if not sys.path.__contains__(str(m_current_path) + "/WorkFeature"):
-        sys.path.append(str(m_current_path) + "/WorkFeature")
+    if not sys.path.__contains__(str(m_current_path) + os.sep + "WorkFeature"):
+        sys.path.append(str(m_current_path) + os.sep + "WorkFeature")
     import WorkFeature.WF as WF
 except ImportError as error:
     print(sys.path)
