@@ -6,43 +6,36 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-import FreeCAD as App
-
-
-def print_msg(message):
-    """ Print a message on console.
-    """
-    print(message)
-    App.Console.PrintMessage(message + "\n")
-
 
 class DefineAndConnectEvents():
+    """Definition of communications between a Gui and an python Object.
+
+    This class is a base class and must be derived like :
+
+    class ParametricCurve2DEvents(DefineAndConnectEvents):
+        def __init__(self,ui):
+            self.ui = ui
+            # Create Parametric Curve objects
+            self.parcurv2D = ParametricCurve2D(self.ui)
+            DefineAndConnectEvents.__init__(self, self.ui, self.parcurv2D)
+
+        def defineEvents(self):
+            #==============================
+
+            # Definition of connections
+
+            # by type of actions on widgets of the Gui.
+            #==============================
+            self.connections_for_button_pressed = {
+                                "ParCurve_button_edit_2"           : "edit",
+                                "ParCurve_button_apply_2"          : "draw",
+                                "ParCurve_button_store_2"          : "store",
+                                }
+            ...
+    """
+
     def __init__(self, ui, obj):
-        """
-        Definition of communications between a Gui and an python Object.
-        This class is a base class and must be derived like :
 
-        class ParametricCurve2DEvents(DefineAndConnectEvents):
-            def __init__(self,ui):
-                self.ui = ui
-                # Create Parametric Curve objects
-                self.parcurv2D = ParametricCurve2D(self.ui)
-                DefineAndConnectEvents.__init__(self, self.ui, self.parcurv2D)
-
-            def defineEvents(self):
-                #==============================
-
-                # Definition of connections
-
-                # by type of actions on widgets of the Gui.
-                #==============================
-                self.connections_for_button_pressed = {
-                                    "ParCurve_button_edit_2"           : "edit",
-                                    "ParCurve_button_apply_2"          : "draw",
-                                    "ParCurve_button_store_2"          : "store",
-                                    }
-                ...
-        """
         if self.__class__ is DefineAndConnectEvents:
             raise Exception("Direct construction not allowed !\nSee doc of the Class.")
         self.ui = ui
@@ -51,9 +44,7 @@ class DefineAndConnectEvents():
         self.connectEvents()
 
     def defineEvents(self):
-        """
-        Definition of connections by type of actions on widgets of the Gui.
-        """
+        """Definition of connections by type of actions on widgets of the Gui."""
         self.connections_for_slider_changed = {}
         self.connections_for_button_pressed = {}
         self.connections_for_combobox_changed = {}

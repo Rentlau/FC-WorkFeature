@@ -7,10 +7,15 @@ Created on Sat May 30 18:53:08 2015
 import sys
 import os.path
 
-import ParCurve.Ui.WF_ObjParCurve2DEditGui_2016 as EDIT_2D
-import ParCurve.Ui.WF_ObjParCurve3DEditGui_2016 as EDIT_3D
-import ParCurve.Ui.WF_ObjSurfaceEditGui_2016 as EDIT_SURF
-import ParCurve.Utils.Text as txt
+# import WorkFeature.ParCurve.Ui.WF_ObjParCurve2DEditGui_2016 as EDIT_2D
+# import WorkFeature.ParCurve.Ui.WF_ObjParCurve3DEditGui_2016 as EDIT_3D
+# import WorkFeature.ParCurve.Ui.WF_ObjSurfaceEditGui_2016 as EDIT_SURF
+
+import WorkFeature.ParCurve.Ui.WF_ObjParCurve2DEditGui as EDIT_2D
+import WorkFeature.ParCurve.Ui.WF_ObjParCurve3DEditGui as EDIT_3D
+import WorkFeature.ParCurve.Ui.WF_ObjSurfaceEditGui as EDIT_SURF
+
+import WorkFeature.ParCurve.Utils.Text as txt
 
 from PySide import QtCore, QtGui
 import FreeCAD as App
@@ -21,12 +26,12 @@ m_current_path = os.path.realpath(__file__)
 if not sys.path.__contains__(m_current_path):
     sys.path.append(m_current_path)
 
-global myDatabase2DName
-myDatabase2DName = "Parametric2D.dat"
-global myDatabase3DName
-myDatabase3DName = "Parametric3D.dat"
-global myDatabaseSurfName
-myDatabaseSurfName = "ParametricSurf.dat"
+global MY_DATABASE2D_NAME
+MY_DATABASE2D_NAME = "Parametric2D.dat"
+global MY_DATABASE3D_NAME
+MY_DATABASE3D_NAME = "Parametric3D.dat"
+global MY_DATABASESURF_NAME
+MY_DATABASESURF_NAME = "ParametricSurf.dat"
 ####################################################################################
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -86,10 +91,16 @@ class Model(QtCore.QAbstractTableModel):
 
 
 class tableWidget():
+    """TableWidget object creation."""
+
     def __init__(self, database):
+        """Init TableWidget.
+
+        Parameters
+        ----------
+        database: the name of database file without path.
         """
-        parameter database: the name of database file without path.
-        """
+        self.debug = 1
         # Flag for common database
         self.database_exists = False
         self.database_name = None
@@ -121,11 +132,11 @@ class tableWidget():
         self.header = None
 
         # This Object ill be created with the setupUi
-        # self.tableWidget = QtGui.QTableWidget(Form)  
+        # self.tableWidget = QtGui.QTableWidget(Form)
         self.tableWidget = None
 # ===============================================================================
 # class tableWidget2D(EDIT_2D.Ui_Form, tableWidget):
-#     def __init__(self, database="Parametric2D.dat"):
+#     def __init__(self, database=MY_DATABASE2D_NAME):
 #         EDIT_2D.Ui_Form.__init__(self)
 #         tableWidget.__init__(self, database)
 #         self.header = "Name, a (t), b (a,t), X (a,b,t), Y(a,b,t), Polar, tmin, tmax, tstep"
@@ -141,21 +152,20 @@ class tableWidget():
         self.model = None
 
     def setupUi(self, Form, combox):
+        """Set GUI."""
         self.dialog = Form
         self.comboBox = combox
         self.updateModel()
 
         # Connect to functions
-        self.connections_for_button_pressed = {
-                            "button_addRow"         : "insertRowAfter",
-                            "button_removeRow"      : "removeSelectedRow",
-                            "button_load"           : "loadDatabase",
-                            "button_save"           : "saveDatabase",
-                            "button_quit"           : "widgetQuit", 
-                            }
-        self.connections_for_combobox_changed = {
-                            "comboBox_select"       : "selectCurve",
-                            }
+        self.connections_for_button_pressed = {"button_addRow"         : "insertRowAfter",
+                                               "button_removeRow"      : "removeSelectedRow",
+                                               "button_load"           : "loadDatabase",
+                                               "button_save"           : "saveDatabase",
+                                               "button_quit"           : "widgetQuit",
+                                               }
+        self.connections_for_combobox_changed = {"comboBox_select"       : "selectCurve",
+                                                 }
 
         for m_key, m_val in self.connections_for_button_pressed.items():
             # print_msg( "Connecting: " + str(getattr(self, str(m_key))) + " and " + str(getattr(self, str(m_val))) )
@@ -171,14 +181,14 @@ class tableWidget():
         if self.database_exists:
             self.curves_number = self.loadDatabase(self.database_name)
             print("Database: " + str(self.database_name))
-            print("Loaded from common database: " + str(self.curves_number) + " curves !")
+            print("Loaded from common database: " + str(self.curves_number) + " items !")
             if self.curves_number != 0:
                 self.curves_loaded = True
 
         if self.database_user_exists:
             self.curves_user_number = self.loadDatabase(self.database_user_name)
             print("Database: " + str(self.database_user_name))
-            print("Loaded from user database: " + str(self.curves_user_number) + " curves !")
+            print("Loaded from user database: " + str(self.curves_user_number) + " items !")
             if self.curves_user_number != 0:
                 self.curves_user_loaded = True
 
@@ -244,6 +254,9 @@ class tableWidget():
         self.insertData(m_curveList)
 
     def loadDatabase(self, my_database_name):
+        """Load Database from a text file."""
+        if not os.path.exists(my_database_name):
+            return 0
         m_line = 0
         try:
             m_lines = txt.read_text_into_list(my_database_name)
@@ -268,6 +281,7 @@ class tableWidget():
             App.Console.PrintError("\nERROR: " + message)
 
     def saveDatabase(self, my_database_name=None):
+        """Save Database to text file."""
         if my_database_name in [None]:
             my_database_name = self.database_user_name
 
@@ -283,9 +297,29 @@ class tableWidget():
             txt.append_text(filename=my_database_name, text=str(m_curve))
 
     def selectCurve(self, *argc):
-        # print str(*argc)
-        m_curveRow = self.tableWidget.row(self.tableWidget.findItems(str(*argc), QtCore.Qt.MatchExactly)[0])
-        print(str(m_curveRow))
+        """Select first item from Table."""
+        if self.tableWidget is None:
+            return None
+        if self.tableWidget.rowCount() == 0:
+            return None
+        if self.debug:
+            print("Look for: " + str(*argc))
+            print("in " + str(self.tableWidget))
+            print("of type: ", type(self.tableWidget))
+        m_rows = self.tableWidget.findItems(str(*argc), QtCore.Qt.MatchExactly)
+        if m_rows is None:
+            if self.debug:
+                print("Not Found!")
+            return None
+        if len(m_rows) == 0:
+            return None
+        print(m_rows)
+        m_curveRow = self.tableWidget.row(m_rows[0])
+        if self.debug:
+            print("Found!")
+            print("Decoding line")
+            print(str(m_curveRow))
+
         m_line = []
         for i_column in range(self.tableWidget.columnCount()):
             # print str(i_column)
@@ -335,7 +369,7 @@ class tableWidget():
 
 
 class tableWidget2D(EDIT_2D.Ui_Form, tableWidget):
-    def __init__(self, database="Parametric2D.dat"):
+    def __init__(self, database=MY_DATABASE2D_NAME):
         EDIT_2D.Ui_Form.__init__(self)
         tableWidget.__init__(self, database)
         self.header = "Name, a (t), b (a,t), X (a,b,t), Y(a,b,t), Polar, tmin, tmax, tstep"
@@ -346,7 +380,7 @@ class tableWidget2D(EDIT_2D.Ui_Form, tableWidget):
 
 
 class tableWidget3D(EDIT_3D.Ui_Form, tableWidget):
-    def __init__(self, database="Parametric3D.dat"):
+    def __init__(self, database=MY_DATABASE3D_NAME):
         EDIT_3D.Ui_Form.__init__(self)
         tableWidget.__init__(self, database)
         self.header = "Name, a (t), b (a,t),c (a,b,t), X (a,b,c,t), Y (a,b,c,t), Z (a,b,c,t), tmin, tmax, tstep, Cartesian"
@@ -357,7 +391,7 @@ class tableWidget3D(EDIT_3D.Ui_Form, tableWidget):
 
 
 class tableWidgetSurf(EDIT_SURF.Ui_Form, tableWidget):
-    def __init__(self, database="ParametricSurf.dat"):
+    def __init__(self, database=MY_DATABASESURF_NAME):
         EDIT_SURF.Ui_Form.__init__(self)
         tableWidget.__init__(self, database)
         self.header = "Name, a , b (a),c (a,b), X (a,b,c,U,V), Y (a,b,c,U,V), Z (a,b,c,U,V), U min, U max, U step, V min, V max, V step, Comment"

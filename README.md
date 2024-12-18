@@ -13,7 +13,7 @@ Tool utility that creates:
 - Planes (from 3 points, from one axis and a point...)  
 and many other useful features to facilitate the creation of your project. 
 
-**Version 2019-05** by @Rentlau_64  
+**Version 2024-12** by @Rentlau_64
 This project is a fork of @wood-galaxy's [FC-WorkFeature macro](https://github.com/wood-galaxy/FC-WorkFeature)
 
  

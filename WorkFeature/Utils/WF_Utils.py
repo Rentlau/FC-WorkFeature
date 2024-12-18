@@ -15,8 +15,7 @@ error_msg_not_yet = "Not yet Developed !"
 
 
 def gui_infoDialog(msg):
-    """ Create a simple QMessageBox dialog for info messages.
-    """
+    """Create a simple QMessageBox dialog for info messages."""
     # The first argument indicates the icon used:
     # one of QtGui.QMessageBox.{NoIcon,Information,Warning Critical,Question}
     diag = QtGui.QMessageBox(QtGui.QMessageBox.Information, 'Info:', msg)
@@ -25,8 +24,7 @@ def gui_infoDialog(msg):
 
 
 def gui_errorDialog(msg):
-    """ Create a simple QMessageBox dialog for error messages.
-    """
+    """Create a simple QMessageBox dialog for error messages."""
     m_script = os.path.basename(os.path.realpath(__file__))
     # The first argument indicates the icon used:
     # one of QtGui.QMessageBox.{NoIcon,Information,Warning Critical,Question}
@@ -36,15 +34,13 @@ def gui_errorDialog(msg):
 
 
 def print_msg(message):
-    """ Print a message on console.
-    """
+    """Print a message on console."""
     print(message)
     App.Console.PrintMessage(message + "\n")
 
 
 def print_gui_msg(message):
-    """ Print a message on console.
-    """
+    """Print a message on console."""
     print(message)
     App.Console.PrintMessage(message + "\n")
     try:
@@ -52,12 +48,11 @@ def print_gui_msg(message):
     except Exception as inst:
         print(inst.args)
         App.Console.PrintError("\nERROR: Not able to launch a QT dialog !")
-        raise(Exception(message))
+        raise (Exception(message))
 
 
 def printError_msg(message):
-    """ Print a ERROR message on console.
-    """
+    """Print a ERROR message on console."""
     print(message)
     App.Console.PrintError("\nERROR: " + message)
     try:
@@ -65,15 +60,16 @@ def printError_msg(message):
     except Exception as inst:
         print(inst.args)
         App.Console.PrintError("\nERROR: Not able to launch a QT dialog !")
-        raise(Exception(message))
+        raise (Exception(message))
 
 
 def print_not_yet():
+    """Print a not yet message on console."""
     printError_msg(error_msg_not_yet)
 
 
 def print_attributes(obj, doc=False):
-    """ Print all the attributes of this object and their value """
+    """Print all the attributes of this object and their value."""
     __m_type = obj.__class__.__name__
     print('* Attributes print for ' + str(__m_type) + '*')
     for names in dir(obj):
@@ -86,7 +82,7 @@ def print_attributes(obj, doc=False):
 
 
 def print_methods(obj, doc=False):
-    """ Print all the methods of this object and their doc string"""
+    """Print all the methods of this object and their doc string."""
     __m_type = obj.__class__.__name__
     print('\n* Methods print for ' + str(__m_type) + '*')
     for names in dir(obj):
@@ -147,14 +143,18 @@ def append_text(filename=None, text=""):
 
 
 def read_text_into_list(filename):
-    """
-    Read the complete ASCII file *filename* (if possible) into a unique
-    list of strings and return the list
-    (or None in case of error).
+    """Read the complete ASCII file *filename* (if possible) into a unique list of strings.
 
-    Controls are done on *filename*.
+    Return
+    ______
+        Returns the list
+        (or None in case of error).
+
+    Parameters
+    __________
 
     *filename*: (string) full path name.
+        Controls are done on *filename*.
     """
     if filename and os.path.exists(filename):
         try:
@@ -183,14 +183,17 @@ def read_text_into_list(filename):
 
 
 def read_text(filename):
-    """
-    Read the complete ASCII file *filename* (if possible) into a unique
-    string and return the string
-    (or None in case of error).
+    """Read the complete ASCII file *filename* (if possible) into a unique string.
 
-    Controls are done on *filename*.
+    Return
+    ______
+        Returns the string
+        (or None in case of error).
 
+    Parameters
+    __________
     *filename*: (string) full path name.
+        Controls are done on *filename*.
     """
     if filename and os.path.exists(filename):
         try:
