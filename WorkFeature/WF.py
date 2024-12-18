@@ -70,11 +70,6 @@ from PySide import QtCore, QtGui
 
 import WorkFeature.Ui.WFGui as WFGui
 
-# from WorkFeature.ParCurve.WF_ObjParCurve_2016 import (ParametricTab,
-#                                                       RegressionCurve2DEvents,
-#                                                       ParametricCurve2DEvents,
-#                                                       ParametricCurve3DEvents,
-#                                                       SurfaceEvents)
 
 from WorkFeature.ParCurve.WF_ObjParCurve import (ParametricTab,
                                                   RegressionCurve2DEvents,
@@ -82,7 +77,6 @@ from WorkFeature.ParCurve.WF_ObjParCurve import (ParametricTab,
                                                   ParametricCurve3DEvents,
                                                   SurfaceEvents)
 
-# import WorkFeature.ParCurve.Ui.WF_ParCurveGui_2016 as ParCurveGui
 import WorkFeature.ParCurve.Ui.WF_ParCurveGui as ParCurveGui
 
 from WorkFeature.WF_ObjRot import RotationEvents, TranslationEvents
