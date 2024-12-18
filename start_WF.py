@@ -1,18 +1,57 @@
 # -*- coding: utf-8 -*-
 import sys
-import os.path
+import os
 
 # Change this by your own FreeCAD lib path to import FreeCAD
 if not sys.path.__contains__("/usr/lib/freecad/lib"):
     sys.path.append("/usr/lib/freecad/lib")
 
-try:
-    # try import
-    m_current_path = os.path.realpath(__file__)
-    m_current_path = os.path.dirname(m_current_path)
-    if not sys.path.__contains__(str(m_current_path) + "/WorkFeature"):
-        sys.path.append(str(m_current_path) + "/WorkFeature")
+
+def launchWorkFeature():
+    """
+    Launch GUI.
+
+    Returns
+    -------
+    None.
+
+    """
     import WorkFeature.WF as WF
+    print()
+    print("INFO: WF module path is\n{0:s}".format(os.path.abspath(WF.__file__)))
+    print("INFO: WF release is\n{0:s}".format(str(WF.myRelease)))
+    WF.myDialog = WF.WorkFeatureTab()
+
+
+def updatePYTHONPATH(current_path):
+    """
+    Update PYTHONPATH id needed.
+
+    Parameters
+    ----------
+    current_path : String
+        A path to workfeature directory.
+
+    Returns
+    -------
+    None.
+
+    """
+    # remove file name from the full path name
+    m_current_path = os.path.dirname(current_path)
+    # check if this path belongs to the PYTHONPATH variable and if not add it
+    if not sys.path.__contains__(str(m_current_path)):
+        sys.path.append(str(m_current_path))
+    if not sys.path.__contains__(str(m_current_path) + os.sep + "WorkFeature"):
+        sys.path.append(str(m_current_path) + os.sep + "WorkFeature")
+
+
+try:
+    m_current_path = os.path.realpath(__file__)
+    if os.path.islink(m_current_path):
+        m_current_path = os.path.realpath(m_current_path)
+    updatePYTHONPATH(m_current_path)
+    launchWorkFeature()
 except ImportError as error:
     print(sys.path)
     print(error.__class__.__name__ + ": " + error.msg)
@@ -24,13 +63,14 @@ except ImportError as error:
         if not m_current_path:
             # get the path of the current python script
             m_current_path = os.path.realpath(__file__)
+            if os.path.islink(m_current_path):
+                m_current_path = os.path.realpath(m_current_path)
             m_current_path = os.path.dirname(m_current_path)
-        # check if this path belongs to the PYTHONPATH variable and if not add it
-        if not sys.path.__contains__(str(m_current_path) + "/WorkFeature"):
-            sys.path.append(str(m_current_path) + "/WorkFeature")
+
+        updatePYTHONPATH(m_current_path)
         # retry import now
         try:
-            import WorkFeature.WF as WF
+            launchWorkFeature()
         except ImportError:
             # we still cannot find WorkFeature. Inform the user
             from PySide import QtGui
@@ -39,10 +79,7 @@ except ImportError as error:
             msgBox.exec_()
             print("ERROR:cannot load FreeCAD WorkFeature macro path !")
             print("Check the installation !")
-            sys.exit(1)
+
     except ImportError:
         print("ERROR: Cannot load FreeCAD WorkFeature macro path !")
         print("Check the installation !")
-        sys.exit(1)
-
-WF.myDialog = WF.WorkFeatureTab()

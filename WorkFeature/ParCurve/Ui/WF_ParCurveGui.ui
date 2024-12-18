@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>803</height>
+    <width>430</width>
+    <height>708</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,6 +20,57 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_41">
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="button_quit">
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_17">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QProgressBar" name="progressBar">
+       <property name="value">
+        <number>24</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_release">
+       <property name="text">
+        <string>2024</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget_6">
      <property name="currentIndex">
@@ -32,6 +83,12 @@
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="0" column="0">
         <widget class="QScrollArea" name="scrollArea_8">
+         <property name="minimumSize">
+          <size>
+           <width>398</width>
+           <height>500</height>
+          </size>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -40,8 +97,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>358</width>
-            <height>654</height>
+            <width>394</width>
+            <height>599</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_38">
@@ -69,6 +126,12 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>332</width>
+                   <height>450</height>
+                  </size>
+                 </property>
                  <property name="currentIndex">
                   <number>0</number>
                  </property>
@@ -95,12 +158,18 @@
                        <verstretch>0</verstretch>
                       </sizepolicy>
                      </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>312</width>
+                       <height>400</height>
+                      </size>
+                     </property>
                      <property name="html">
                       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
                     </widget>
                    </item>
@@ -235,8 +304,8 @@ p, li { white-space: pre-wrap; }
                        <rect>
                         <x>0</x>
                         <y>0</y>
-                        <width>294</width>
-                        <height>485</height>
+                        <width>338</width>
+                        <height>441</height>
                        </rect>
                       </property>
                       <layout class="QGridLayout" name="gridLayout_35">
@@ -495,7 +564,7 @@ p, li { white-space: pre-wrap; }
                     <string>Click to visualize the curve.</string>
                    </property>
                    <property name="text">
-                    <string>Apply</string>
+                    <string>Draw</string>
                    </property>
                   </widget>
                  </item>
@@ -536,9 +605,9 @@ p, li { white-space: pre-wrap; }
                   <property name="geometry">
                    <rect>
                     <x>0</x>
-                    <y>0</y>
-                    <width>303</width>
-                    <height>652</height>
+                    <y>-104</y>
+                    <width>337</width>
+                    <height>638</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout">
@@ -759,8 +828,7 @@ save your custom curves.</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>Click to store the current edited curve into the table.
-To save your curve you need to go to &quot;Edit&quot;.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Click to store parametric of the current edited curve into the table.&lt;/p&gt;&lt;p&gt;To save your table you need to go to &amp;quot;Edit&amp;quot;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>Store</string>
@@ -798,7 +866,7 @@ To save your curve you need to go to &quot;Edit&quot;.</string>
                         <string>Click to visualize the curve.</string>
                        </property>
                        <property name="text">
-                        <string>Apply</string>
+                        <string>Draw</string>
                        </property>
                       </widget>
                      </item>
@@ -1338,8 +1406,8 @@ safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>316</width>
-                    <height>579</height>
+                    <width>358</width>
+                    <height>534</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_15">
@@ -1531,7 +1599,7 @@ To save your curve you need to go to &quot;Edit&quot;.</string>
                         <string>Click to visualize the curve.</string>
                        </property>
                        <property name="text">
-                        <string>Apply</string>
+                        <string>Draw</string>
                        </property>
                       </widget>
                      </item>
@@ -1557,8 +1625,8 @@ To save your curve you need to go to &quot;Edit&quot;.</string>
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>305</width>
-                            <height>383</height>
+                            <width>301</width>
+                            <height>378</height>
                            </rect>
                           </property>
                           <layout class="QGridLayout" name="gridLayout_14">
@@ -2179,8 +2247,8 @@ safe_list = ['acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh',
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>316</width>
-                    <height>579</height>
+                    <width>358</width>
+                    <height>534</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_7">
@@ -2268,8 +2336,8 @@ save your custom curves.</string>
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>261</width>
-                            <height>343</height>
+                            <width>301</width>
+                            <height>340</height>
                            </rect>
                           </property>
                           <layout class="QGridLayout" name="gridLayout_24">
@@ -3054,7 +3122,7 @@ To save your curve you need to go to &quot;Edit&quot;.</string>
                         <string>Click to visualize the curve.</string>
                        </property>
                        <property name="text">
-                        <string>Apply</string>
+                        <string>Draw</string>
                        </property>
                       </widget>
                      </item>
@@ -3305,44 +3373,6 @@ To save your curve you need to go to &quot;Edit&quot;.</string>
       <zorder>horizontalSpacer_16</zorder>
      </widget>
     </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QProgressBar" name="progressBar">
-     <property name="value">
-      <number>24</number>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="button_quit">
-       <property name="text">
-        <string>Close</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_6">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_release">
-       <property name="text">
-        <string>2016</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

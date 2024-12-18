@@ -166,10 +166,10 @@ def minMaxObjectsLimits(objs, info=0):
 
 
 class Translation():
-    """ A translation object
-    """
+    """Translation Object creation."""
+
     def __init__(self, gui):
-        self.msg = 1
+        self.msg = 0
         self.applied = False
         self.m_num_obj = 0
         self.m_selEx = None
@@ -243,8 +243,7 @@ class Translation():
         self.setEnableSlider(False)
 
     def enable(self, flag=True):
-        """ Enable or not most of the buttons.
-        """
+        """Enable or not most of the buttons."""
         if self.msg != 0:
             print_msg("Translation.enable:")
 
@@ -1008,8 +1007,8 @@ class Translation():
 
 
 class Rotation():
-    """ A rotation object
-    """
+    """Rotation Object creation."""
+
     def __init__(self, gui):
         self.msg = 1
         self.m_num = 0
@@ -1056,6 +1055,7 @@ class Rotation():
         self.visuObjects = []
 
     def enable(self, flag=True):
+        
         self.but_center.setEnabled(flag)
         self.but_reset.setEnabled(flag)
         self.but_apply.setEnabled(flag)
@@ -1065,17 +1065,14 @@ class Rotation():
         self.angle_edit.setEnabled(flag)
 
     def selection(self):
-        """ Check if one object at least is selected.
-        """
+        """Check if one object at least is selected."""
         if self.m_num < 1:
             printError_msg("Select at least one object and click on 'Select Object(s)' button!")
             return False
         return True
 
     def initialize(self):
-        """ Store a copy of original placements for all selected objects
-        into internal placements list.
-        """
+        """Store a copy of original placements for all selected objects into internal placements list."""
         if self.msg != 0:
             print_msg("initialize !")
 
@@ -1209,8 +1206,7 @@ class Rotation():
         print_msg("rotation angle  = " + str(self.rot_angle))
 
     def select_center(self):
-        """ Selection of Center of rotation by button.
-        """
+        """Select of Center of rotation by button."""
         # Get the selected Objects
         Selection = get_SelectedObjects()
         error_msg = "Select one point !"
@@ -1231,8 +1227,7 @@ class Rotation():
             self.info()
 
     def select_axis(self):
-        """ Selection of Axis of rotation by button.
-        """
+        """Select of Axis of rotation by button."""
         # Get the selected Objects
         Selection = get_SelectedObjects()
         error_msg = "Select one axis !"
@@ -1314,16 +1309,14 @@ Or One Edge and One Plane !"""
             printError_msg(error_msg)
 
     def set_zero(self):
-        """ Put zero into edit box and on slider.
-        """
+        """Put zero into edit box and on slider."""
         self.internal = True
         self.slider.setValue(0.0)
         self.angle_edit.setText(str(0.0))
         self.internal = False
 
     def center_value(self, *argc):
-        """ Center of rotation selection by combo box.
-        """
+        """Center of rotation selection by combo box."""
         # print_msg("New center selected: " + str(*argc))
         # DeActivate select button
         self.but_center.setEnabled(False)
@@ -1347,8 +1340,7 @@ Or One Edge and One Plane !"""
             self.info()
 
     def axis_value(self, *argc):
-        """ Axis of rotation selection by combo box.
-        """
+        """Axis of rotation selection by combo box."""
         # print_msg("New axis selected: " + str(*argc))
         # DeActivate select button
         self.but_axis.setEnabled(False)
@@ -1372,8 +1364,7 @@ Or One Edge and One Plane !"""
             self.info()
 
     def angle_value_changed(self, value):
-        """ Respond to the change in value of a slider, update the text box
-        """
+        """Respond to the change in value of a slider, update the text box."""
         # If the value was changed internally, ignore event.
         if self.internal:
             return
@@ -1382,6 +1373,7 @@ Or One Edge and One Plane !"""
         self.angle_value_entered()
 
     def angle_value_entered(self):
+        """Respond to the change in value of a text box."""
         # if self.msg != 0:
         #     print_msg("angle_value_entered entered!")
         try:
@@ -1397,8 +1389,7 @@ Or One Edge and One Plane !"""
             printError_msg("Angle must be valid number in degrees !")
 
     def preview(self):
-        """ Preview the placement
-        """
+        """Preview the placement."""
         if self.selection() is False:
             return
 
@@ -1415,11 +1406,10 @@ Or One Edge and One Plane !"""
             printError_msg("Select a center of rotation first!")
 
     def application(self):
-        """ Application by saving into internal placements list
-        """
+        """Application by saving into internal placements list."""
         if self.msg != 0:
             print_msg("Apply button pressed!")
-        if self.selection()is False:
+        if self.selection() is False:
             return
 
         for m_i in range(self.m_num):
@@ -1436,7 +1426,7 @@ Or One Edge and One Plane !"""
         self.set_zero()
 
     def reset(self):
-        if self.selection()is False:
+        if self.selection() is False:
             return
 
         if self.msg != 0:
@@ -1455,6 +1445,8 @@ except AttributeError:
 
 
 class RotationEvents(DefineAndConnectEvents):
+    """RotationEvents Object creation."""
+    
     def __init__(self, ui):
         self.ui = ui
         # Create a Rotation object
@@ -1462,69 +1454,63 @@ class RotationEvents(DefineAndConnectEvents):
         DefineAndConnectEvents.__init__(self, self.ui, self.rot)
 
     def defineEvents(self):
-        self.connections_for_slider_changed = {
-                             "ObjRot_horizontalSlider"       : "angle_value_changed",
-                             }
-        self.connections_for_button_pressed = {
-                             "ObjRot_button_select"          : "initialize",
-                             "ObjRot_button_select_center"   : "select_center",
-                             "ObjRot_button_select_axis"     : "select_axis",
-                             "ObjRot_button_reset"           : "reset",
-                             "ObjRot_button_apply"           : "application",
-                             }
-        self.connections_for_combobox_changed = {
-                             "ObjRot_comboBox_center"        : "center_value",
-                             "ObjRot_comboBox_axis"          : "axis_value",
-                            }
+        self.connections_for_slider_changed = {"ObjRot_horizontalSlider"       : "angle_value_changed",
+                                               }
+        self.connections_for_button_pressed = {"ObjRot_button_select"          : "initialize",
+                                               "ObjRot_button_select_center"   : "select_center",
+                                               "ObjRot_button_select_axis"     : "select_axis",
+                                               "ObjRot_button_reset"           : "reset",
+                                               "ObjRot_button_apply"           : "application",
+                                               }
+        self.connections_for_combobox_changed = {"ObjRot_comboBox_center"        : "center_value",
+                                                 "ObjRot_comboBox_axis"          : "axis_value",
+                                                 }
         self.connections_for_checkbox_toggled = {}
         self.connections_for_spin_changed = {}
-        self.connections_for_return_pressed = {
-                             "ObjRot_lineEdit_angle"         : "angle_value_entered",
-                             }
+        self.connections_for_return_pressed = {"ObjRot_lineEdit_angle"         : "angle_value_entered",
+                                               }
 
 
 class TranslationEvents(DefineAndConnectEvents):
+    """TranslationEvents Object creation."""
+
     def __init__(self, ui):
         self.ui = ui
         # Create a Translation object
         self.trans = Translation(self.ui)
         DefineAndConnectEvents.__init__(self, self.ui, self.trans)
 
-    def defineEvents(self): 
-        self.connections_for_slider_changed = {
-                             "ObjTrans_horizontalSlider"     : "length_value_changed",
-                             }
-        self.connections_for_button_pressed = {
-                             "ObjTrans_button_select"        : "initialize",
-                             "ObjTrans_button_select_start"  : "select_start",
-                             "ObjTrans_button_select_end"    : "select_end",
-                             "ObjTrans_button_reset"         : "reset",
-                             "ObjTrans_button_apply"         : "application",
-                             }
-        self.connections_for_combobox_changed = {
-                             "ObjTrans_comboBox_start"       : "select_start_type",
-                             "ObjTrans_comboBox_end"         : "select_end_type",
-                            }
-        self.connections_for_checkbox_toggled = {
-                            "ObjTrans_duplicate"             : "copyFlag",
-                            "ObjTrans_deepCopy"              : "deepCopyFlag",
-                            }
-        self.connections_for_spin_changed = {
-                            "ObjTrans_spin"                  : "numberCopies",
-                            }
-        self.connections_for_return_pressed = { 
-                             "ObjTrans_start_x"              : "start_x_entered",
-                             "ObjTrans_start_y"              : "start_y_entered",
-                             "ObjTrans_start_z"              : "start_z_entered",
-                             "ObjTrans_end_x"                : "end_x_entered",
-                             "ObjTrans_end_y"                : "end_y_entered",
-                             "ObjTrans_end_z"                : "end_z_entered",
+    def defineEvents(self):
+        self.connections_for_slider_changed = {"ObjTrans_horizontalSlider"     : "length_value_changed",
+                                               }
+        self.connections_for_button_pressed = {"ObjTrans_button_select"        : "initialize",
+                                               "ObjTrans_button_select_start"  : "select_start",
+                                               "ObjTrans_button_select_end"    : "select_end",
+                                               "ObjTrans_button_reset"         : "reset",
+                                               "ObjTrans_button_apply"         : "application",
+                                               }
+        self.connections_for_combobox_changed = {"ObjTrans_comboBox_start"       : "select_start_type",
+                                                 "ObjTrans_comboBox_end"         : "select_end_type",
+                                                 }
+        self.connections_for_checkbox_toggled = {"ObjTrans_duplicate"             : "copyFlag",
+                                                 "ObjTrans_deepCopy"              : "deepCopyFlag",
+                                                 }
+        self.connections_for_spin_changed = {"ObjTrans_spin"                  : "numberCopies",
+                                             }
+        self.connections_for_return_pressed = {"ObjTrans_start_x"              : "start_x_entered",
+                                               "ObjTrans_start_y"              : "start_y_entered",
+                                               "ObjTrans_start_z"              : "start_z_entered",
+                                               "ObjTrans_end_x"                : "end_x_entered",
+                                               "ObjTrans_end_y"                : "end_y_entered",
+                                               "ObjTrans_end_z"                : "end_z_entered",
 
-                             "ObjTrans_lineEdit_length_seg"  : "length_value_entered",
-                             }
+                                               "ObjTrans_lineEdit_length_seg"  : "length_value_entered",
+                                               }
 
 
 class ObjectRotationTab():
+    """ObjectRotationTab Object creation."""
+    
     def __init__(self):
         # Get main window
         self.m_main = self.getMainWindow()
@@ -1683,8 +1669,7 @@ class ObjectRotationTab():
                     break
 
     def getMainWindow(self):
-        """ Returns the main window.
-        """
+        """Return the main window."""
         # using QtGui.qApp.activeWindow()isn't very reliable because if another
         # widget than the mainwindow is active (e.g. a dialog)the wrong widget
         # is returned
@@ -1695,8 +1680,7 @@ class ObjectRotationTab():
         raise Exception("No main window found")
 
     def getComboView(self, window):
-        """ Returns the main Tab.
-        """
+        """Return the main Tab."""
         dw = window.findChildren(QtGui.QDockWidget)
         for i in dw:
             if str(i.objectName()) == "Combo View":

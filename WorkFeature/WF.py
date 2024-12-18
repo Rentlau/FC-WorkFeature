@@ -52,8 +52,6 @@
 *   USA or see <http://www.gnu.org/licenses/>                             *
 ***************************************************************************
 """
-# First two lines to be able to launch with python
-import sys
 import os.path
 
 import time
@@ -70,21 +68,37 @@ import Draft
 
 from PySide import QtCore, QtGui
 
-import WorkFeature.WFGui as WFGui
+import WorkFeature.Ui.WFGui as WFGui
 
-from WorkFeature.ParCurve.WF_ObjParCurve_2016 import *
+# from WorkFeature.ParCurve.WF_ObjParCurve_2016 import (ParametricTab,
+#                                                       RegressionCurve2DEvents,
+#                                                       ParametricCurve2DEvents,
+#                                                       ParametricCurve3DEvents,
+#                                                       SurfaceEvents)
+
+from WorkFeature.ParCurve.WF_ObjParCurve import (ParametricTab,
+                                                  RegressionCurve2DEvents,
+                                                  ParametricCurve2DEvents,
+                                                  ParametricCurve3DEvents,
+                                                  SurfaceEvents)
+
+# import WorkFeature.ParCurve.Ui.WF_ParCurveGui_2016 as ParCurveGui
+import WorkFeature.ParCurve.Ui.WF_ParCurveGui as ParCurveGui
+
+from WorkFeature.WF_ObjRot import RotationEvents, TranslationEvents
 from WorkFeature.WF_ObjRot import *
 
 from WorkFeature.Utils.WF_Utils import *
-from WorkFeature.Utils.WF_Utils import print_msg
+from WorkFeature.Utils.WF_Utils import print_msg, printError_msg
 from WorkFeature.Utils.WF_geometry import *
 from WorkFeature.Utils.WF_selection import *
+from WorkFeature.Utils.WF_selection import createFolders, get_ActiveDocument
 from WorkFeature.Utils.WF_print import print_point
 from WorkFeature.Utils.WF_translate import _translate
 
 
 global myRelease
-myRelease = "2019_05_01"
+myRelease = "2024_12"
 
 ####################################################################################
 # assume the Icons directory in the same directory as this MACRO file
@@ -192,8 +206,7 @@ m_set = 'Set'
 
 
 def verbose_toggled(flag):
-    """ Respond to the change of verbose flag.
-    """
+    """Respond to the change of verbose flag."""
     global verbose
     verbose = 0
     if flag is True:
@@ -202,8 +215,7 @@ def verbose_toggled(flag):
 
 
 def biColor_toggled(flag):
-    """ Respond to the change of biColor flag.
-    """
+    """Respond to the change of biColor flag."""
     msg = verbose
     global biColor
     biColor = 0
@@ -214,8 +226,7 @@ def biColor_toggled(flag):
 
 
 def copy_toggled(flag):
-    """ Respond to the change of Object copy flag.
-    """
+    """Respond to the change of Object copy flag."""
     msg = verbose
     global objCopy
     objCopy = 0
@@ -4369,12 +4380,13 @@ def plot_points_random():
 
 
 def sel_projection(*argc):
-    """ Projection plane by combo box.
+    """Projection plane by combo box.
+
     Options:
-    All
-    XY plane
-    YZ plane
-    XZ plane
+        All
+        XY plane
+        YZ plane
+        XZ plane
     """
     global m_projection_plane
     global verbose
@@ -4382,6 +4394,8 @@ def sel_projection(*argc):
     if msg != 0:
         print_msg("Projection plane location by combo box !")
     m_projection_plane = "All"
+    if str(*argc) == "All":
+        m_projection_plane = "ALL"
     if str(*argc) == "XY plane":
         m_projection_plane = "XY"
     if str(*argc) == "YZ plane":
@@ -4390,12 +4404,15 @@ def sel_projection(*argc):
         m_projection_plane = "XZ"
 
     if msg != 0:
-        print_msg("argc is " + str(*argc) + " and Projection plane " + str(m_attach_point) + " selected !")
+        print_msg("argc is " + str(*argc) + " and Projection plane " + str(m_projection_plane) + " selected !")
 
 
 def plot_projected_points():
     """Create projected point(s) on the chosen main planes.
-    - Select one (or several) Point(s) and/or one (or several) Axis.
+
+    - Select one (or several) Point(s), and/or one (or several) Axis,
+    and/or one (or several) Planes, and/or one (or several) Objects.
+
     Define the projection plane if needed.
     It can be either
     XY plane,
@@ -4403,10 +4420,14 @@ def plot_projected_points():
     XZ plane or
     All 3 planes
     """
+    global m_projection_plane
+    m_proj_plane = str(m_projection_plane).upper()
     msg = verbose
 
     error_msg = """Unable to create projected Point(s):
-    - Select one (or several) Point(s) and/or one (or several) Axis.
+    - Select one (or several) Point(s), and/or one (or several) Axis,
+    and/or one (or several) Planes, and/or one (or several) Objects.
+
     Define the projection plane if needed.
     It can be either
     XY plane,
@@ -4464,51 +4485,68 @@ def plot_projected_points():
             for Selected_Point in Point_List:
                 my_point_list.append(Selected_Point.Point)
 
+        def __plot_projected_point(Vector_A):
+            Vector_B = Base.Vector(x, y, z)
+            Point_User_Name = plot_point(Vector_A, part, name, str(m_dir))
+            print_point(Vector_A, str(Point_User_Name) + result_msg + " at:")
+            if Vector_A != Vector_B:
+                Axis_User_Name, axis = plot_axis(Vector_A, Vector_B,
+                                                 part="Part::Feature",
+                                                 name=m_name,
+                                                 grp=str(m_dir))
+                try:
+                    Gui.ActiveDocument.getObject(Axis_User_Name).DrawStyle = "Dotted"
+                except Exception as inst:
+                    print(inst.args)
+                    print_msg("Not able to set DrawStyle !")
+
+        if msg != 0:
+            print_msg("List_of_Points=" + str(len(my_point_list)))
+            print(my_point_list)
+
         for m_point in my_point_list:
+            if msg != 0:
+                print(m_point)
             x = m_point.x
             y = m_point.y
             z = m_point.z
-            if m_projection_plane == "All" or m_projection_plane == "XY":
+
+            if m_proj_plane == "XY":
                 Vector_A = Base.Vector(x, y, 0.0)
-                Vector_B = Base.Vector(x, y, z)
-                Point_User_Name = plot_point(Vector_A, part, name, str(m_dir))
-                print_point(Vector_A, str(Point_User_Name) + result_msg + " at:")
-                Axis_User_Name, axis = plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis_ProjectionToXY", grp=str(m_dir))
-                try:
-                    Gui.ActiveDocument.getObject(Axis_User_Name).DrawStyle = "Dotted"
-                except Exception as inst:
-                    print(inst.args)
-                    print_msg("Not able to set DrawStyle !")
-            if m_projection_plane == "All" or m_projection_plane == "YZ":
+                m_name = "Axis_ProjectionToXY"
+                __plot_projected_point(Vector_A)
+
+            if m_proj_plane == "YZ":
                 Vector_A = Base.Vector(0.0, y, z)
-                Vector_B = Base.Vector(x, y, z)
-                Point_User_Name = plot_point(Vector_A, part, name, str(m_dir))
-                print_point(Vector_A, str(Point_User_Name) + result_msg + " at:")
-                Axis_User_Name, axis = plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis_ProjectionToYZ", grp=str(m_dir))
-                try:
-                    Gui.ActiveDocument.getObject(Axis_User_Name).DrawStyle = "Dotted"
-                except Exception as inst:
-                    print(inst.args)
-                    print_msg("Not able to set DrawStyle !")
-            if m_projection_plane == "All" or m_projection_plane == "XZ":
+                m_name = "Axis_ProjectionToYZ"
+                __plot_projected_point(Vector_A)
+
+            if m_proj_plane == "XZ":
                 Vector_A = Base.Vector(x, 0.0, z)
-                Vector_B = Base.Vector(x, y, z)
-                Point_User_Name = plot_point(Vector_A, part, name, str(m_dir))
-                print_point(Vector_A, str(Point_User_Name) + result_msg + " at:")
-                Axis_User_Name, axis = plot_axis(Vector_A, Vector_B, part="Part::Feature", name="Axis_ProjectionToXZ", grp=str(m_dir))
-                try:
-                    Gui.ActiveDocument.getObject(Axis_User_Name).DrawStyle = "Dotted"
-                except Exception as inst:
-                    print(inst.args)
-                    print_msg("Not able to set DrawStyle !")
+                m_name = "Axis_ProjectionToXZ"
+                __plot_projected_point(Vector_A)
+
+            if m_proj_plane == "ALL":
+
+                Vector_A = Base.Vector(x, y, 0.0)
+                m_name = "Axis_ProjectionToXY"
+                __plot_projected_point(Vector_A)
+
+                Vector_A = Base.Vector(0.0, y, z)
+                m_name = "Axis_ProjectionToYZ"
+                __plot_projected_point(Vector_A)
+
+                Vector_A = Base.Vector(x, 0.0, z)
+                m_name = "Axis_ProjectionToXZ"
+                __plot_projected_point(Vector_A)
+
     except Exception as inst:
         print(inst.args)
         printError_msg(error_msg)
 
 
 def plot_centerObjectAxes():
-    """ Create 3 Axes XY, and Z at center point of all selected objects.
-    """
+    """Create 3 Axes XY, and Z at center point of all selected objects."""
     msg = 0
     createFolders('WorkAxis')
     error_msg = "Unable to create Axes: \nSelect at least one object !"
@@ -13608,7 +13646,10 @@ class ViewObserver:
 
 
 class WorkFeatureTab():
+    """Main Panel creation."""
+
     def __init__(self, movable=True):
+        self.debug = 0
 
         self.movable = movable
         if self.movable:
@@ -13669,143 +13710,140 @@ class WorkFeatureTab():
         # self.events3D = ParametricCurve3DEvents(self.ui)
 
         # ## Connect to functions
-        self.connections_for_checkbox_toggled = {
-                             "checkBox_object_center"      : "bBox_toggled",
-                             "checkBox_solid"              : "solid_toggled",
-                             "checkBox_allsubselect"       : "subselect_toggled",
-                             "checkBox_volumBB"            : "volumBBox_toggled",
-                             "checkBox_infoBB"             : "infoBBox_toggled"
-                            }
-        self.connections_for_button_clicked = {
-                             "button_WF_quit"              : "quit_clicked",
-                             "button_curves_and_surfaces"  : "launch_curvesAndSurfaces",
-                            }
-                #self.PB_Quit.clicked.connect(self.on_PB_Quit_clicked) # quit
+        self.connections_for_checkbox_toggled = {"checkBox_object_center"      : "bBox_toggled",
+                                                 "checkBox_solid"              : "solid_toggled",
+                                                 "checkBox_allsubselect"       : "subselect_toggled",
+                                                 "checkBox_volumBB"            : "volumBBox_toggled",
+                                                 "checkBox_infoBB"             : "infoBBox_toggled"
+                                                 }
+        self.connections_for_button_clicked = {"button_WF_quit"              : "quit_clicked",
+                                               "button_curves_and_surfaces"  : "launch_curvesAndSurfaces",
+                                               }
+        # self.PB_Quit.clicked.connect(self.on_PB_Quit_clicked) # quit
 
-        self.connections_for_button_pressed = {
-                             "button_origin"              : "plot_originObject",
+        self.connections_for_button_pressed = {"button_origin"              : "plot_originObject",
 
-                             "button_object_center"       : "plot_centerObjectPoint",
-                             "button_Npoints_center"      : "plot_NpointsPoint",
-                             "button_line_center"         : "plot_centerLinePoint",
-                             "button_line_extrema"        : "plot_extremaLinePoint",
-                             "button_circle_center"       : "plot_centerCirclePoint",
-                             "button_point_on_line"       : "plot_alongLinePoint",
-                             "button_face_center"         : "plot_centerFacePoint",
-                             "button_line_face_point"     : "plot_lineFacePoint",
-                             "button_points_projection"   : "plot_projected_points",
+                                               "button_object_center"       : "plot_centerObjectPoint",
+                                               "button_Npoints_center"      : "plot_NpointsPoint",
+                                               "button_line_center"         : "plot_centerLinePoint",
+                                               "button_line_extrema"        : "plot_extremaLinePoint",
+                                               "button_circle_center"       : "plot_centerCirclePoint",
+                                               "button_point_on_line"       : "plot_alongLinePoint",
+                                               "button_face_center"         : "plot_centerFacePoint",
+                                               "button_line_face_point"     : "plot_lineFacePoint",
+                                               "button_points_projection"   : "plot_projected_points",
 
-                             "button_point_face_point"    : "plot_pointFacePoint",
-                             "button_twolines_point"      : "plot_2LinesPoint",
-                             "button_point_line_point"    : "plot_pointLinePoint",
-                             "button_distPoint"           : "plot_distPoint",
-                             "button_cut_wire_point"      : "plot_cutWirePoint",
-                             "button_click_for_point"     : "plot_clickForPoint",
-                             "button_object_base_point"   : "plot_baseObjectPoint",
-                             "button_object_center_mass_point": "plot_centerMassObjectPoint",
-                             "button_object_Npoint"       : "plot_objectNPoints",
+                                               "button_point_face_point"    : "plot_pointFacePoint",
+                                               "button_twolines_point"      : "plot_2LinesPoint",
+                                               "button_point_line_point"    : "plot_pointLinePoint",
+                                               "button_distPoint"           : "plot_distPoint",
+                                               "button_cut_wire_point"      : "plot_cutWirePoint",
+                                               "button_click_for_point"     : "plot_clickForPoint",
+                                               "button_object_base_point"   : "plot_baseObjectPoint",
+                                               "button_object_center_mass_point": "plot_centerMassObjectPoint",
+                                               "button_object_Npoint"       : "plot_objectNPoints",
 
-                             "button_points_load"         : "point_toLoad",
-                             "button_points_save"         : "point_toSave",
-                             "button_points_random"       : "plot_points_random",
-                             "button_point_to_sketch"     : "point_toSketch",
+                                               "button_points_load"         : "point_toLoad",
+                                               "button_points_save"         : "point_toSave",
+                                               "button_points_random"       : "plot_points_random",
+                                               "button_point_to_sketch"     : "point_toSketch",
 
-                             "button_object_axis"         : "plot_centerObjectAxes",
-                             "button_twopoints_axis"      : "plot_2PointsAxis",
-                             "button_Npoints_axis"        : "plot_NPointsAxis",
-                             "button_cylinder_axis"       : "plot_cylinderAxis",
-                             "button_plane_axis"          : "plot_planeAxis",
-                             "button_face_normal"         : "plot_faceNormal",
-                             "button_point_line_axis"     : "plot_pointLineAxis",
-                             "button_line_point_axis"     : "plot_linePointAxis",
-                             "button_twolines_axis"       : "plot_2LinesAxis",
-                             "button_plane_point_line_axis": "plot_planeLinePointAxis",
-                             "button_line_plane_axis"     : "plot_linePlaneAxis",
-                             "button_twoplanes_axis"      : "plot_2PlanesAxis",
+                                               "button_object_axis"         : "plot_centerObjectAxes",
+                                               "button_twopoints_axis"      : "plot_2PointsAxis",
+                                               "button_Npoints_axis"        : "plot_NPointsAxis",
+                                               "button_cylinder_axis"       : "plot_cylinderAxis",
+                                               "button_plane_axis"          : "plot_planeAxis",
+                                               "button_face_normal"         : "plot_faceNormal",
+                                               "button_point_line_axis"     : "plot_pointLineAxis",
+                                               "button_line_point_axis"     : "plot_linePointAxis",
+                                               "button_twolines_axis"       : "plot_2LinesAxis",
+                                               "button_plane_point_line_axis": "plot_planeLinePointAxis",
+                                               "button_line_plane_axis"     : "plot_linePlaneAxis",
+                                               "button_twoplanes_axis"      : "plot_2PlanesAxis",
 
-                             "button_distLine"            : "plot_distLine",
-                             "button_angleLine"           : "plot_angleLine",
-                             "button_cut_axis"            : "plot_cutAxis",
-                             "button_cut_wire_axis"       : "plot_cutWireAxis",
-                             "button_extension_axis"      : "plot_extensionAxis",
-                             "button_click_for_axis"      : "plot_clickForAxis",
-                             "button_object_base_axes"    : "plot_baseObjectAxes",
-                             "button_object_Naxes"        : "plot_objectNAxes",
-                             "button_object_3axes"        : "plot_object3Axes",
-                             "button_line_to_sketch"      : "line_toSketch",
+                                               "button_distLine"            : "plot_distLine",
+                                               "button_angleLine"           : "plot_angleLine",
+                                               "button_cut_axis"            : "plot_cutAxis",
+                                               "button_cut_wire_axis"       : "plot_cutWireAxis",
+                                               "button_extension_axis"      : "plot_extensionAxis",
+                                               "button_click_for_axis"      : "plot_clickForAxis",
+                                               "button_object_base_axes"    : "plot_baseObjectAxes",
+                                               "button_object_Naxes"        : "plot_objectNAxes",
+                                               "button_object_3axes"        : "plot_object3Axes",
+                                               "button_line_to_sketch"      : "line_toSketch",
 
-                             "button_points_to_polygon"   : "points_toPolygon",
-                             # "button_wire_on_plane"       : "plot_wire_on_plane",
-                             "button_points_to_convex_2Dpolygon": "Plot_convex2Dpolygon",
-                             "button_4points_bezier"      : "plot_4points_bezier",
+                                               "button_points_to_polygon"   : "points_toPolygon",
+                                               # "button_wire_on_plane"       : "plot_wire_on_plane",
+                                               "button_points_to_convex_2Dpolygon": "Plot_convex2Dpolygon",
+                                               "button_4points_bezier"      : "plot_4points_bezier",
 
-                             "button_linecenter_circle"   : "plot_linecenterCircle",
-                             "button_linepoint_circle"    : "plot_linepointCircle",
-                             "button_3points_circle"      : "plot_3pointsCircle",
-                             "button_3points_ellipse"     : "plot_3pointsEllipse",
-                             "button_3points_arc"         : "plot_3pointsArc",
-                             "button_cut_circle"          : "plot_cutCircle",
-                             "button_circle_to_sketch"    : "circle_toSketch",
+                                               "button_linecenter_circle"   : "plot_linecenterCircle",
+                                               "button_linepoint_circle"    : "plot_linepointCircle",
+                                               "button_3points_circle"      : "plot_3pointsCircle",
+                                               "button_3points_ellipse"     : "plot_3pointsEllipse",
+                                               "button_3points_arc"         : "plot_3pointsArc",
+                                               "button_cut_circle"          : "plot_cutCircle",
+                                               "button_circle_to_sketch"    : "circle_toSketch",
 
-                             "button_threepoints_plane"   : "plot_3PointsPlane",
-                             "button_twopoints_plane"     : "plot_2PointsPlane",
-                             "button_Npoints_plane"       : "plot_NPointsPlane",
-                             "button_axisandpoint_plane"  : "plot_axisPointPlane",
-                             "button_axis_point_plane"    : "plot_perpendicularAxisPointPlane",
-                             "button_planeandpoint_plane" : "plot_planePointPlane",
-                             "button_planeandaxis_plane"  : "plot_planeAxisPlane",
-                             "button_distPlane"           : "plot_distPlane",
-                             "button_face_tangent"        : "plot_faceTangentPlane",
-                             "button_click_for_plane"     : "plot_clickForPlane",
+                                               "button_threepoints_plane"   : "plot_3PointsPlane",
+                                               "button_twopoints_plane"     : "plot_2PointsPlane",
+                                               "button_Npoints_plane"       : "plot_NPointsPlane",
+                                               "button_axisandpoint_plane"  : "plot_axisPointPlane",
+                                               "button_axis_point_plane"    : "plot_perpendicularAxisPointPlane",
+                                               "button_planeandpoint_plane" : "plot_planePointPlane",
+                                               "button_planeandaxis_plane"  : "plot_planeAxisPlane",
+                                               "button_distPlane"           : "plot_distPlane",
+                                               "button_face_tangent"        : "plot_faceTangentPlane",
+                                               "button_click_for_plane"     : "plot_clickForPlane",
 
-                             "button_extension_plane"     : "plot_extensionPlane",
-                             # "button_click_for_plane2"    : "plot_clickForPlane2",
-                             "button_object_center_planes": "plot_centerObjectPlanes",
+                                               "button_extension_plane"     : "plot_extensionPlane",
+                                               # "button_click_for_plane2"    : "plot_clickForPlane2",
+                                               "button_object_center_planes": "plot_centerObjectPlanes",
 
-                             "button_boundingboxes"       : "plot_boundingBoxes",
-                             "button_boundingbox"         : "plot_boundingBox",
-                             "button_cylinder_create"     : "plot_axisPointCylinder",
-                             "button_cube_create"         : "plot_axisPointCube",
-                             "button_sphere_create"       : "plot_centerSphere",
-                             "button_dome_create"         : "plot_centerDome",
-                             "button_letter"              : "plot_letter",
-                             "button_revolve"             : "plot_revolution",
-                             "button_common"              : "object_common",
-                             "button_difference"          : "object_difference",
-                             "button_copy_objects"        : "object_copy",
-                             "button_sweep"               : "plot_sectionSweep",
-                             "button_beam"                : "plot_sectionBeam",
+                                               "button_boundingboxes"       : "plot_boundingBoxes",
+                                               "button_boundingbox"         : "plot_boundingBox",
+                                               "button_cylinder_create"     : "plot_axisPointCylinder",
+                                               "button_cube_create"         : "plot_axisPointCube",
+                                               "button_sphere_create"       : "plot_centerSphere",
+                                               "button_dome_create"         : "plot_centerDome",
+                                               "button_letter"              : "plot_letter",
+                                               "button_revolve"             : "plot_revolution",
+                                               "button_common"              : "object_common",
+                                               "button_difference"          : "object_difference",
+                                               "button_copy_objects"        : "object_copy",
+                                               "button_sweep"               : "plot_sectionSweep",
+                                               "button_beam"                : "plot_sectionBeam",
 
-                             # "button_rotate_image"        : "rotate_image",
-                             "button_scale_image"         : "scale_image",
+                                               # "button_rotate_image"        : "rotate_image",
+                                               "button_scale_image"         : "scale_image",
 
-                             "button_alignview"           : "view_align",
-                             "button_trackcamera"         : "view_trackCamera",
+                                               "button_alignview"           : "view_align",
+                                               "button_trackcamera"         : "view_trackCamera",
 
-                             "button_cut_select_object"   : "cut_selectObject",
-                             "button_cut_select_line"     : "cut_selectLine",
-                             "button_cut_select_plane"    : "cut_selectPlane",
-                             "button_cut_reset"           : "cut_reset",
-                             "button_cut_apply"           : "plot_cutObject",
+                                               "button_cut_select_object"   : "cut_selectObject",
+                                               "button_cut_select_line"     : "cut_selectLine",
+                                               "button_cut_select_plane"    : "cut_selectPlane",
+                                               "button_cut_reset"           : "cut_reset",
+                                               "button_cut_apply"           : "plot_cutObject",
 
-                             "button_isParallel"          : "object_parallel",
-                             "button_isPerpendicular"     : "object_perpendicular",
-                             "button_isCoplanar"          : "object_coplanar",
-                             "button_isClearance"         : "object_clearance",
-                             "button_isAngle"             : "object_angle",
-                             "button_isDistance"          : "points_distance",
-                             "button_isLength"            : "line_length",
-                             "button_isRadius"            : "object_radius",
-                             "button_isArea"              : "plane_area",
-                             "button_isView"              : "camera_orientation",
+                                               "button_isParallel"          : "object_parallel",
+                                               "button_isPerpendicular"     : "object_perpendicular",
+                                               "button_isCoplanar"          : "object_coplanar",
+                                               "button_isClearance"         : "object_clearance",
+                                               "button_isAngle"             : "object_angle",
+                                               "button_isDistance"          : "points_distance",
+                                               "button_isLength"            : "line_length",
+                                               "button_isRadius"            : "object_radius",
+                                               "button_isArea"              : "plane_area",
+                                               "button_isView"              : "camera_orientation",
 
-                             "button_alignface2view"      : "object_align2view",
-                             "button_align_faces"         : "object_alignFaces",
-                             "button_align_edges"         : "object_alignEdges",
-                             "button_align_main_axis"     : "object_alignMainAxis",
-                             "button_joint_points"        : "object_jointPoints",
-                             "button_joint_faces"         : "object_jointFaces",
-                            }
+                                               "button_alignface2view"      : "object_align2view",
+                                               "button_align_faces"         : "object_alignFaces",
+                                               "button_align_edges"         : "object_alignEdges",
+                                               "button_align_main_axis"     : "object_alignMainAxis",
+                                               "button_joint_points"        : "object_jointPoints",
+                                               "button_joint_faces"         : "object_jointFaces",
+                                               }
 
         self.connections_for_text_changed = {
                              "tolerance_edit"           : "setTolerance",
@@ -13931,20 +13969,27 @@ class WorkFeatureTab():
         if self.movable:
             t = Gui.getMainWindow()
             wf = t.findChild(QtGui.QDockWidget, "WorkFeatures")
-            cv = t.findChild(QtGui.QDockWidget, "Combo View")
-            print_msg("Combo View" + str(cv))
-            print_msg("WorkFeatures" + str(wf))
-            cv.setFeatures(QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable|QtGui.QDockWidget.DockWidgetClosable)
-            wf.setFeatures(QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable|QtGui.QDockWidget.DockWidgetClosable)
-            if wf and cv:
-                t.tabifyDockWidget(cv, wf)
-                print_msg("Tabified done !")
-                wf.activateWindow()
-                wf.raise_()
+            if self.debug:
+                print_msg("WorkFeatures" + str(wf))
+            wf.setFeatures(QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable | QtGui.QDockWidget.DockWidgetClosable)
 
-        print_msg("icons path = " + str(WF_ICONS_PATH))
+            cv = t.findChild(QtGui.QDockWidget, "Combo View")
+            if cv is not None:
+                if self.debug:
+                    print_msg("Combo View" + str(cv))
+                cv.setFeatures(QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable | QtGui.QDockWidget.DockWidgetClosable)
+
+                if wf and cv:
+                    t.tabifyDockWidget(cv, wf)
+                    print_msg("Tabified done !")
+                    wf.activateWindow()
+                    wf.raise_()
+
+        if self.debug:
+            print_msg("icons path = " + str(WF_ICONS_PATH))
 
     def quit_clicked(self):
+        """Message for quiting."""
         print_msg("Quit requested !")
         if self.movable:
             self.dw.close()
@@ -13966,6 +14011,7 @@ class WorkFeatureTab():
         return
 
     def launch_curvesAndSurfaces(self):
+        """Launch Curves panel."""
         myObject = ParametricTab(ParCurveGui)
 
         # Create a Regression 2D Curve object and connect
@@ -13980,8 +14026,7 @@ class WorkFeatureTab():
         # QtCore.QObject.connect(myObject.ui.button_quit, QtCore.SIGNAL ('clicked()'), myObject.quit_clicked)
 
     def getMainWindow(self):
-        """ Returns the main window
-        """
+        """Return the main window."""
         # using QtGui.qApp.activeWindow() isn't very reliable because if another
         # widget than the mainwindow is active (e.g. a dialog) the wrong widget
         # is returned
@@ -13993,8 +14038,7 @@ class WorkFeatureTab():
         raise Exception("No main window found")
 
     def getComboView(self, window):
-        """ Returns the main Tab.
-        """
+        """Return the main Tab."""
         dw = window.findChildren(QtGui.QDockWidget)
         for i in dw:
             if str(i.objectName()) == "Combo View":
@@ -14002,8 +14046,7 @@ class WorkFeatureTab():
         raise Exception("No tab widget found")
 
     def getComboViewMv(self, window):
-        """ Returns the main Tab.
-        """
+        """Return the main Tab."""
         import FreeCAD
         mw = FreeCAD.Gui.getMainWindow()
         layout = QtGui.QVBoxLayout()

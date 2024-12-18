@@ -7,11 +7,11 @@ import sys
 import os.path
 
 from WorkFeature.Utils.WF_translate import _translate
-import WorkFeature.ParCurve.WF_ObjParCurveEdit_2016 as ParCurveEdit
-import WorkFeature.ParCurve.Ui.WF_ParCurveGui_2016 as ParCurveGui
+import WorkFeature.ParCurve.WF_ObjParCurveEdit as ParCurveEdit
+import WorkFeature.ParCurve.Ui.WF_ParCurveGui as ParCurveGui
 
-from ParCurve.Utils.Gui import DefineAndConnectEvents
-from ParCurve.Utils.Gui import print_msg
+from WorkFeature.ParCurve.Utils.Gui import DefineAndConnectEvents
+from WorkFeature.ParCurve.Utils.WFPC_Utils import print_msg, printError_msg
 
 import FreeCAD
 import FreeCADGui
@@ -28,6 +28,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s:s
 
+import math
 from math import *
 
 # Get the path of the current python script
@@ -42,7 +43,7 @@ myTabName = "Parametric Curves"
 global myObjName
 myObjName = "ParametricCurves"
 global ParametricRelease
-ParametricRelease = "2019_05"
+ParametricRelease = "2024_12"
 global f2
 global f2b
 global f3
@@ -65,51 +66,8 @@ def f3b(fa, fb, fc, fx, fy, fz, u, v, msgBox):
     pass
 
 
-def gui_infoDialog(msg):
-    """ Create a simple QMessageBox dialog for info messages.
-    """
-    # The first argument indicates the icon used:
-    # one of QtGui.QMessageBox.{NoIcon,Information,Warning Critical,Question}
-    diag = QtGui.QMessageBox(QtGui.QMessageBox.Information, 'Info:', msg)
-    diag.setWindowModality(QtCore.Qt.ApplicationModal)
-    diag.exec_()
-
-
-def gui_errorDialog(msg):
-    """ Create a simple QMessageBox dialog for error messages.
-    """
-    m_script = os.path.basename(os.path.realpath(__file__))
-    # The first argument indicates the icon used:
-    # one of QtGui.QMessageBox.{NoIcon,Information,Warning Critical,Question}
-    diag = QtGui.QMessageBox(QtGui.QMessageBox.Warning,
-                             'Error in ' + str(m_script), msg)
-    diag.setWindowModality(QtCore.Qt.ApplicationModal)
-    diag.exec_()
-
-
-def print_msg(message):
-    """ Print a message on console.
-    """
-    print(message)
-    FreeCAD.Console.PrintMessage(message + "\n")
-
-
-def printError_msg(message):
-    """ Print a ERROR message on console.
-    """
-    print(message)
-    FreeCAD.Console.PrintError("\nERROR: " + message)
-    try:
-        gui_errorDialog(message)
-    except Exception as inst:
-        print(inst.args)
-        FreeCAD.Console.PrintError("\nERROR: Not able to launch a QT dialog !")
-        raise(Exception(message))
-
-
 def get_ActiveDocument(info=0):
-    """ Return the active document
-    """
+    """Return the active document."""
     m_actDoc = FreeCAD.activeDocument()
     if m_actDoc is None:
         printError_msg("No Active document selected !")
@@ -204,9 +162,10 @@ def get_SelectedObjects(info=0, printError=True):
 
 
 class Regression():
+    """Regression object creation."""
+
     def __init__(self, gui):
-        """ A Regression object
-        """
+
         self.debug = 1
         self.degree = 2
         self.gui = gui
@@ -218,8 +177,7 @@ class Regression():
         pass
 
     def setDegree(self, value):
-        """ Respond to a change in Degree
-        """
+        """Respond to a change in Degree."""
         try:
             self.degree = int(value)
             if self.debug != 0:
@@ -229,9 +187,9 @@ class Regression():
 
 
 class Parametric():
+    """Parametric object creation."""
+
     def __init__(self, gui):
-        """ A Parametric object
-        """
         self.debug = 1
 
         self.close = False
@@ -679,8 +637,8 @@ class RegressionCurve2D(Regression, Parametric):
 
 
 class ParametricCurve2D(Parametric):
-    """ A ParametricCurve2D object
-    """
+    """ParametricCurve2D object creation."""
+
     def __init__(self, gui):
         Parametric.__init__(self, gui)
 
@@ -743,14 +701,15 @@ class ParametricCurve2D(Parametric):
                 self.face = False
 
     def select_curve(self, *argc):
-        """ Selection of Curve by combo box.
-        """
+        """Select Curve by combo box."""
         if self.debug != 0:
             print(self.select_curve.__name__)
 
         m_line = self.dialog.ui.selectCurve(*argc)
         if self.debug != 0:
             print(str(m_line))
+        if m_line is None:
+            return
         self.name.setText(str(m_line[0]))
         self.la.setText(str(m_line[1]))
         self.lb.setText(str(m_line[2]))
@@ -778,6 +737,7 @@ class ParametricCurve2D(Parametric):
         self.lpolar.setChecked(self.polar)
 
     def draw(self):
+        """Draw Curve."""
         if self.debug != 0:
             print(self.draw.__name__)
 
@@ -832,6 +792,7 @@ class ParametricCurve2D(Parametric):
             iterate()
 
     def draw_par_function(self, fa, fb):
+        """Draw parametric function."""
         if self.debug != 0:
             print(self.draw_par_function.__name__)
 
@@ -896,9 +857,7 @@ def f2b(fa,fb,fx,fy,t,i,msgBox):
             print(inst.args)
             import traceback
             var = traceback.format_exc()
-            self.msgBox.setText("Error in the code:\n" +
-                                str(var)
-                                )
+            self.msgBox.setText("Error in the code:\n" + str(var) )
             self.msgBox.exec_()
             return
 
@@ -913,7 +872,7 @@ def f2b(fa,fb,fx,fy,t,i,msgBox):
             fxx, fyy = f2b(fa, fb, fx, fy, t, i, self.msgBox)
 
             if self.polar is True:
-                x, y, z = ox + (fxx * cos(fyy)), oy + (fxx * sin(fyy)), oz
+                x, y, z = ox + (fxx * math.cos(fyy)), oy + (fxx * math.sin(fyy)), oz
                 # matriz.append(FreeCAD.Vector(fxx*cos(fyy),fxx*sin(fyy),fz))
             else:
                 x, y, z = ox + fxx, oy + fyy, oz
@@ -985,7 +944,7 @@ def f2(fa,fb,fx,fy,t,i):
         for i in range(dmax):
             fxx, fyy = f2(fa, fb, fx, fy, t, i)
             if self.polar is True:
-                matriz.append(FreeCAD.Vector(fxx * cos(fyy), fxx * sin(fyy), 0.0))
+                matriz.append(FreeCAD.Vector(fxx * math.cos(fyy), fxx * math.sin(fyy), 0.0))
             else:
                 matriz.append(FreeCAD.Vector(fxx, fyy, 0.0))
             t += intt
@@ -1096,8 +1055,7 @@ class ParametricCurve3D(Parametric):
         self.lspheri.setChecked(self.spheri)
 
     def select_curve(self, *argc):
-        """ Selection of Curve by combo box.
-        """
+        """Select of Curve by combo box."""
         if self.debug != 0:
             print(self.select_curve.__name__)
 
@@ -1314,10 +1272,10 @@ def f3b(fa,fb,fc,fx,fy,fz,t,i,msgBox):
             fxx, fyy, fzz = f3b(fa, fb, fc, fx, fy, fz, t, i, self.msgBox)
 
             if self.cylind is True:
-                x, y, z = ox + (fxx * cos(fyy)), oy + (fxx * sin(fyy)), oz + fzz
+                x, y, z = ox + (fxx * math.cos(fyy)), oy + (fxx * math.sin(fyy)), oz + fzz
                 # matriz.append(FreeCAD.Vector(fxx*cos(fyy),fxx*sin(fyy),fzz))
             if self.spheri is True:
-                x, y, z = ox + (fxx * sin(fyy) * cos(fzz)), oy + (fxx * sin(fyy) * sin(fzz)), oz + (fxx * cos(fyy))
+                x, y, z = ox + (fxx * math.sin(fyy) * math.cos(fzz)), oy + (fxx * math.sin(fyy) * math.sin(fzz)), oz + (fxx * math.cos(fyy))
                 # matriz.append(FreeCAD.Vector(fxx*sin(fyy)*cos(fzz),fxx*sin(fyy)*sin(fzz),fxx*cos(fyy)))
             else:
                 x, y, z = ox + fxx, oy + fyy, oz + fzz
@@ -1416,9 +1374,9 @@ def f3(fa,fb,fc,fx,fy,fz,t,i):
             fxx, fyy, fzz = f3(fa, fb, fc, fx, fy, fz, t, i)
 
             if self.cylind is True:
-                matriz.append(FreeCAD.Vector(fxx * cos(fyy), fxx * sin(fyy), fzz))
+                matriz.append(FreeCAD.Vector(fxx * math.cos(fyy), fxx * math.sin(fyy), fzz))
             if self.spheri is True:
-                matriz.append(FreeCAD.Vector(fxx * sin(fyy) * cos(fzz), fxx * sin(fyy) * sin(fzz), fxx * cos(fyy)))
+                matriz.append(FreeCAD.Vector(fxx * math.sin(fyy) * math.cos(fzz), fxx * math.sin(fyy) * math.sin(fzz), fxx * math.cos(fyy)))
             else:
                 matriz.append(FreeCAD.Vector(fxx, fyy, fzz))
             t += intt
@@ -1596,9 +1554,12 @@ class Surface(Parametric):
             print("oys=" + str(oys))
             print("ozs=" + str(ozs))
 
-        import collections
+        try:
+            from collections.abc import Iterable
+        except ImportError:
+            from collections import Iterable  # For older Python versions
         # if hasattr(oxs, '__iter__'):
-        if isinstance(oxs, collections.Iterable):
+        if isinstance(oxs, Iterable):
             for m_ox, m_oy, m_oz in zip(oxs, oys, ozs):
                 self.ox = float(m_ox)
                 self.oy = float(m_oy)
@@ -1937,6 +1898,8 @@ class SurfaceEvents(DefineAndConnectEvents):
 
 
 class RegressionCurve2DEvents(DefineAndConnectEvents):
+    """RegressionCurve2DEvents object creation."""
+
     def __init__(self, ui):
         self.ui = ui
         # Create Regression Curve 2D object
@@ -1948,25 +1911,24 @@ class RegressionCurve2DEvents(DefineAndConnectEvents):
         # Connect to 2D functions
         # ======================================================================
         self.connections_for_slider_changed = {}
-        self.connections_for_button_pressed = {
-                            "Reg2DCurve_button_apply"         :"draw",
-                            "Reg2DCurve_button_select_points" :"get_points",
-                            }
+        self.connections_for_button_pressed = {"Reg2DCurve_button_apply"         : "draw",
+                                               "Reg2DCurve_button_select_points" : "get_points",
+                                               }
         self.connections_for_combobox_changed = {
-                            #"ParCurve_comboBox_2"            :"select_curve",
-                            }
-        self.connections_for_checkbox_toggled = {
-                            "checkBox_points_reg1"             :"cpointsState",
-                            "checkBox_polyline_reg1"           :"cpolyState",
-                            "checkBox_bspline_reg1"            :"cbsplineState",
-                            "checkBox_bezier_reg1"             :"cbezierState",
-                            }
-        self.connections_for_spin_changed = {
-                            "Reg2DCurve_degree_select"         :"setDegree"}
+                                                 # "ParCurve_comboBox_2"            : "select_curve",
+                                                }
+        self.connections_for_checkbox_toggled = {"checkBox_points_reg1"             : "cpointsState",
+                                                 "checkBox_polyline_reg1"           : "cpolyState",
+                                                 "checkBox_bspline_reg1"            : "cbsplineState",
+                                                 "checkBox_bezier_reg1"             : "cbezierState",
+                                                 }
+        self.connections_for_spin_changed = {"Reg2DCurve_degree_select"         : "setDegree"}
         self.connections_for_return_pressed = {}
 
 
 class ParametricCurve2DEvents(DefineAndConnectEvents):
+    """ParametricCurve2DEvents object creation."""
+
     def __init__(self, ui):
         self.ui = ui
         # Create Parametric Curve 2D object
@@ -1978,29 +1940,28 @@ class ParametricCurve2DEvents(DefineAndConnectEvents):
         # Connect to 2D functions
         # ======================================================================
         self.connections_for_slider_changed = {}
-        self.connections_for_button_pressed = {
-                            "ParCurve_button_edit_2"        :"edit",
-                            "ParCurve_button_apply_2"       :"draw",
-                            "ParCurve_button_store_2"       :"store",
-                            "button_select_point"           :"getOrigin",
-                            }
-        self.connections_for_combobox_changed = {
-                            "ParCurve_comboBox_2"           :"select_curve",
-                            }
-        self.connections_for_checkbox_toggled = {
-                            "checkBox_close_2"              :"ccloseState",
-                            "checkBox_face_2"               :"cfaceState",
-                            "checkBox_points_2"             :"cpointsState",
-                            "checkBox_polyline_2"           :"cpolyState",
-                            "checkBox_bspline_2"            :"cbsplineState",
-                            "checkBox_bezier_2"             :"cbezierState",
-                            "checkBox_polar_2"              :"cpolarState",
-                            }
+        self.connections_for_button_pressed = {"ParCurve_button_edit_2"        :"edit",
+                                               "ParCurve_button_apply_2"       :"draw",
+                                               "ParCurve_button_store_2"       :"store",
+                                               "button_select_point"           :"getOrigin",
+                                               }
+        self.connections_for_combobox_changed = {"ParCurve_comboBox_2"           :"select_curve",
+                                                 }
+        self.connections_for_checkbox_toggled = {"checkBox_close_2"              :"ccloseState",
+                                                 "checkBox_face_2"               :"cfaceState",
+                                                 "checkBox_points_2"             :"cpointsState",
+                                                 "checkBox_polyline_2"           :"cpolyState",
+                                                 "checkBox_bspline_2"            :"cbsplineState",
+                                                 "checkBox_bezier_2"             :"cbezierState",
+                                                 "checkBox_polar_2"              :"cpolarState",
+                                                 }
         self.connections_for_spin_changed = {}
         self.connections_for_return_pressed = {}
 
 
 class ParametricCurve3DEvents(DefineAndConnectEvents):
+    """ParametricCurve3DEvents object creation."""
+
     def __init__(self, ui):
         self.ui = ui
         # Create Parametric Curve 3D object
@@ -2012,30 +1973,30 @@ class ParametricCurve3DEvents(DefineAndConnectEvents):
         # Connect to 3D functions
         # ======================================================================
         self.connections_for_slider_changed = {}
-        self.connections_for_button_pressed = {
-                            "ParCurve_button_edit_3"          :"edit",
-                            "ParCurve_button_apply_3"         :"draw",
-                            "ParCurve_button_store_3"         :"store",
-                            "button_select_point"             :"getOrigin",
-                            }
-        self.connections_for_combobox_changed = {
-                            "ParCurve_comboBox_3"            :"select_curve",
-                            }
-        self.connections_for_checkbox_toggled = {
-                            "checkBox_close_3"              :"ccloseState",
-                            "checkBox_points_3"             :"cpointsState",
-                            "checkBox_polyline_3"           :"cpolyState",
-                            "checkBox_bspline_3"            :"cbsplineState",
-                            "checkBox_bezier_3"             :"cbezierState",
-                            "checkBox_cylind_3"             :"ccylindState",
-                            "checkBox_spheric_3"            :"csphericState",
-                            }
+        self.connections_for_button_pressed = {"ParCurve_button_edit_3"          :"edit",
+                                               "ParCurve_button_apply_3"         :"draw",
+                                               "ParCurve_button_store_3"         :"store",
+                                               "button_select_point"             :"getOrigin",
+                                               }
+        self.connections_for_combobox_changed = {"ParCurve_comboBox_3"            :"select_curve",
+                                                 }
+        self.connections_for_checkbox_toggled = {"checkBox_close_3"              :"ccloseState",
+                                                 "checkBox_points_3"             :"cpointsState",
+                                                 "checkBox_polyline_3"           :"cpolyState",
+                                                 "checkBox_bspline_3"            :"cbsplineState",
+                                                 "checkBox_bezier_3"             :"cbezierState",
+                                                 "checkBox_cylind_3"             :"ccylindState",
+                                                 "checkBox_spheric_3"            :"csphericState",
+                                                 }
         self.connections_for_spin_changed = {}
         self.connections_for_return_pressed = {}
 
 
 class ParametricTab():
+    """ParametricTab object creation."""
+
     def __init__(self, gui, movable=True):
+        self.debug = 0
         self.gui = gui
         self.title = myTabName
         self.objname = myObjName
@@ -2088,7 +2049,8 @@ class ParametricTab():
                                                }
 
         for m_key, m_val in self.connections_for_button_clicked.items():
-            print_msg("Connecting:" + str(m_key) + " and " + str(m_val))
+            if self.debug:
+                print_msg("Connecting:" + str(m_key) + " and " + str(m_val))
             QtCore.QObject.connect(getattr(self.ui, str(m_key)),
                                    QtCore.SIGNAL("clicked()"), getattr(self, str(m_val)))
 
@@ -2107,18 +2069,26 @@ class ParametricTab():
         if self.movable:
             t = FreeCADGui.getMainWindow()
             wf = t.findChild(QtGui.QDockWidget, str(self.objname))
-            cv = t.findChild(QtGui.QDockWidget, "Combo View")
-            cv.setFeatures(QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable | QtGui.QDockWidget.DockWidgetClosable)
+            if self.debug:
+                print_msg("WorkFeatures" + str(wf))
             wf.setFeatures(QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable | QtGui.QDockWidget.DockWidgetClosable)
-            if wf and cv:
-                t.tabifyDockWidget(cv, wf)
-                print_msg("Tabified done !")
-                wf.activateWindow()
-                wf.raise_()
+
+            cv = t.findChild(QtGui.QDockWidget, "Combo View")
+            if cv is not None:
+                if self.debug:
+                    print_msg("Combo View" + str(cv))
+                cv.setFeatures(QtGui.QDockWidget.DockWidgetMovable | QtGui.QDockWidget.DockWidgetFloatable | QtGui.QDockWidget.DockWidgetClosable)
+
+                if wf and cv:
+                    t.tabifyDockWidget(cv, wf)
+                    print_msg("Tabified done !")
+                    wf.activateWindow()
+                    wf.raise_()
 
         QtCore.QObject.connect(self.ui.button_quit, QtCore.SIGNAL('clicked()'), self.quit_clicked)
 
     def quit_clicked(self):
+        """Message for quiting."""
         print_msg("quit_clicked !")
         if self.movable:
             self.dw.close()
@@ -2134,8 +2104,7 @@ class ParametricTab():
                         break
 
     def getMainWindow(self):
-        """ Returns the main window
-        """
+        """Return the main window."""
         # using QtGui.qApp.activeWindow() isn't very reliable because if another
         # widget than the mainwindow is active (e.g. a dialog) the wrong widget
         # is returned
@@ -2146,8 +2115,7 @@ class ParametricTab():
         raise Exception("No main window found")
 
     def getComboView(self, window):
-        """ Returns the main Tab.
-        """
+        """Return the ComboView."""
         dw = window.findChildren(QtGui.QDockWidget)
         for i in dw:
             if str(i.objectName()) == "Combo View":
@@ -2155,8 +2123,7 @@ class ParametricTab():
         raise Exception("No tab widget found")
 
     def getComboViewMv(self, window):
-        """ Returns the main Tab.
-        """
+        """Return theComboViewMv."""
         mw = FreeCAD.Gui.getMainWindow()
         layout = QtGui.QVBoxLayout()
         myw = QtGui.QWidget()
@@ -2172,6 +2139,7 @@ class ParametricTab():
         self.dw = dw1
         layout.mw = mw
         return layout
+
 
 if __name__ == '__main__':
     myObject = ParametricTab(ParCurveGui)
